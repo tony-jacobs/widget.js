@@ -63,6 +63,7 @@ function setProgress( msg, pct, force ) {
               }
             },
             "options": {
+              defaultRenderer: 'tableRowRenderer'
             }
           }
         ]
@@ -96,6 +97,48 @@ function setProgress( msg, pct, force ) {
       enabled: true,
       action: function() { 
         console.log( "Do something here" );
+      }
+    }
+  });
+  
+  widget.util.setData( 'renderers', {
+    tableRowRenderer: {
+      type: "renderer",
+      options: {
+        styleClass: "tableRow"
+      },
+      layout: {
+        "type": "list",
+        "content": [
+          {
+            "type": "label",
+            "name": "${meta,0.rendererKey|??}",
+            "options": {
+              "styleClass": "index"
+            }
+          },
+          {
+            "type": "label",
+            "name": "${title}",
+            "options": {
+              "styleClass": "title"
+            }
+          },
+          {
+            "type": "label",
+            "name": "={ return moment( data.post_date*1000 ).format('MMM. DD YYYY, h:mm A'); }",
+            "options": {
+              "styleClass": "postDate"
+            }
+          },
+          {
+            "type": "label",
+            "name": "${excerpt}",
+            "options": {
+              "styleClass": "excerpt"
+            }
+          }
+        ]
       }
     }
   });
@@ -144,7 +187,7 @@ function startDataManager( onReady, onUpdate ) {
           "id":"1",
           "type":"alert",
           "lastModified":1423853991,
-          "title":"Test Item",
+          "title":"Test Item 1",
           "excerpt":"Lorem ipsum dolor amit",
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1395420888,
@@ -165,20 +208,20 @@ function startDataManager( onReady, onUpdate ) {
           "id":"3",
           "type":"alert",
           "lastModified":1423853991,
-          "title":"Test Item",
+          "title":"Test Item 3",
           "excerpt":"Lorem ipsum dolor amit",
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
-          "post_date":1395420888,
+          "post_date":1395420882,
           "rendererKey":"alertItem"
         },
         {
           "id":"4",
           "type":"alert",
           "lastModified":1423853991,
-          "title":"Test Item 2",
+          "title":"Test Item 4",
           "excerpt":"Lorem ipsum dolor amit",
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
-          "post_date":1422970265,
+          "post_date":1422970264,
           "keywords":"",
           "rendererKey":"alertItem"
         }
@@ -219,8 +262,7 @@ function createArticleViewAction( data )
     var content = $( '<div/>' ).addClass( 'contentView' );
     var header = $( '<div/>' ).addClass( 'contentViewHeader' ).appendTo( content );
 
-    var iconSource = widget.assets.get( 'icon', data.type, 'img/logo_128.png' );
-    $( '<img/>', { src: iconSource } ).addClass('logo').appendTo( header );
+
     $( '<div/>', { text: data.title } ).addClass( 'title' ).appendTo( header );
 
     var byline = $( '<div/>' ).addClass( 'contentViewByline' ).appendTo( content );

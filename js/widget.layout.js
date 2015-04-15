@@ -118,20 +118,38 @@ widget.layout = (function(){
 
     return result;
   }
-
+  
   function dispatch( parent, data, options, defaultHandler ) {
+    
+    function configureRenderer( data, options ) 
+    {
+      var typeKey = data.rendererKey || data.type;
+
+      if( options && options.defaultRenderer )
+      {
+        data.rendererKey = 'renderer';
+        data.dynamicRenderer = ( options.renderers && options.renderers[ typeKey ] ) ? options.renderers[ typeKey ] : options.defaultRenderer;
+      }
+      else
+        data.rendererKey = typeKey;
+    }
+    
     options = $.extend( {}, options, data.options||{} );
     var factory = options.factory;
     delete options.factory;
+
+    // Make a clone of data since we're monkeying with it's actual fields below..
+    data = $.extend( {}, data );
 
     if( data.hasOwnProperty( 'dataSource' ) )
     {
       data.content = loadDataSource( data.dataSource, data.content, options );
     }
-
+    
     if( factory || data.hasOwnProperty( 'type' ) )
     {
-      data.rendererKey = data.rendererKey || data.type;
+      configureRenderer( data, options.listOptions );
+
       var handler = factory || widget.layout[data.rendererKey];
       if( $.isFunction( handler ) )
       {
@@ -203,8 +221,18 @@ widget.layout = (function(){
     },
 
     label: function( view, data, options ) {
-      var label = $('<div/>', {html: data.name} ).addClass( options.styleClass || 'dataLabel' ).addClass('unselectable').appendTo( view );
-      return label;
+      var name = widget.util.expandPath( data.name );
+
+      var label = $('<div/>', {html: name} ).addClass( 'dataLabel' ).addClass('unselectable');
+      if( options.styleClass )
+        label.addClass( options.styleClass );
+        
+      if( data.action )
+      {
+        label.addClass( 'clickable' ).click( data.action );
+      }
+        
+      return label.appendTo( view );
     },
 
     image: function( view, data, options ) {
@@ -332,7 +360,7 @@ widget.layout = (function(){
       });
 
       $.each( listData.content, function( i, item ) {
-        var listItem = dispatch( panel, item, { factory: listOptions.itemFactory }, function( view, data, options ) {
+        var listItem = dispatch( panel, item, { listOptions: listOptions, factory: listOptions.itemFactory }, function( view, data, options ) {
           var v = $('<div/>', {text: data} ).appendTo( view );
           v.addClass( options.styleClass||'listItem' );
           return v;
@@ -343,9 +371,8 @@ widget.layout = (function(){
     },
 
     listItem: function createListItem( view, data, options ) {
-
-//console.log( "Create list item", data, options );
-
+      //console.log( "Create list item", data, options );
+      
       if( $.isFunction( data.initialize ) )
         data.initialize();
 
@@ -532,6 +559,50 @@ widget.layout = (function(){
 
 
       return button;
+    },
+
+    renderer: function createRendererView( view, data, options ) {
+      var key = widget.get( data, 'dynamicRenderer', 'Unknown Type' );
+      var renderer = widget.util.get( 'renderers', key );
+      
+      var panel = $('<div/>' ).addClass( 'renderer' ).addClass( key ).appendTo( view );
+
+      if( renderer && renderer.layout )
+      {
+        var dataStack = widget.util.getData( 'stack', [] ); 
+        dataStack.push( data );
+
+        var rendererOptions = $.extend( {}, renderer.options||{}, {
+          rendererKey: key
+        } );
+
+        var optionsStack = widget.util.getData( 'meta', [] ); 
+        optionsStack.push( rendererOptions );
+        
+        var rendererData = $.extend( {}, renderer.layout );
+
+        var rendererView = dispatch( panel, rendererData, rendererOptions, function( view, data, options ) {
+          var v = $('<div/>', {text: data} ).appendTo( view );
+          v.addClass( options.styleClass||'listItem' );
+          return v;
+        });
+        
+        optionsStack.pop();
+        dataStack.pop();
+      }
+      else
+      {
+        panel.append( $('<div/>', {text: key } ).addClass('title') );
+        panel.append( $('<div/>', {text: JSON.stringify(data) } ).addClass('data') );
+      }
+      
+      if( data.action )
+      {
+        panel.addClass( 'clickable' ).click( data.action );
+      }
+
+      
+      return panel;
     },
 
     error: function createErrorView( view, data, options ) {

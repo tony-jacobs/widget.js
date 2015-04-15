@@ -171,7 +171,6 @@ console.log( "Search result:", result );
     widget.layout.list( dropDown, { content: menu }, { itemFactory: widget.layout.notificationItem } );
   };
 
-  widget.util.getMessages( 'context', true, refreshContextMenu, 500 );
 }
 
 

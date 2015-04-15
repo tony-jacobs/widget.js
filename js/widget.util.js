@@ -7,7 +7,7 @@ widget.util = (function(){
     keyPrefix: 'widget.js'
   };
 
-  function getToken( str )
+  function getToken( flavor, str )
   {
     if( str )
     {
@@ -17,7 +17,7 @@ widget.util = (function(){
       for( var i=0; i<str.length; i++ )
       {
         var ch = str.charAt(i);
-        if( (ch === '$') && (str.charAt( i+1 ) == '{') )
+        if( (ch === flavor ) && (str.charAt( i+1 ) == '{') )
         {
           if( front < 0 )
             front = i+2;
@@ -48,13 +48,18 @@ widget.util = (function(){
         return widget.util.get( dbName, path[0] );
     }
     else
-      return "${" + token + "}";
+    {
+      var stackVal = decode( "stack,0." + token );
+      return stackVal || "${" + token + "}";
+    }
   }
 
   function expandTokens( str )
   {
     var result = [];
-    var token = getToken( str );
+    
+    
+    var token = getToken( '$', str );
     if( token )
     {
       var i = str.indexOf( token );
@@ -70,7 +75,18 @@ widget.util = (function(){
     }
     else
     {
-      result.push(str);
+      token = getToken( '=', str );
+      if( token )
+      {
+        /* jshint ignore:start */
+        var f = new Function( "data", token );
+        /* jshint ignore:end */
+        var data = widget.util.get( 'stack', 0 );
+        evaluatedToken = f( data );
+        result.push( evaluatedToken );
+      }
+      else 
+        result.push(str);
     }
 
     return result.join('');

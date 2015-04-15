@@ -47,6 +47,10 @@
   cursor: default;
 }
 
+.clickable .unselectable {
+  cursor: pointer;
+}
+
 .panelLabel {
   position: fixed;
   top: 0;
@@ -88,7 +92,7 @@
   transition: background-color 0.2s ease;
 }
 .clickable:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba( 128, 128, 128, 0.1 );
 }
 
 
@@ -201,12 +205,6 @@
   left: 0;
   right: 0;
   padding-right: 200px;
-}
-.dataLabel {
-  padding: 16px 16px 0 16px;
-  font-size: 14px;
-  font-weight: 300;
-  color: #c0c0c0;
 }
 
 .columnPanel {
