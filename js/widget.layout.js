@@ -23,7 +23,7 @@ widget.assets = (function(){
   };
 })();
 
-var ui = (function(){
+widget.layout = (function(){
   
   var assets = widget.assets;
 
@@ -132,7 +132,7 @@ var ui = (function(){
     if( factory || data.hasOwnProperty( 'type' ) )
     {
       data.rendererKey = data.rendererKey || data.type;
-      var handler = factory || ui[data.rendererKey];
+      var handler = factory || widget.layout[data.rendererKey];
       if( $.isFunction( handler ) )
       {
         return handler( parent, data, options );
@@ -283,7 +283,7 @@ var ui = (function(){
         } );
 
         selector.addClass( options.styleClass || 'dataSelectLabel' ).addClass('unselectable');
-        selector.on( 'selectmenuchange', function( event, ui ){
+        selector.on( 'selectmenuchange', function( event ){
           widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
         });
         var uiMenu = selector.appendTo( view ).selectmenu({
@@ -384,13 +384,13 @@ var ui = (function(){
     },
 
     alertItem: function createAlertItem( view, data, options ) {
-      return ui.listItem( view, data, $.extend( {}, (options||{}), {
+      return widget.layout.listItem( view, data, $.extend( {}, (options||{}), {
         //icon: 'img/iconAlertItem_40.png'
       }) );
     },
 
     newsItem: function createAlertItem( view, data, options ) {
-      return ui.listItem( view, data, $.extend( {}, (options||{}), {
+      return widget.layout.listItem( view, data, $.extend( {}, (options||{}), {
         icon: 'img/iconNewsItem_40.png'
       }) );
     },
@@ -560,7 +560,7 @@ function refreshTab( tabName )
     {
       var holder = tab.view.empty();
 
-      var factory = ui[ tab.type ] || ui.createTabView;
+      var factory = widget.layout[ tab.type ] || widget.layout.createTabView;
       var view = factory( holder, tab );
       holder.append( view );
     }

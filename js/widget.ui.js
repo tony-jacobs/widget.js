@@ -13,13 +13,15 @@ function createScreen( options )
   });
 
   var createTabAction = function createTabAction( tabName ) {
-    return function() { tabManager.selectTab( tabName ); };
+    return function() { 
+      tabManager.selectTab( tabName ); 
+    };
   };
 
   $.each( options.tabData, function( i, tab ) {
     var holder = $( '.'+options.tabClass+tab.name, screen );
 
-    var factory = ui[ tab.type ] || ui.createTabView;
+    var factory = widget.layout[ tab.type ] || widget.layout.createTabView;
     var view = factory( holder, tab );
     holder.append( view );
   });
@@ -81,11 +83,11 @@ function createScreen( options )
         resultStatus.appendTo( resultInfo ).slideDown(350);
     }
     var searchResultFactory = function searchFactory(view, data, options) {
-      return ui.listItem( view, data, options );
+      return widget.layout.listItem( view, data, options );
     };
 
 console.log( "Search result:", result );
-//    ui.list( $( '.widgetTabPanelSearch .contentPane').empty(), { content: result }, { itemFactory: searchResultFactory } );
+//    widget.layout.list( $( '.widgetTabPanelSearch .contentPane').empty(), { content: result }, { itemFactory: searchResultFactory } );
   };
 
   searchField.on( "propertychange keyup input paste", function( event ) {
@@ -166,7 +168,7 @@ console.log( "Search result:", result );
 
 //    menu.push( { title: 'Log Out', action:logoutAction } );
 
-    ui.list( dropDown, { content: menu }, { itemFactory: ui.notificationItem } );
+    widget.layout.list( dropDown, { content: menu }, { itemFactory: widget.layout.notificationItem } );
   };
 
   widget.util.getMessages( 'context', true, refreshContextMenu, 500 );
