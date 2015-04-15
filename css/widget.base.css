@@ -1,0 +1,619 @@
+.header img.logo {
+  width: 64px;
+  height: 64px;
+  background-color: black;
+  padding: 12px;
+  display: inline-block;
+}
+.header {
+  background-color: #404040;
+  height: 40px;
+}
+.container {
+  width: 100%;
+  height: 100%;
+  background-color: #f8f8f8;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+#tabNav {
+  position: fixed;
+}
+#appIconMenu {
+  display: inline-block;
+  position: absolute;
+  right:0;
+  height: 40px;
+}
+.iconMenuLabel {
+  color: #808080;
+  cursor: pointer;
+  padding: 10px;
+  display: inline-block;
+}
+.iconMenuLabel:hover {
+  background-color: #303030;
+}
+.iconMenuLabel.tabSelected {
+  color: #e0e0e0;
+}
+
+.unselectable {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.panelLabel {
+  position: fixed;
+  top: 0;
+  height: 40px;
+}
+.panelLabel > * {
+  vertical-align:middle;
+  display: inline-block;
+}
+.panelLabel .tabTitle {
+  font-size: 20px;
+  line-height: 40px;
+  color: white;
+}
+
+.panelLabel .tabTitle div {
+  display: inline-block;
+}
+
+/* View Styles */
+.listItem {
+  padding: 16px;
+}
+.errorPanel .title {
+  display: inline-block;
+  font-size: 20px;
+  line-height:20px;
+  color: #E96363;
+}
+.errorPanel .errorMessage {
+  font-family: monospace;
+  display:inline-block;
+  line-height:20px;
+  padding-left: 10px
+}
+
+.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.clickable:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+.namedPanel .alertItem,
+.namedPanel .newsItem {
+  display: inline-block;
+  width: 400px;
+  margin-right: 40px;
+}
+
+.itemContent .timestamp,
+.itemContent .datestamp,
+.itemContent .summary {
+  font-size: 14px;
+}
+
+.itemContent .datestamp,
+.itemContent .timestamp{
+  display: inline-block;
+  min-width: 100px;
+}
+
+.widgetTabPanel .itemContent .title {
+  font-size: 16px;
+}
+.widgetTabPanel .itemContent {
+  color: #404040;
+}
+.widgetTabPanel .itemContent .title {
+  font-weight: 500;
+}
+
+.widgetTabPanel .decoration {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  right: 4px;
+  margin-top: 16px;
+}
+
+.widgetTabPanel .panelContent .decoration {
+  right: -16px;
+}
+
+
+.widgetTabPanel .newsItem .icon,
+.widgetTabPanel .alertItem .icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 18px 10px 0 0;
+  vertical-align: top;
+}
+
+.namedPanel .panelTitle {
+  border-bottom: 1px solid rgba( 40,40,40,0.25);
+  padding-bottom: 8px;
+  color: #202020;
+  font-weight: 500;
+  font-size: 20px;
+}
+.namedPanel {
+  padding: 40px 16px;
+}
+
+
+/* Input field styles */
+.inputField {
+  background-color: #343434;
+  color: white;
+  border: 0px solid transparent;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 300;
+  width: 100%;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #606060;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #606060;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #606060;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #606060;
+}
+
+.inputField:focus {
+  box-shadow: 0px 0px 2pt 1pt rgba(81, 203, 238, 0.5);
+  border-radius: 8px;
+  outline-color: transparent;
+  outline-style: none;
+}
+.inputField.readonly:focus{
+  box-shadow: 0px 0px 2pt 1pt transparent
+}
+.inputField.readonly {
+  color: #b0b0b0;
+}
+
+.inputFieldHolder {
+  padding: 8px 16px;
+  position: relative;
+  left: 0;
+  right: 0;
+  padding-right: 200px;
+}
+.dataLabel {
+  padding: 16px 16px 0 16px;
+  font-size: 14px;
+  font-weight: 300;
+  color: #c0c0c0;
+}
+
+.columnPanel {
+  vertical-align: top;
+  display: inline-block;
+  width: 400px;
+}
+
+
+/* Header control panel */
+.searchWidget {
+  display:inline-block;
+  height:100%;
+  position: absolute;
+  top: 24px;
+  right: 240px;
+}
+
+.searchWidget input {
+  padding: 10px 10px 10px 40px;
+  border-radius: 6px;
+  border: 0px solid transparent;
+  background-color: #343434;
+  color: white;
+  margin-right: 30px;
+}
+.searchIndicator {
+  position: absolute;
+  width: 40px;
+  color: white;
+  text-align: center;
+  line-height: 38px;
+  font-size: 18px;
+}
+
+div#headerControlPanel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 88px;
+}
+.dropdownContent {
+  background-color: rgba(64,64,64,0.80);
+  color: #e0e0e0;
+  position: absolute;
+  width: 240px;
+  top: 86px;
+  z-index: 1000;
+}
+.dropdownContent .listPanel>div {
+  border-top: 2px solid black;
+}
+
+.dropdownContent .alertItem,
+.dropdownContent .newsItem,
+.dropdownContent .notificationItem{
+  padding: 16px;
+}
+
+.dropdownContent .notificationItem .title{
+  font-weight: bold;
+}
+
+.dropdownContent .alertItem .title,
+.dropdownContent .newsItem .title {
+  font-style: italic;
+  font-weight: 100;
+  letter-spacing: 1px;
+}
+
+.dropdownContent .title {
+  line-height: 18px;
+  height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.popupContent.contentPopup .contentViewHeader{
+  padding: 20px;
+  background-color: #404040;
+  color: white;
+  font-size: 26px;
+  letter-spacing: 1px;
+  font-weight: 100;
+  vertical-align: middle;
+  line-height: 26px;
+}
+
+.contentViewHeader .title,
+.contentViewHeader .logo {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.contentViewHeader .logo {
+  width: 60px;
+  height: 60px;
+  margin-left: 0;
+  margin-right: 20px;
+}
+.contentViewHeader .title {
+  width: 460px;
+}
+
+.contentViewByline {
+  padding: 5px 0 0 40px;
+  color: #a0a0a0;
+  font-weight: 100;
+}
+
+.contentViewByline .timestamp,
+.contentViewByline .datestamp {
+  font-size: 14px;
+  display: inline-block;
+  min-width: 100px;
+}
+
+.popupContent.contentPopup .contentViewBody{
+  padding: 24px 40px 40px 40px;
+  max-height: 500px;
+  overflow: auto;
+  white-space: pre-wrap;
+  color: #404040;
+  font-weight: 300;
+}
+
+.searchResultsPane .status {
+  background-color: rgba( 128,128,128,0.1 );
+  text-align: center;
+  color: #808080;
+  width: 100%;
+  margin: -16px -16px 8px -16px;
+  padding: 24px 16px 8px 16px;
+}
+
+.listItem,
+.alertItem,
+.newsItem,
+.simpleListItem {
+  max-width: 800px;
+  position: relative;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  -ms-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+}
+.listItem:hover,
+.alertItem:hover,
+.newsItem:hover,
+.simpleListItem:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.simpleListItem {
+  display: inline-block;
+  vertical-align: top;
+  width: 380px;
+  overflow: hidden;
+  margin-right: 24px;
+  margin-bottom: 16px;
+  padding: 4px 16px;
+}
+
+.listItem .icon,
+.simpleListItem .icon {
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+}
+
+.contentViewBody .metaKey {
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.contentViewBody .metaValue {
+  padding: 8px;
+}
+
+
+
+html, body{ height: 100%; }
+a { color: inherit; }
+
+.contentPane,
+.tabContentHolder,
+.framePanelHolder {
+  height: 100%;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.framePanelHolder .namedPanel {
+  padding: 40px 16px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.framePanelHolder .frameHolder {
+  margin-top: 80px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #f1f1f1;
+}
+
+.iconTabLabels .tabLabel {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  border:  1px solid rgba(255,255,255,0.1);
+  margin-right: 8px;
+  text-align: center;
+  font-weight: 100;
+  font-size: 10px;
+  letter-spacing: 1px;
+  vertical-align: top;
+}
+
+.iconTabLabels .tabLabel.tabSelected {
+  border:  1px solid rgba(255,255,255,0.5);
+  background-color: rgba( 255,255,255,0.1);
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.dataButton.disabled {
+  display: none;
+}
+
+.frameHolder .controlHolder {
+  position: absolute;
+  top: -36px;
+  right:0px;
+}
+
+.frameHolder .controlHolder .browserButton {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-left:10px;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius:2px;
+}
+
+.dataIconHolder {
+  display: inline-block;
+  width:100px;
+  margin:10px 20px;
+  padding:10px;
+  vertical-align: top;
+  text-align:center;
+  border-radius: 4px;
+}
+
+.dataIconHolder .dataIcon {
+  width: 40px;
+  height: 40px;
+}
+
+.dataIconHolder .dataLabel {
+  padding: 0;
+}
+
+.loginStatus {
+  float: left;
+  padding: 10px 20px;
+  color: red;
+  font-size: 15px;
+}
+
+.expandablePanel .panelContent{
+  max-height: 1000px;
+  -webkit-transition: max-height 0.2s;
+  -moz-transition: max-height 0.2s;
+  transition: max-height 0.2s;
+}
+
+.expandablePanel .panelContent{
+  max-height: 0px;
+  overflow: hidden;
+}
+
+.expandablePanel.expanded .panelContent {
+  max-height: 1000px;
+  height: auto;
+}
+
+.expandablePanel .panelTitle {
+  border-bottom: 1px solid transparent;
+  padding-left: 20px;
+}
+
+.expandablePanel .panelTitle:before {
+  font-family: FontAwesome;
+  display:block;
+  float:left;
+  content: "\f0da";
+  margin-left: -16px;
+  font-size: 20px;
+  height: 20px;
+  width: 16px;
+  line-height: 20px;
+}
+
+.expandablePanel.expanded .panelTitle {
+  border-bottom: 1px solid rgba( 255,255,255,0.25);
+}
+
+.expandablePanel.expanded .panelTitle:before {
+  content: "\f0d7";
+  margin-left: -20px;
+}
+
+
+.contentItemNote,
+.contentItem {
+  font-style: italic;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 400px;
+  text-align: left;
+  margin-left: 80px;
+}
+
+.contentItem:before {
+  content: "\25cf ";
+  margin-left: -20px;
+  padding-right: 10px;
+}
+
+.listPanel {
+  position: relative;
+}
+
+
+.carouselFooter {
+  position: absolute;
+  bottom: 0px;
+  left:  0px;
+  width:  100%;
+}
+
+.carouselPager{
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 10px 8px 10px;
+}
+.carouselPager .carouselPageLabel {
+  display: inline-block;
+}
+
+.buttonHolder {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.popupCloseButton {
+  position:absolute;
+  top:0px;
+  left: 0px;
+  padding: 6px 12px;
+  font-size:24px;
+}
+
+.cooperativeFrameHolder {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.searchResultsPane {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.contentPopup table {
+  font-size: 14px;
+  font-family: "arial narrow", helvetica, sans-serif;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-top: 10px;
+}
+
+.contentPopup td {
+  padding: 2px 4px;
+  border: 1px solid #d8d8d8 !important;
+}
+
+.externalToolInfo {
+  font-size: 14px;
+  color: #ccc;
+  margin-top: -16px;
+  padding-left: 20px;
+  font-style: italic;
+}
+
+.sublabelActive .searchWidget.Tools {
+  display: none;
+}
