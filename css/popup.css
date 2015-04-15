@@ -1,0 +1,65 @@
+.popupHolder {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  overflow-x: visible;
+  height: auto;
+  z-index: 2000;
+  visibility: hidden;
+  backface-visibility: hidden;
+  perspective: 1300px;
+}
+
+.popupOverlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  opacity: 0;
+  transition: all 0.45s;
+}
+
+.popupContent {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  width: 600px;
+  background-color: white;
+  text-align: left;
+
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: rotateY(-70deg);
+  transform: rotateY(-70deg);
+  transition: all 0.45s;
+  opacity: 0;
+}
+
+.popupTransition {
+  visibility: visible;
+}
+
+.popupTransition ~ .popupOverlay {
+  opacity: 1;
+  visibility: visible;
+  background: rgba(0,0,0,0.5);
+}
+
+.popupTransition ~ .container {
+  -webkit-filter: blur(3px);
+  filter: blur(3px);
+}
+
+.popupTransition .popupContent {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
