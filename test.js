@@ -39,12 +39,12 @@ function setProgress( msg, pct, force ) {
           },
           {
             "type": "namedPanel",
-            "name": "Alerts",
+            "name": "Grid Layout",
             "content": {
               "type": "list",
               "dataSource": {
-                "type": "context",
-                "path": "alert"
+                "type": "data",
+                "path": "testList"
               }
             },
             "options": {
@@ -54,23 +54,19 @@ function setProgress( msg, pct, force ) {
           },
           {
             "type": "namedPanel",
-            "name": "News",
+            "name": "Table Layout",
             "content": {
               "type": "list",
               "dataSource": {
-                "type": "context",
-                "path": "news"
+                "type": "data",
+                "path": "testList"
               }
             },
             "options": {
-              "sort": "newest",
-              "hideOnEmpty": true
             }
           }
         ]
       } },
-      // { name:'Tools', type:'Tab' },
-      
       { name:'Search', label:'Search', type:'Tab', layout:
         {
           "type":"list",
@@ -91,13 +87,7 @@ function setProgress( msg, pct, force ) {
             }
           ]
         }
-      },
-      // { name:'Feedback', type:'Tab' },
-      // { name:'CustomerEducation', type:'Tab' },
-      // { name:'About', type:'Tab' },
-      // { name:'Profile', type:'Tab' },
-      // { name:'Authentication', type:'HiddenTab' },
-      // { name:'Search', type:'HiddenTab' }
+      }
     ]
   };
 
@@ -146,47 +136,65 @@ function keyFactory( obj ) {
 
 function startDataManager( onReady, onUpdate ) {
 
-  var context = {
-      "alert":{
-        "type":"list",
-        "content":[
-          {
-            "id":"2126",
-            "type":"alert",
-            "lastModified":1423853991,
-            "title":"Test Item",
-            "excerpt":"Lorem ipsum dolor amit",
-            "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
-            "post_date":1395420888,
-            "rendererKey":"alertItem"
-          },
-          {
-            "id":"8057",
-            "type":"alert",
-            "lastModified":1423853991,
-            "title":"Test Item 2",
-            "excerpt":"Lorem ipsum dolor amit",
-            "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
-            "post_date":1422970265,
-            "keywords":"",
-            "rendererKey":"alertItem"
-          }
-        ]
-      }
-    };
-    
-    $.each( context.alert.content, function( key, value ) {
-      console.log( "Initialize", key, value );
+  var data = {
+    testList: {
+      type:"list",
+      content:[
+        {
+          "id":"1",
+          "type":"alert",
+          "lastModified":1423853991,
+          "title":"Test Item",
+          "excerpt":"Lorem ipsum dolor amit",
+          "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
+          "post_date":1395420888,
+          "rendererKey":"alertItem"
+        },
+        {
+          "id":"2",
+          "type":"alert",
+          "lastModified":1423853991,
+          "title":"Test Item 2",
+          "excerpt":"Lorem ipsum dolor amit",
+          "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
+          "post_date":1422970265,
+          "keywords":"",
+          "rendererKey":"alertItem"
+        },
+        {
+          "id":"3",
+          "type":"alert",
+          "lastModified":1423853991,
+          "title":"Test Item",
+          "excerpt":"Lorem ipsum dolor amit",
+          "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
+          "post_date":1395420888,
+          "rendererKey":"alertItem"
+        },
+        {
+          "id":"4",
+          "type":"alert",
+          "lastModified":1423853991,
+          "title":"Test Item 2",
+          "excerpt":"Lorem ipsum dolor amit",
+          "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
+          "post_date":1422970265,
+          "keywords":"",
+          "rendererKey":"alertItem"
+        }
+      ]
+    }
+  };
+  
+  $.each( data, function( key, value ) {
+    $.each( value.content, function( key, value ) {
       value.id = keyFactory( value );
-      
       value.action = ( value.url ) ? createUrlViewAction( value ) : createArticleViewAction( value );
       Search.appendRecord( value.id, value );
     });
-    
-    widget.util.setData( 'context', context );
+  });
   
-  
-  onReady( {}, true );
+  onReady( widget.util.setData( 'data', data ), true );
 }
 
 function createUrlViewAction( data )

@@ -92,6 +92,7 @@ widget.util = (function(){
     },
     setData: function setData( key, data ) {
       db[key] = data;
+      return data;
     },
     expandPath: expandTokens,
     decode: decode,
@@ -113,8 +114,6 @@ widget.util = (function(){
       
       options.layoutDataSource = options.layoutDataSource || ( options.layout ? 'options.layout' : config.mode );
       
-      console.log( "Options?", options );
-
       if( options.profile )
       {
         args.division = widget.get( options, 'profile.division' );
@@ -133,7 +132,6 @@ widget.util = (function(){
         'options.layout': function optionsDataLoader( cacheArgs ) {
           if( $.isFunction( callback ) )
           {
-            console.log( options.layout );
             callback( options.layout );
           }
         },

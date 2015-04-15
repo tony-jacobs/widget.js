@@ -85,7 +85,6 @@ var ui = (function(){
     contentPane.append( $('<div/>', { text: "Loading..."}) );
 
     widget.util.loadData( options, function( data ) {
-      console.log( "Data loaded", data );
       panel.data( data );
       if( $.isFunction( dataReadyCallback ) )
         dataReadyCallback( contentPane, data );
@@ -345,7 +344,7 @@ var ui = (function(){
 
     listItem: function createListItem( view, data, options ) {
 
-console.log( "Create list item", data, options );
+//console.log( "Create list item", data, options );
 
       if( $.isFunction( data.initialize ) )
         data.initialize();

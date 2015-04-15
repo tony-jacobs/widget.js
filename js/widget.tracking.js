@@ -1,13 +1,18 @@
 var Tracking = (function() {
 
   var defaults = false;
+  var self;
 
   var Tracking = function() {
+    self = this;
+    
     this.init();
+    this.events = [];
   };
 
   Tracking.prototype = {
     init: function() {
+      tracker = this;
     },
 
     setDefaultKeyValue: function setDefaultKeyValue( key, value ) {
@@ -21,7 +26,8 @@ var Tracking = (function() {
     },
 
     track: function track( data ) {
-      console.log( "Track", data );
+      //console.log( "Track", data );
+      self.events.push( data );
       return data;
     }
   };
