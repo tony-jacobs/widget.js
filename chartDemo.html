@@ -155,8 +155,8 @@ $(function(){
     factory.create( { type:'gauge', data:data[seriesKey], parent:tableRowId } );
   });
 
-  factory.create( { type:'donut', dataSeries: data, parent: '#'+seriesChartHolderId });
-  factory.create( { type:'bar', dataSeries: data, parent: '#'+seriesChartHolderId });
+  factory.create( { type:'donut', data: data, parent: '#'+seriesChartHolderId });
+  factory.create( { type:'bar', data: data, parent: '#'+seriesChartHolderId });
   
 
   function createUpdater( seriesKey )

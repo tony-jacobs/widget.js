@@ -34,7 +34,7 @@ function setProgress( msg, pct, force ) {
             "type": "label",
             "name": "Widget.js demo App",
             "options": {
-              "styleClass": "demoTitle"
+              "styleClass": "panelTitle"
             }
           },
           {
@@ -64,6 +64,20 @@ function setProgress( msg, pct, force ) {
             },
             "options": {
               defaultRenderer: 'tableRowRenderer'
+            }
+          },
+          {
+            "type": "chart",
+            "chartType":"donut",
+            "dataSeries":"charts",
+            "options": {
+            }
+          },
+          {
+            "type": "chart",
+            "chartType":"bar",
+            "dataSeries":"charts",
+            "options": {
             }
           }
         ]
@@ -137,6 +151,31 @@ function setProgress( msg, pct, force ) {
             "options": {
               "styleClass": "excerpt"
             }
+          },
+          {
+            "type": "chart",
+            "chartType": "sparkline",
+            'dataSeries': "charts.${dataSeries}",
+            "options": {
+              width: 150,
+              height: 24
+            }
+          },
+          {
+            "type": "chart",
+            "chartType": "gauge",
+            'dataSeries': "charts.${dataSeries}",
+            "options": {
+              height: 40
+            }
+          },
+          {
+            "type": "chart",
+            "chartType": "readout",
+            'dataSeries': "charts.${dataSeries}",
+            "options": {
+              "formatter": "percent"
+            }
           }
         ]
       }
@@ -191,7 +230,8 @@ function startDataManager( onReady, onUpdate ) {
           "excerpt":"Lorem ipsum dolor amit",
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1395420888,
-          "rendererKey":"alertItem"
+          "rendererKey":"alertItem",
+          "dataSeries": "series1"
         },
         {
           "id":"2",
@@ -202,7 +242,8 @@ function startDataManager( onReady, onUpdate ) {
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1422970265,
           "keywords":"",
-          "rendererKey":"alertItem"
+          "rendererKey":"alertItem",
+          "dataSeries": "series2"
         },
         {
           "id":"3",
@@ -212,7 +253,8 @@ function startDataManager( onReady, onUpdate ) {
           "excerpt":"Lorem ipsum dolor amit",
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1395420882,
-          "rendererKey":"alertItem"
+          "rendererKey":"alertItem",
+          "dataSeries": "series3"
         },
         {
           "id":"4",
@@ -223,7 +265,8 @@ function startDataManager( onReady, onUpdate ) {
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1422970264,
           "keywords":"",
-          "rendererKey":"alertItem"
+          "rendererKey":"alertItem",
+          "dataSeries": "series4"
         }
       ]
     }
@@ -236,6 +279,8 @@ function startDataManager( onReady, onUpdate ) {
       Search.appendRecord( value.id, value );
     });
   });
+  
+  data.charts = generateSampleData();
   
   onReady( widget.util.setData( 'data', data ), true );
 }
@@ -300,4 +345,61 @@ function createArticleViewAction( data )
     $('.'+data.key).toggleClass( 'unread', false );
   };
 }
+
+function generateSampleData() 
+{
+  function sine() {
+    var sin = [];
+    var now =+new Date();
+    for (var i = 0; i < 10; i++) {
+      sin.push({
+        x: now - (10-i) * 1000, 
+        y: 50+100*Math.sin(i)
+      });
+    }
+    return sin;
+  }
+  
+  function createUpdater( seriesKey )
+  {
+    return function dataSeriesUpdater() {
+      data[seriesKey].push( {
+        x: new Date(),
+        y: Math.random() * 100
+      });
+    };
+  }
+
+  var vals = [ 30, 200, 100, 400, 150, 250 ];
+
+  var data = {
+    series1: widget.chartFactory.createDataSource( sine() ),
+    series2: widget.chartFactory.createDataSource( [] ),
+    series3: widget.chartFactory.createDataSource( [] ),
+    series4: widget.chartFactory.createDataSource( sine() ),
+  };
+
+  var now = new Date();
+  var len = vals.length;
+  vals.forEach( function( val, index ) {
+    data.series2.push( {
+      x: now-(len-index)*1000, 
+      y: val
+    });
+    data.series3.push( {
+      x: now-(len-index)*1000, 
+      y: val
+    });
+  });
+  
+  Object.keys( data ).forEach( function( seriesKey ) {
+    var updater = createUpdater( seriesKey );
+    var timeout = 500 + Math.random()*750;
+    setInterval( updater, timeout );
+  });  
+
+  return data;
+}
+
+
 

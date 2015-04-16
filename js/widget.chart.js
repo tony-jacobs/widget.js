@@ -19,26 +19,25 @@ widget.ChartFactory = (function() {
   };
 
 
-  ChartFactory.prototype.createChartNode = function createChartNode( parentSelector, classKey, nodeType )
+  ChartFactory.prototype.createChartNode = function createChartNode( parent, classKey, nodeType )
   {
     var containerId = 'chart-' + Object.keys( charts ).length;
     var className = 'chart';
     if( classKey )
       className += ' ' + classKey;
-  
-    var parent = document.querySelector( parentSelector );
+
     var node = (nodeType == 'svg') ? document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' ) : document.createElement( nodeType );
   
     node.setAttribute( 'id', containerId );
     node.setAttribute( 'class', className );
-    parent.appendChild( node );
+    $(parent).append( node );
     
     return containerId;
   };
 
-  ChartFactory.prototype.attachDataSource = function attachDataSource( data, domSelector, chartId )
+  ChartFactory.prototype.attachDataSource = function attachDataSource( data, domSelector, chartId, maxValues )
   {
-    var dataSet = data;
+    var dataSet = [];
     if( typeof data == 'function' )
     {
       data.subscribe( function( oldValue ) {
@@ -68,3 +67,5 @@ widget.ChartFactory = (function() {
   
   return ChartFactory;
 })();
+widget.chartFactory = new widget.ChartFactory();
+

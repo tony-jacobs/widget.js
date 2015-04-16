@@ -15,7 +15,7 @@
       
       var dataProjection = [];
       
-      $.each( options.dataSeries, function( key, dataHolder ) {
+      $.each( options.data, function( key, dataHolder ) {
         var dataSet = dataHolder();
         var datum = {
           key: key,

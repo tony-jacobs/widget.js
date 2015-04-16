@@ -6,15 +6,24 @@
   function createReadout( factory, options ) {
     var data = options.data;
     var parentSelector = options.parent;
-    var format = options.formatter || function( val ) { return val; };
+    var format = options.formatter;
+    if( !$.isFunction(format) )
+    {
+      var formatKey = format;
+      format = function( val ) {
+        return widget.Formatters.format( formatKey, val, true );
+      };
+    }
     
     var chartId = factory.createChartNode( parentSelector, 'readout', 'div' );
     var domSelector = '#'+chartId;
-    var chart = d3.select( domSelector )[0][0];
+    var chart = $( domSelector, $(options.parent) )[0];
     
     chart.updateReadout = function updateReadout( oldValue ) {
       var val = dataSet[ dataSet.length-1 ];
-      chart.innerHTML = format( val.y );
+      var formatString = format( val.y );
+
+      chart.innerHTML = formatString;
     };
   
     var dataSet = data;

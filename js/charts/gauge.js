@@ -20,11 +20,26 @@
         [ 1.0, "#ff0000" ]
       ]
     };
-  
+    
+    var width, height;
+    if( options.width )
+    {
+      width = options.width;
+      height = options.height || width * 0.667;
+    }
+    else
+    {
+      height = options.height || 100;
+      width = options.width || height * 1.5;
+    }
+    
     var chartId = factory.createChartNode( options.parent, 'gauge', 'canvas' );
     var domSelector = '#'+chartId;
-    var chart = d3.select( domSelector )[0][0];
+    var chart = $( domSelector, $(options.parent) )[0];
     var gauge = new Gauge( chart );
+    
+    gauge.canvas.width = width;
+    gauge.canvas.height = height;
       
     gauge.setOptions( opts ); 
     gauge.minValue = options.minValue || 0;
@@ -51,7 +66,9 @@
     }
   
     factory.charts[ chartId ] = gauge;
+    $(chart).css( {width:width+'px', height:height+'px'} );
     chart.updateGauge();
+
     return gauge;
   }
 
