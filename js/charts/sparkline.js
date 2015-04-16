@@ -17,7 +17,7 @@
       chart.height( height );
   
       var domSelector = '#'+chartId;
-      var dataSet = factory.attachDataSource( data, domSelector, chartId );  
+      var dataSet = factory.attachDataSource( data, domSelector, chartId, options.maxDataCount );  
     
       d3.select( domSelector )
         .datum( dataSet )

@@ -12,7 +12,7 @@
       var chart = nv.models.sparklinePlus();
       
       var domSelector = '#'+chartId;
-      var dataSet = factory.attachDataSource( data, domSelector, chartId );  
+      var dataSet = factory.attachDataSource( data, domSelector, chartId, options.maxDataCount );  
       
       chart.margin({left: 200});
       chart.x( function(d,i) { 

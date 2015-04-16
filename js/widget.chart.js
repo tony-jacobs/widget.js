@@ -37,13 +37,30 @@ widget.ChartFactory = (function() {
 
   ChartFactory.prototype.attachDataSource = function attachDataSource( data, domSelector, chartId, maxValues )
   {
-    var dataSet = [];
+    var dataSet = data;
+    maxValues = maxValues || 60;
+    
     if( typeof data == 'function' )
     {
-      data.subscribe( function( oldValue ) {
+      dataSet = data().slice( 0 );
+      var end = dataSet.length;
+
+      data.subscribe( function( oldData ) {
+        var newData = data();
+        if( newData.length > end )
+        {
+          var append = newData.slice( end );
+          end = newData.length;
+          for( var i=0; i<append.length; i++ )
+          {
+            while( dataSet.length >= maxValues )
+              dataSet.shift();
+            dataSet.push( append[i] );
+          }
+        }
+        
         d3.select( domSelector ).call( charts[ chartId ] );
       });
-      dataSet = data();
     }
     
     return dataSet;
