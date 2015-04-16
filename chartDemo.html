@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+ <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>widget.js test page</title>
+
+  <!-- build:css css/widget.css -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/popup.css">
+  <link rel="stylesheet" href="css/nvd3-1.7.1.min.css">
+  <link rel="stylesheet" href="css/widget.base.css">
+  <link rel="stylesheet" href="css/widget.ui.css">
+  <link rel="stylesheet" href="css/widget.chart.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/roboto.css">
+  <!-- /build -->
+
+    <style>
+svg.sparkline {
+  display: inline-block;
+  width: 200px;
+  height: 40px;
+  margin: 10px;
+}
+
+svg.interactivesparkline {
+  width: 800px;
+  height: 80px;
+}
+
+.chart.readout {
+  font-family: 'helvetica neue', helvetica, arial, sans-serif;
+  width: 120px;
+}
+
+.tableRow .chart {
+  vertical-align: middle;
+}
+
+#seriesChartDemo .chart {
+  display: inline-block;
+}
+    </style>
+
+</head>
+<body>
+
+  <div id="chartHolder"></div>
+
+
+  <!-- build:js widget.js -->
+  <script src="js/vendor/jquery-1.11.0.min.js"></script>
+  <script src="js/vendor/knockout-3.3.0.min.js"></script>
+  <script src="js/vendor/jquery-ui-1.11.2.min.js"></script>
+  <script src="js/vendor/moment-2.8.2.min.js"></script>
+  <script src="js/vendor/lancasterStemmer.js"></script>
+  <script src="js/vendor/lunr-0.5.6_tj.js"></script>
+  <script src="js/vendor/lzstring-1.3.5.min.js"></script>
+  <script src="js/vendor/d3-3.5.2.min.js"></script>
+  <script src="js/vendor/nvd3-1.7.1.min.js"></script>
+  <script src="js/vendor/gauge-1.2.1.min.js"></script>
+  
+  <script src="js/global.js"></script>
+  
+  <script src="js/widget.js"></script>
+  <script src="js/widget.tracking.js"></script>
+  <script src="js/widget.search.js"></script>
+  <script src="js/widget.layout.js"></script>
+  <script src="js/widget.ui.js"></script>
+  <script src="js/widget.util.js"></script>
+  <script src="js/widget.chart.js"></script>
+  <script src="js/widget.format.js"></script>
+  <!-- /build -->
+
+  <script>
+    
+$(function(){
+  var parentId = "#chartHolder";
+  
+  function generateSampleData( factory ) 
+  {
+    function sine() {
+      var sin = [];
+      var now =+new Date();
+      for (var i = 0; i < 10; i++) {
+        sin.push({
+          x: now - (10-i) * 1000, 
+          y: 50+100*Math.sin(i)
+        });
+      }
+      return sin;
+    }
+  
+    var vals = [ 30, 200, 100, 400, 150, 250 ];
+  
+    var data = {
+      series1: factory.createDataSource( sine() ),
+      series2: factory.createDataSource( [] ),
+      series3: factory.createDataSource( [] ),
+      series4: factory.createDataSource( sine() ),
+    };
+  
+    var now = new Date();
+    var len = vals.length;
+    vals.forEach( function( val, index ) {
+      data.series2.push( {
+        x: now-(len-index)*1000, 
+        y: val
+      });
+      data.series3.push( {
+        x: now-(len-index)*1000, 
+        y: val
+      });
+    });
+    
+    return data;
+  }
+  
+  var sparklineHolderId = 'sparklineDemo';
+  var interactiveLineHolderId = 'interactiveLineDemo';
+  var tableHolderId = 'tableDemo';
+  var seriesChartHolderId = 'seriesChartDemo';
+    
+  $('<div/>').attr( 'id', seriesChartHolderId ).appendTo( $(parentId) );
+  $('<div/>').attr( 'id', tableHolderId ).appendTo( $(parentId) );
+  $('<div/>').attr( 'id', sparklineHolderId ).appendTo( $(parentId) );
+  $('<div/>').attr( 'id', interactiveLineHolderId ).appendTo( $(parentId) );
+
+
+  var factory = new ChartFactory();
+  var data = generateSampleData( factory );
+  
+  var i=0;
+  Object.keys( data ).forEach( function( seriesKey ) {
+    // Sparkline demo
+    factory.create( { type:'sparkline', data:data[seriesKey], parent:'#'+sparklineHolderId } );
+    
+    // Interactive line demo
+    factory.create( { type:'interactiveSparkline', data:data[seriesKey], parent:'#'+interactiveLineHolderId } );
+    
+    // Table row demo
+    var tableRowId = 'tableRow'+(i++);
+    $('<div/>').attr( 'id', tableRowId ).addClass('tableRow').appendTo( $('#'+tableHolderId) );
+    tableRowId = '#'+tableRowId;
+    factory.create( { type:'sparkline', data:data[seriesKey], parent:tableRowId } );
+    factory.create( { type:'readout', data:data[seriesKey], parent:tableRowId, formatter:Formatters.percent } );
+    factory.create( { type:'gauge', data:data[seriesKey], parent:tableRowId } );
+  });
+
+  factory.create( { type:'donut', dataSeries: data, parent: '#'+seriesChartHolderId });
+  factory.create( { type:'bar', dataSeries: data, parent: '#'+seriesChartHolderId });
+  
+
+  function createUpdater( seriesKey )
+  {
+    return function dataSeriesUpdater() {
+      data[seriesKey].push( {
+        x: new Date(),
+        y: Math.random() * 100
+      });
+    };
+  }
+  
+  Object.keys( data ).forEach( function( seriesKey ) {
+    var updater = createUpdater( seriesKey );
+    var timeout = 500 + Math.random()*750;
+    setInterval( updater, timeout );
+  });
+});
+
+  </script>
+
+</body>
+</html>

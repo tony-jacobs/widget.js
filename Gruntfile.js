@@ -16,6 +16,8 @@ module.exports = function(grunt) {
           'js/widget.layout.js',
           'js/widget.ui.js',
           'js/widget.util.js',
+          'js/widget.chart.js',
+          'js/widget.format.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       }
@@ -27,8 +29,10 @@ module.exports = function(grunt) {
         src: [
           'css/normalize.css',
           'css/popup.css',
+          'css/nvd3-1.7.1.min.css',
           'css/widget.base.css',
           'css/widget.ui.css',
+          'css/widget.chart.css',
           'css/font-awesome.min.css',
           'css/roboto.css',
         ],
@@ -53,6 +57,7 @@ module.exports = function(grunt) {
       dist: {
         files: {
           'dist/index.html': ['index.html'],
+          'dist/chartDemo.html': ['chartDemo.html'],
         }
       }
     },
