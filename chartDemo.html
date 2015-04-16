@@ -71,6 +71,13 @@ svg.interactivesparkline {
   <script src="js/widget.util.js"></script>
   <script src="js/widget.chart.js"></script>
   <script src="js/widget.format.js"></script>
+  
+  <script src="js/charts/bar.js"></script>
+  <script src="js/charts/donut.js"></script>
+  <script src="js/charts/gauge.js"></script>
+  <script src="js/charts/interactiveSparkline.js"></script>
+  <script src="js/charts/readout.js"></script>
+  <script src="js/charts/sparkline.js"></script>
   <!-- /build -->
 
   <script>
@@ -128,7 +135,7 @@ $(function(){
   $('<div/>').attr( 'id', interactiveLineHolderId ).appendTo( $(parentId) );
 
 
-  var factory = new ChartFactory();
+  factory = new widget.ChartFactory();
   var data = generateSampleData( factory );
   
   var i=0;
@@ -144,7 +151,7 @@ $(function(){
     $('<div/>').attr( 'id', tableRowId ).addClass('tableRow').appendTo( $('#'+tableHolderId) );
     tableRowId = '#'+tableRowId;
     factory.create( { type:'sparkline', data:data[seriesKey], parent:tableRowId } );
-    factory.create( { type:'readout', data:data[seriesKey], parent:tableRowId, formatter:Formatters.percent } );
+    factory.create( { type:'readout', data:data[seriesKey], parent:tableRowId, formatter:widget.Formatters.percent } );
     factory.create( { type:'gauge', data:data[seriesKey], parent:tableRowId } );
   });
 

@@ -17,7 +17,13 @@ module.exports = function(grunt) {
           'js/widget.ui.js',
           'js/widget.util.js',
           'js/widget.chart.js',
-          'js/widget.format.js'
+          'js/widget.format.js',
+          'js/charts/bar.js',
+          'js/charts/donut.js',
+          'js/charts/gauge.js',
+          'js/charts/interactiveSparkline.js',
+          'js/charts/readout.js',
+          'js/charts/sparkline.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       }
