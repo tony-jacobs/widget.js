@@ -1,17 +1,3 @@
-function showIframePopup( parent, url ) {
-  widget.showPopup( function( panel, contentHolder ) {
-    contentHolder.addClass( 'iframePopup' );
-    contentHolder.html("<iframe width='600' height='600' frameborder='0' scrolling='true' marginheight='0' marginwidth='0' src='"+url+"'></iframe>");
-    contentHolder.css("display","block");
-  }, parent );
-}
-
-function showContentPopup( parent, content ) {
-  widget.showPopup( function( panel, contentHolder ) {
-    contentHolder.addClass( 'contentPopup' ).append( $( content ).css("display","block") );
-  }, parent );
-}
-
 widget.assets = (function(){
   map = {};
 
@@ -233,6 +219,23 @@ widget.layout = (function(){
       }
         
       return label.appendTo( view );
+    },
+
+    content: function( view, data, options ) {
+      var name = widget.util.expandPath( data.name );
+
+      var content = $('<div/>', {html: name} ).addClass( 'dataContent' );
+      if( options.styleClass )
+        content.addClass( options.styleClass );
+        
+      if( data.action )
+      {
+        content.addClass( 'clickable' ).click( data.action );
+      }
+        
+      widget.ui.addAnchorSupport( content );
+            
+      return content.appendTo( view );
     },
 
     image: function( view, data, options ) {

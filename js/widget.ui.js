@@ -1,4 +1,81 @@
 
+widget.ui = {
+  addAnchorSupport: function( body, options ) {
+    
+    // todo:  This code is buggy - it seems to find the stuff right, but 
+    //        scrolling doesn't always work.
+    
+    options = $.extend( {}, options||{}, {
+      scrollAnimationTime: 400,
+      linkWindowTitle: 'widgetLinkViewer'
+    });
+    
+    $( 'a', body ).each( function( i, anchor ){
+      anchor = $(anchor);
+      var href = anchor.attr( 'href' );
+      if( href )
+      {
+        if( href.startsWith( '#' ) )
+        {
+          anchor.on( 'click', function() {
+            var targetAnchor = $( "a[name=" + href.substring(1) + "]", body );
+            body.animate({
+              scrollTop: targetAnchor.offset().top
+            }, options.scrollAnimationTime );
+            return false;
+          });
+        }
+        else
+        {
+          anchor.on( 'click', function() {
+            window.open( href, options.linkWindowTitle );
+            return false;
+          } );
+        }
+      }
+    });
+  },
+  
+  createUrlViewAction: function createUrlViewAction( data ) {
+    return function urlViewAction() {
+      showIframePopup( $('#tabNav').parent(), data.url );
+    };
+  },
+
+  createRendererPopupAction: function createRendererPopupAction( data, renderer ) {
+    var action = function rendererPopupAction() {
+      var holder = $('<div/>');
+      var rendererData = $.extend( {}, data, { 
+        dynamicRenderer: renderer 
+      });
+      
+      if( rendererData.action == action )
+        delete rendererData.action;
+      
+      var view = widget.layout.renderer( holder, rendererData );
+  
+      showContentPopup( $('#tabNav').parent(), holder );
+    };
+    
+    return action;
+  }
+
+};
+
+function showIframePopup( parent, url ) {
+  widget.showPopup( function( panel, contentHolder ) {
+    contentHolder.addClass( 'iframePopup' );
+    contentHolder.html("<iframe width='600' height='600' frameborder='0' scrolling='true' marginheight='0' marginwidth='0' src='"+url+"'></iframe>");
+    contentHolder.css("display","block");
+  }, parent );
+}
+
+function showContentPopup( parent, content ) {
+  widget.showPopup( function( panel, contentHolder ) {
+    contentHolder.addClass( 'contentPopup' ).append( $( content ).css("display","block") );
+  }, parent );
+}
+
 
 function createScreen( options )
 {

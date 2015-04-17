@@ -234,7 +234,7 @@ div#headerControlPanel {
   overflow: hidden;
 }
 
-.popupContent.contentPopup .contentViewHeader{
+.popupContent .popupHeader{
   padding: 20px;
   background-color: #404040;
   color: white;
@@ -245,36 +245,7 @@ div#headerControlPanel {
   line-height: 26px;
 }
 
-.contentViewHeader .title,
-.contentViewHeader .logo {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.contentViewHeader .logo {
-  width: 60px;
-  height: 60px;
-  margin-left: 0;
-  margin-right: 20px;
-}
-.contentViewHeader .title {
-  width: 460px;
-}
-
-.contentViewByline {
-  padding: 5px 0 0 40px;
-  color: #a0a0a0;
-  font-weight: 100;
-}
-
-.contentViewByline .timestamp,
-.contentViewByline .datestamp {
-  font-size: 14px;
-  display: inline-block;
-  min-width: 100px;
-}
-
-.popupContent.contentPopup .contentViewBody{
+.popupContent .popupBody{
   padding: 24px 40px 40px 40px;
   max-height: 500px;
   overflow: auto;
@@ -282,6 +253,7 @@ div#headerControlPanel {
   color: #404040;
   font-weight: 300;
 }
+
 
 .searchResultsPane .status {
   background-color: rgba( 128,128,128,0.1 );
