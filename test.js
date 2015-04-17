@@ -1,22 +1,3 @@
-var progressNow = 0;
-function setProgress( msg, pct, force ) {
-  var seconds = Math.floor( (new Date().getTime()) / 1000 );
-  if( seconds > progressNow )
-  {
-    progressNow = seconds;
-    if( pct !== undefined )
-    {
-      msg += " (" + pct + "%)";
-    }
-
-    //$('.statusFeedbackPane').empty().text( msg );
-    console.log( "STATUS " + msg );
-  }
-  else if( force )
-    console.log( "STATUS " + msg );
-}
-
-
 (function(){
 
   var mainNav = {
