@@ -77,6 +77,13 @@
                   "dataSeries":"charts",
                   "options": {
                   }
+                },
+                {
+                  "type": "chart",
+                  "chartType":"horizontalBar",
+                  "dataSeries":"charts",
+                  "options": {
+                  }
                 }
               ],
               options: { styleClass: 'chartPanel', expandable:true }
