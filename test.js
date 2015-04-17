@@ -80,6 +80,13 @@
                 },
                 {
                   "type": "chart",
+                  "chartType":"pie",
+                  "dataSeries":"charts",
+                  "options": {
+                  }
+                },
+                {
+                  "type": "chart",
                   "chartType":"horizontalBar",
                   "dataSeries":"charts",
                   "options": {
