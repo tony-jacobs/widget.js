@@ -71,9 +71,7 @@
 }
 
 /* View Styles */
-.listItem {
-  padding: 16px;
-}
+
 .errorPanel .title {
   display: inline-block;
   font-size: 20px;
@@ -96,35 +94,6 @@
 }
 
 
-.namedPanel .alertItem,
-.namedPanel .newsItem {
-  display: inline-block;
-  width: 400px;
-  margin-right: 40px;
-}
-
-.itemContent .timestamp,
-.itemContent .datestamp,
-.itemContent .summary {
-  font-size: 14px;
-}
-
-.itemContent .datestamp,
-.itemContent .timestamp{
-  display: inline-block;
-  min-width: 100px;
-}
-
-.widgetTabPanel .itemContent .title {
-  font-size: 16px;
-}
-.widgetTabPanel .itemContent {
-  color: #404040;
-}
-.widgetTabPanel .itemContent .title {
-  font-weight: 500;
-}
-
 .widgetTabPanel .decoration {
   position: absolute;
   width: 16px;
@@ -138,12 +107,11 @@
 }
 
 
-.widgetTabPanel .newsItem .icon,
-.widgetTabPanel .alertItem .icon {
+.icon {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin: 18px 10px 0 0;
+  width: 32px;
+  height: 32px;
+  margin: 4px;
   vertical-align: top;
 }
 
@@ -258,23 +226,6 @@ div#headerControlPanel {
   border-top: 2px solid black;
 }
 
-.dropdownContent .alertItem,
-.dropdownContent .newsItem,
-.dropdownContent .notificationItem{
-  padding: 16px;
-}
-
-.dropdownContent .notificationItem .title{
-  font-weight: bold;
-}
-
-.dropdownContent .alertItem .title,
-.dropdownContent .newsItem .title {
-  font-style: italic;
-  font-weight: 100;
-  letter-spacing: 1px;
-}
-
 .dropdownContent .title {
   line-height: 18px;
   height: 18px;
@@ -339,43 +290,6 @@ div#headerControlPanel {
   width: 100%;
   margin: -16px -16px 8px -16px;
   padding: 24px 16px 8px 16px;
-}
-
-.listItem,
-.alertItem,
-.newsItem,
-.simpleListItem {
-  max-width: 800px;
-  position: relative;
-  -webkit-transition: background-color 100ms linear;
-  -moz-transition: background-color 100ms linear;
-  -o-transition: background-color 100ms linear;
-  -ms-transition: background-color 100ms linear;
-  transition: background-color 100ms linear;
-}
-.listItem:hover,
-.alertItem:hover,
-.newsItem:hover,
-.simpleListItem:hover {
-  background-color: rgba(255,255,255,0.1);
-}
-
-.simpleListItem {
-  display: inline-block;
-  vertical-align: top;
-  width: 380px;
-  overflow: hidden;
-  margin-right: 24px;
-  margin-bottom: 16px;
-  padding: 4px 16px;
-}
-
-.listItem .icon,
-.simpleListItem .icon {
-  float: left;
-  width: 20px;
-  height: 20px;
-  margin-right: 6px;
 }
 
 .contentViewBody .metaKey {

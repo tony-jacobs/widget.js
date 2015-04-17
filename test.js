@@ -48,6 +48,7 @@ function setProgress( msg, pct, force ) {
               }
             },
             "options": {
+              defaultRenderer: 'itemCard',
               "sort": "newest",
               "hideOnEmpty": true
             }
@@ -179,6 +180,44 @@ function setProgress( msg, pct, force ) {
           }
         ]
       }
+    },
+    itemCard: {
+      type: "renderer",
+      options: {
+        styleClass: "cardContent"
+      },
+      layout: {
+        "type": "list",
+        "content": [
+          {
+            "type": "label",
+            "name": "${title}",
+            "options": {
+              "styleClass": "title"
+            }
+          },
+          {
+            "type": "label",
+            "name": "={ return moment( data.post_date*1000 ).format('MMM. DD YYYY'); }",
+            "options": {
+              "styleClass": "datestamp"
+            }
+          },{
+            "type": "label",
+            "name": "={ return moment( data.post_date*1000 ).format('h:mmA'); }",
+            "options": {
+              "styleClass": "timestamp"
+            }
+          },
+          {
+            "type": "label",
+            "name": "${excerpt}",
+            "options": {
+              "styleClass": "summary"
+            }
+          }
+        ]
+      }
     }
   });
 
@@ -230,7 +269,6 @@ function startDataManager( onReady, onUpdate ) {
           "excerpt":"Lorem ipsum dolor amit",
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1395420888,
-          "rendererKey":"alertItem",
           "dataSeries": "series1"
         },
         {
@@ -242,7 +280,6 @@ function startDataManager( onReady, onUpdate ) {
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1422970265,
           "keywords":"",
-          "rendererKey":"alertItem",
           "dataSeries": "series2"
         },
         {
@@ -253,7 +290,6 @@ function startDataManager( onReady, onUpdate ) {
           "excerpt":"Lorem ipsum dolor amit",
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1395420882,
-          "rendererKey":"alertItem",
           "dataSeries": "series3"
         },
         {
@@ -265,7 +301,6 @@ function startDataManager( onReady, onUpdate ) {
           "content":"Lorem ipsum dolor amit sit quo nullam eadem longus textus",
           "post_date":1422970264,
           "keywords":"",
-          "rendererKey":"alertItem",
           "dataSeries": "series4"
         }
       ]
