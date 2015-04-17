@@ -4,36 +4,40 @@
 
 
   function createProgressGauge( factory, options ) {
+    
+    options = $.extend( {}, options||{}, {
+      color: '#1d5d79',
+      fillColor: '#e0e0e0',
+      
+      lineWidth: 0.12
+    });
+    
     var opts = {
       angle: 0.5,
-      lineWidth: 0.1,
+      lineWidth: options.lineWidth,
       pointer: {
         length: 0.66, 
         strokeWidth: 0.035
       },
   
-      strokeColor: options.fillColor || '#E0E0E0',
-      percentColors: [
-        [ 0.0, "#a9d70b" ],
-        [ 0.6, "#a9d70b" ],
-        [ 0.75, "#f9c802" ],
-        [ 1.0, "#ff0000" ]
-      ]
+      colorStart: options.color,
+      colorStop: options.color,
+      strokeColor: options.fillColor
     };
     
     var width, height;
     if( options.width )
     {
       width = options.width;
-      height = options.height || width * 0.667;
+      height = options.height || width;
     }
     else
     {
       height = options.height || 100;
-      width = options.width || height * 1.5;
+      width = options.width || height;
     }
     
-    var chartId = factory.createChartNode( options.parent, 'gauge', 'canvas' );
+    var chartId = factory.createChartNode( options.parent, 'progressGauge', 'canvas' );
     var domSelector = '#'+chartId;
     var chart = $( domSelector, $(options.parent) )[0];
     var gauge = new Donut( chart );
