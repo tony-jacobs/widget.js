@@ -257,6 +257,13 @@ function setProgress( msg, pct, force ) {
                 "options": {
                   "styleClass": "timestamp"
                 }
+              },  
+              {
+                "type": "chart",
+                "chartType": "interactiveSparkline",
+                'dataSeries': "charts.${dataSeries}",
+                "options": {
+                }
               },
               {
                 "type": "content",
