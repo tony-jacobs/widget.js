@@ -23,6 +23,7 @@ module.exports = function(grunt) {
           'js/charts/gauge.js',
           'js/charts/horizontalBar.js',
           'js/charts/interactiveSparkline.js',
+          'js/charts/line.js',
           'js/charts/progressGauge.js',
           'js/charts/readout.js',
           'js/charts/sparkline.js'

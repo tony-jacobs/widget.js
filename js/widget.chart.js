@@ -61,7 +61,8 @@ widget.ChartFactory = (function() {
           }
         }
         
-        d3.select( domSelector ).call( charts[ chartId ] );
+        if( domSelector )
+          d3.select( domSelector ).call( charts[ chartId ] );
       });
     }
     

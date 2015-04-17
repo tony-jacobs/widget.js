@@ -84,6 +84,13 @@
                   "dataSeries":"charts",
                   "options": {
                   }
+                },
+                {
+                  "type": "chart",
+                  "chartType":"line",
+                  "dataSeries":"charts",
+                  "options": {
+                  }
                 }
               ],
               options: { styleClass: 'chartPanel', expandable:true }
