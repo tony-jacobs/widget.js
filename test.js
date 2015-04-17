@@ -19,6 +19,16 @@
             }
           },
           {
+            "type": "list",
+            "dataSource": {
+              "type": "data",
+              "path": "testList"
+            },
+            "options": {
+              defaultRenderer: 'itemCard'
+            }
+          },
+          {
             "type": "namedPanel",
             "name": "Grid Layout",
             "content": {
@@ -29,7 +39,7 @@
               }
             },
             "options": {
-              defaultRenderer: 'itemCard',
+              defaultRenderer: 'itemGridCell',
               "sort": "newest",
               "hideOnEmpty": true
             }
@@ -49,19 +59,29 @@
             }
           },
           {
-            "type": "chart",
-            "chartType":"donut",
-            "dataSeries":"charts",
-            "options": {
+            "type": "namedPanel",
+            "name": "Charts",
+            "content": {
+              type: "list",
+              content: [
+                {
+                  "type": "chart",
+                  "chartType":"donut",
+                  "dataSeries":"charts",
+                  "options": {
+                  }
+                },
+                {
+                  "type": "chart",
+                  "chartType":"bar",
+                  "dataSeries":"charts",
+                  "options": {
+                  }
+                }
+              ],
+              options: { styleClass: 'chartPanel', expandable:true }
             }
           },
-          {
-            "type": "chart",
-            "chartType":"bar",
-            "dataSeries":"charts",
-            "options": {
-            }
-          }
         ]
       } },
       { name:'Search', label:'Search', type:'Tab', layout:
@@ -171,6 +191,57 @@
         "type": "list",
         "content": [
           {
+            "type":"list",
+            "content":[
+              {
+                "type": "chart",
+                "chartType": "gauge",
+                'dataSeries': "charts.${dataSeries}",
+                "options": {
+                  width: 150
+                }
+              },
+              {
+                "type": "chart",
+                "chartType": "readout",
+                'dataSeries': "charts.${dataSeries}",
+                "options": {
+                  "formatter": "percent"
+                }
+              },
+              {
+                "type": "chart",
+                "chartType": "sparkline",
+                'dataSeries': "charts.${dataSeries}",
+                "options": {
+                  width: 138,
+                  height: 24
+                }
+              }
+            ],
+            "options": {
+              "styleClass": "content"
+            }
+          },
+          {
+            "type": "label",
+            "name": "${title}",
+            "options": {
+              "styleClass": "title"
+            }
+          }
+        ]
+      }
+    },
+    itemGridCell: {
+      type: "renderer",
+      options: {
+        styleClass: "cardContent"
+      },
+      layout: {
+        "type": "list",
+        "content": [
+          {
             "type": "label",
             "name": "${title}",
             "options": {
@@ -202,9 +273,6 @@
     },
     popupRenderer: {
       type: "renderer",
-      options: {
-        styleClass: "popupContent"
-      },
       layout: {
         "type": "list",
         "content": [
