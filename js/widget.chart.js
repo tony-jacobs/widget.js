@@ -16,6 +16,8 @@ widget.ChartFactory = (function() {
     var factory = chartRegistry[ options.type ];
     if( factory )
       return factory( this, options );
+    else
+      return $(options.parent).append( $( "<div/>", {text:options.type} ).addClass( "chart error " + options.type ) );
   };
 
 

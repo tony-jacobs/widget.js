@@ -22,6 +22,7 @@ module.exports = function(grunt) {
           'js/charts/donut.js',
           'js/charts/gauge.js',
           'js/charts/interactiveSparkline.js',
+          'js/charts/progressGauge.js',
           'js/charts/readout.js',
           'js/charts/sparkline.js'
         ],
@@ -62,8 +63,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'dist/index.html': ['index.html'],
-          'dist/chartDemo.html': ['chartDemo.html'],
+          'dist/index.html': ['index.html']
         }
       }
     },

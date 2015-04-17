@@ -173,6 +173,14 @@
           },
           {
             "type": "chart",
+            "chartType": "progressGauge",
+            'dataSeries': "charts.${dataSeries}",
+            "options": {
+              height: 40
+            }
+          },
+          {
+            "type": "chart",
             "chartType": "readout",
             'dataSeries': "charts.${dataSeries}",
             "options": {
