@@ -12,7 +12,6 @@ widget.assets = (function(){
 widget.layout = (function(){
   
   var assets = widget.assets;
-  var registry;
 
   function createUrlAction( linkUrl, windowMode ) {
     return function() {
@@ -56,41 +55,6 @@ widget.layout = (function(){
       } );
 
     };
-  }
-
-  function createTab( parent, options, dataReadyCallback ) {
-    var labelHolder = $('<div/>' ).addClass( 'panelLabel unselectable' ).addClass( options.name +"Header" );
-
-    var titleBlock = $('<span/>').addClass( 'tabTitle' ).appendTo( labelHolder );
-    titleBlock.append( $( '<img/>', { src: options.icon_on || options.icon } ).addClass('icon') );
-    titleBlock.append( $( '<div/>', { text: options.label || options.name } ) );
-    labelHolder.hide();
-    $('#appHeader').append( labelHolder );
-    var panel = $('<div/>').addClass( 'tabContentHolder' );
-
-    var contentPane = $( '<div/>' ).addClass( 'contentPane' ).appendTo( panel );
-    contentPane.append( $('<div/>', { text: "Loading..."}) );
-
-    widget.util.loadData( options, function( data ) {
-      panel.data( data );
-      if( $.isFunction( dataReadyCallback ) )
-        dataReadyCallback( contentPane, data );
-    } );
-
-    return panel;
-  }
-
-  function defaultTabView( parent, tabData, options ) {
-    var tabView = createTab( parent, tabData, function( contentPane, data, options ) {
-      contentPane.empty();
-
-      return dispatch( contentPane, data, options, function( view, data, options ) {
-        return view.append( $('<pre/>', { text: JSON.stringify( data ) } ) );
-      });
-    });
-    
-    parent.append( tabView );
-    return tabView;
   }
 
   function loadDataSource( dataSource, baseContent, options )
@@ -140,9 +104,9 @@ widget.layout = (function(){
       configureRenderer( data, options.listOptions );
 
       if( factory && $.type( factory ) === 'string' )
-        factory = registry[ factory ];
+        factory = widget.layout.registry[ factory ];
 
-      var handler = factory || registry[data.rendererKey];
+      var handler = factory || widget.layout.registry[data.rendererKey];
       if( $.isFunction( handler ) )
       {
         return handler( parent, data, options );
@@ -188,369 +152,22 @@ widget.layout = (function(){
       return data;
   }
 
-  registry = {
-    Tab: defaultTabView,
-    HiddenTab: defaultTabView,
-
-    tabGroup: function createTabGroup( view, data, options )
-    {
-      var labelHolderClass = options.labelHolder || 'labels';
-      var tabOptions = $.extend( {}, options, {
-        tabData: data.content,
-        labelSelector: "." + labelHolderClass
-      } );
-      view.append( $('<div/>').addClass( labelHolderClass ) );
-      var tabNav = widget.generateTabs( view, tabOptions );
-      var tabManager = tabNav.data('tabManager');
-
-      $.each( data.content, function( i, tabData ) {
-        var tabContent = dispatch( tabData.view, tabData.content, {}, function( view, data, options ) {
-          var v = $('<div/>', {text: data} ).appendTo( view );
-          v.addClass( options.styleClass||'tabItem' );
-          return v;
-        });
-      } );
-    },
-
-    label: function( view, data, options ) {
-      var name = widget.util.expandPath( data.name );
-
-      var label = $('<div/>', {html: name} ).addClass( 'dataLabel' ).addClass('unselectable');
-      if( options.styleClass )
-        label.addClass( options.styleClass );
-        
-      if( data.action )
-      {
-        label.addClass( 'clickable' ).click( data.action );
-      }
-        
-      return label.appendTo( view );
-    },
-
-    content: function( view, data, options ) {
-      var name = widget.util.expandPath( data.name );
-
-      var content = $('<div/>', {html: name} ).addClass( 'dataContent' );
-      if( options.styleClass )
-        content.addClass( options.styleClass );
-        
-      if( data.action )
-      {
-        content.addClass( 'clickable' ).click( data.action );
-      }
-        
-      widget.ui.addAnchorSupport( content );
-            
-      return content.appendTo( view );
-    },
-
-    image: function( view, data, options ) {
-      var image = $('<img/>', {src: data.url} ).addClass( options.styleClass || 'dataImage' ).addClass('unselectable').appendTo( view );
-      return image;
-    },
-
-    icon: function iconFactory( view, data, options ) {
-      var icon = $('<div/>' ).addClass( options.styleClass || 'dataIconHolder' ).addClass('unselectable').appendTo( view );
-
-      var iconUrl = widget.util.expandPath( data.iconUrl );
-      var displayName = widget.util.expandPath( data.name );
-
-      $('<img/>', {src: iconUrl} ).addClass( options.iconStyleClass || 'dataIcon' ).appendTo( icon );
-      $('<div/>', {html: displayName} ).addClass( options.labelStyleClass || 'dataLabel' ).appendTo( icon );
-
-      var action = null;
-
-      if( data.linkUrl )
-      {
-        var linkUrl = widget.util.expandPath( widget.util.expandPath( data.linkUrl ) );
-        if( options.mode=='link' )
-          action = createUrlAction( linkUrl );
-        else if( options.mode=='cooperativeFrame' )
-        {
-          var label = $( '<div/>' ).addClass( 'toolTitle' );
-          $('<img/>', {src: iconUrl} ).addClass( options.iconTitleStyleClass || 'icon titleIcon' ).appendTo( label );
-          $('<div/>', {html: displayName} ).addClass( options.labelTitleStyleClass || 'titleLabel' ).appendTo( label );
-
-          var parent = options.parentSelector ? $(options.parentSelector) : view.parent();
-          action = createCooperativeFrame( parent, linkUrl, label );
-        }
-        if( action && options.trackingKey )
-        {
-          var oldAction = action;
-          action = function() {
-            var obj = {};
-            obj[ options.trackingKey ] = 'SELECTED';
-            widget.util.track( obj );
-            oldAction();
-          };
-        }
-      }
-
-      if( action )
-        icon.addClass( 'clickable' ).on( 'click', action );
-
-      return icon;
-    },
-
-    selector: function( view, data, options ) {
-      if( !data.items )
-      {
-        var listDataSource = widget.get( options, 'listDataSource', null );
-        if( listDataSource )
-        {
-          data.items = widget.util.get( listDataSource.type, listDataSource.path );
-        }
-      }
-
-      if( data.items )
-      {
-        var selector = $('<select/>', {name: data.name, id: data.name} );
-
-        var sourceData = widget.util.get( data.dataSource.type, data.dataSource.path );
-
-        $.each( data.items, function( i, item ){
-          if( $.type( item ) === "string" )
-            item = { key:item, name:item, displayName:item };
-
-          var displayName = item.displayName || (item.key + ": " + item.name);
-          var opt = $( '<option/>', { value: item.key, html: displayName } ).appendTo( selector );
-
-          if( sourceData && (item.key == sourceData) )
-            opt.prop( 'selected', true );
-        } );
-
-        selector.addClass( options.styleClass || 'dataSelectLabel' ).addClass('unselectable');
-        selector.on( 'selectmenuchange', function( event ){
-          widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
-        });
-        var uiMenu = selector.appendTo( view ).selectmenu({
-          width: 360,
-          icons: { button: "fa fa-caret-down" } });
-        return selector;
-      }
-      else
-      {
-        console.log( "Omitting selector", data, "No list items found" );
-        return null;
-      }
-    },
-
-    iframe: function( view, data, options ) {
-
-      var frameHolder = $('<div/>').addClass(options.styleClass || 'frameHolder').appendTo( view );
-      var iframe = $( '<iframe></iframe>', {
-        frameborder:0,
-        scrolling:true,
-        marginHeight:0,
-        marginwidth:0,
-        src: data.url
-      }).addClass( 'dataFrame' ).appendTo( frameHolder );
-
-      if( options.browserControls )
-      {
-        iframe.addClass( 'browserControlTarget' );
-        var controlHolder = $('<div/>').addClass('controlHolder').appendTo( frameHolder );
-        $('<div/>', {text:'<'}).addClass( 'unselectable clickable button browserButton back' ).click( function(){
-          iframe[0].contentWindow.history.back();
-        }).appendTo( controlHolder );
-        $('<div/>', {text:'>'}).addClass( 'unselectable clickable button browserButton next' ).click( function(){
-          iframe[0].contentWindow.history.forward();
-        }).appendTo( controlHolder );
-      }
-
-      return iframe;
-    },
-
-
-    list: function createListView( parent, listData, listOptions ) {
-      var panel = $('<div/>' ).addClass( listOptions.styleClass||'listPanel' ).appendTo( parent );
-      $.each( ['max-width', 'margin-right'], function( i, key ) {
-        if( listOptions[ key ] ) panel.css( key, listOptions[key] );
-      });
-
-      $.each( listData.content, function( i, item ) {
-        var listItem = dispatch( panel, item, { listOptions: listOptions, factory: listOptions.itemFactory }, function( view, data, options ) {
-          var v = $('<div/>', {text: data} ).appendTo( view );
-          v.addClass( options.styleClass||'listItem' );
-          return v;
-        });
-
-      } );
-      return panel;
-    },
-
-    namedPanel: function createNamedPanelView( parent, panelData, options ) {
-      var panel = $('<div/>' ).addClass( options.styleClass||'namedPanel' );
-      var panelTitle = $('<div/>', {text: panelData.name } ).addClass( 'unselectable ' + (options.titleClass||'panelTitle'));
-      panel.append( panelTitle );
-
-      var expandedClass = options.expandedClassName || 'expanded';
-      if( options.expandable )
-      {
-        panel.addClass( 'expandablePanel' );
-        panelTitle.addClass( 'clickable' ).on( 'click', function() {
-          panel.toggleClass( expandedClass );
-        });
-      }
-      if( options.isExpanded )
-        panel.addClass( expandedClass );
-
-      var content = dispatch( panel, panelData.content, options, function( view, data, options ) {
-        return $('<div/>', {text: data} ).appendTo( view );
-      });
-      content.addClass( 'panelContent' );
-
-      if( content.children().length===0 && options.hideOnEmpty )
-        return null;
-      else
-      {
-        parent.append( panel );
-        return panel;
-      }
-    },
-
-    inputField: function createInputField( view, data, options )
-    {
-      var fieldKey = (data.dataSource.path).replace( /\./g, "_" );
-      var panel = $('<div/>' ).addClass( 'inputFieldHolder' ).appendTo( view );
-      var field = $('<input>').attr( {
-        id: fieldKey,
-        name: fieldKey,
-        placeholder: data.placeholder
-      }).addClass( options.styleClass || 'inputField' ).appendTo( panel );
-
-      if( options.readonly )
-        field.addClass('readonly').prop( 'readonly', options.readonly );
-
-      var sourceData = widget.util.get( data.dataSource.type, data.dataSource.path );
-      if( sourceData )
-        field.val( sourceData );
-
-      field.on( 'propertychange keyup input paste', function(){
-        widget.util.set( data.dataSource.type, data.dataSource.path, field.val() );
-      });
-
-      return panel;
-    },
-
-    checkBox: function( view, data, options ) {
-      var label = $('<div/>', {html: data.name} ).addClass( options.styleClass || 'dataCheckBox' ).appendTo( view );
-
-      if( data.excerpt )
-        $('<div/>', {html: data.excerpt} ).addClass( options.excerptStyleClass || 'excerpt' ).appendTo( label );
-
-      label.addClass( 'unselectable clickable' ).on( 'click', function(){
-        label.toggleClass( 'selected' );
-        widget.util.set( data.dataSource.type, data.dataSource.path, label.hasClass('selected') );
-      });
-
-      var sourceData = widget.util.get( data.dataSource.type, data.dataSource.path, false );
-      if( sourceData )
-        label.toggleClass( 'selected', true );
-
-      if( data.dataSource.storeType )
-      {
-        widget.util.set( data.dataSource.storeType, data.dataSource.path, data );
-      }
-
-      return label;
-    },
-
-    button: function( view, data, options ) {
-      var button = $('<div/>', {text: data.name} ).addClass( options.styleClass || 'dataButton' ).appendTo( view );
-
-      var actionContext = widget.util.get( 'actionManager', data.action );
-      if( actionContext )
-      {
-        button.toggleClass( 'disabled', !actionContext.enabled );
-        button.addClass( 'unselectable clickable' ).on( 'click', function(){
-          if( actionContext.enabled )
-            actionContext.action();
-        });
-
-        widget.util.watch( 'actionManager', data.action, function() {
-          button.toggleClass( 'disabled', !actionContext.enabled );
-        });
-      }
-      else
-        console.warn( "Unbound Action", data.action );
-
-
-      return button;
-    },
-
-    renderer: function createRendererView( view, data, options ) {
-      var key = widget.get( data, 'dynamicRenderer', 'Unknown Type' );
-      var renderer = widget.util.get( 'renderers', key );
-      
-      var panel = $('<div/>' ).addClass( 'renderer' ).addClass( key ).appendTo( view );
-
-      if( renderer && renderer.layout )
-      {
-        var dataStack = widget.util.getData( 'stack', [] ); 
-        dataStack.push( data );
-
-        var rendererOptions = $.extend( {}, renderer.options||{}, {
-          rendererKey: key
-        } );
-
-        var optionsStack = widget.util.getData( 'meta', [] ); 
-        optionsStack.push( rendererOptions );
-        
-        var rendererData = $.extend( {}, renderer.layout );
-
-        var rendererView = dispatch( panel, rendererData, rendererOptions, function( view, data, options ) {
-          var v = $('<div/>', {text: data} ).appendTo( view );
-          v.addClass( options.styleClass||'listItem' );
-          return v;
-        });
-        
-        optionsStack.pop();
-        dataStack.pop();
-      }
-      else
-      {
-        panel.append( $('<div/>', {text: key } ).addClass('title') );
-        panel.append( $('<div/>', {text: JSON.stringify(data) } ).addClass('data') );
-      }
-      
-      if( data.action )
-      {
-        panel.addClass( 'clickable' ).click( data.action );
-      }
-
-      
-      return panel;
-    },
-
-    chart: function createChartView( view, data, options ) {
-      var panel = $('<div/>' ).addClass( 'chart' ).appendTo( view );
-      if( options.chartId )
-        panel.attr( 'id', options.chartId );
-      
-      var dataSeriesKey = widget.util.expandPath( data.dataSeries );
-      var chartData = widget.util.get( data.dataSource||'data', dataSeriesKey );
-
-      var chartOptions = $.extend( {}, options, {
-        type:data.chartType, 
-        data:chartData, 
-        parent:panel
-      });
-      
-      widget.chartFactory.create( chartOptions );
-      return panel;
-    },
-
-    error: function createErrorView( view, data, options ) {
-      var panel = $('<div/>' ).addClass( 'errorPanel' ).appendTo( view );
-      panel.append( $('<div/>', {text: 'To Do:' } ).addClass('title') );
-      panel.append( $('<div/>', {text: data.message} ).addClass('errorMessage') );
-      return panel;
-    }
-  };
-  
-  return function layout( typeKey, parent, data, options ) {
-    var layoutImpl = registry[ typeKey ] || registry.error;
+  var self = function layout( typeKey, parent, data, options ) {
+    var layoutImpl = self.registry[ typeKey ] || self.registry.error;
     return layoutImpl( parent, data, options );    
   };
+  self.registry = {};
+  self.documentation = {};
+  self.register = function register( key, implementation, docs ) {
+    self.registry[ key ] = implementation;
+    
+    if( docs )
+    {
+      self.documentation[key] = ( $.type(docs)==='string' ) ? { description:docs } : docs;
+    }
+    
+    return dispatch;
+  };
+  
+  return self;
 })();

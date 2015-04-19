@@ -27,7 +27,23 @@ module.exports = function(grunt) {
           'js/charts/pie.js',
           'js/charts/progressGauge.js',
           'js/charts/readout.js',
-          'js/charts/sparkline.js'
+          'js/charts/sparkline.js',
+          'js/layout/button.js',
+          'js/layout/chart.js',
+          'js/layout/checkBox.js',
+          'js/layout/content.js',
+          'js/layout/error.js',
+          'js/layout/icon.js',
+          'js/layout/iframe.js',
+          'js/layout/image.js',
+          'js/layout/inputField.js',
+          'js/layout/label.js',
+          'js/layout/list.js',
+          'js/layout/namedPanel.js',
+          'js/layout/renderer.js',
+          'js/layout/selector.js',
+          'js/layout/tab.js',
+          'js/layout/tabGroup.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       }
