@@ -51,15 +51,15 @@ widget.ui = {
       
       if( rendererData.action == action )
         delete rendererData.action;
+        
+      var rendererOptions = {};
       
-      var view = widget.layout.renderer( holder, rendererData );
-  
+      widget.layout( 'renderer', holder, rendererData, rendererOptions );
       showContentPopup( $('#tabNav').parent(), holder );
     };
     
     return action;
   }
-
 };
 
 function showIframePopup( parent, url ) {
@@ -97,10 +97,7 @@ function createScreen( options )
 
   $.each( options.tabData, function( i, tab ) {
     var holder = $( '.'+options.tabClass+tab.name, screen );
-
-    var factory = widget.layout[ tab.type ] || widget.layout.createTabView;
-    var view = factory( holder, tab );
-    holder.append( view );
+    widget.layout( tab.type, holder, tab, options );
   });
 
   var controlPanel = $('#headerControlPanel');
@@ -160,11 +157,11 @@ function createScreen( options )
         resultStatus.appendTo( resultInfo ).slideDown(350);
     }
     var searchResultFactory = function searchFactory(view, data, options) {
-      return widget.layout.listItem( view, data, options );
+      return widget.layout( 'listItem', view, data, options );
     };
 
 console.log( "Search result:", result );
-//    widget.layout.list( $( '.widgetTabPanelSearch .contentPane').empty(), { content: result }, { itemFactory: searchResultFactory } );
+//    widget.layout( 'list', $( '.widgetTabPanelSearch .contentPane').empty(), { content: result }, { itemFactory: searchResultFactory } );
   };
 
   searchField.on( "propertychange keyup input paste", function( event ) {
@@ -245,7 +242,7 @@ console.log( "Search result:", result );
 
 //    menu.push( { title: 'Log Out', action:logoutAction } );
 
-    widget.layout.list( dropDown, { content: menu }, { itemFactory: widget.layout.notificationItem } );
+    widget.layout( 'list', dropDown, { content: menu }, { itemFactory: notificationItem } );
   };
 
 }

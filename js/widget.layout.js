@@ -12,6 +12,7 @@ widget.assets = (function(){
 widget.layout = (function(){
   
   var assets = widget.assets;
+  var registry;
 
   function createUrlAction( linkUrl, windowMode ) {
     return function() {
@@ -87,6 +88,8 @@ widget.layout = (function(){
         return view.append( $('<pre/>', { text: JSON.stringify( data ) } ) );
       });
     });
+    
+    parent.append( tabView );
     return tabView;
   }
 
@@ -136,7 +139,10 @@ widget.layout = (function(){
     {
       configureRenderer( data, options.listOptions );
 
-      var handler = factory || widget.layout[data.rendererKey];
+      if( factory && $.type( factory ) === 'string' )
+        factory = registry[ factory ];
+
+      var handler = factory || registry[data.rendererKey];
       if( $.isFunction( handler ) )
       {
         return handler( parent, data, options );
@@ -182,7 +188,7 @@ widget.layout = (function(){
       return data;
   }
 
-  var self = {
+  registry = {
     Tab: defaultTabView,
     HiddenTab: defaultTabView,
 
@@ -542,28 +548,9 @@ widget.layout = (function(){
       return panel;
     }
   };
-
-  return self;
+  
+  return function layout( typeKey, parent, data, options ) {
+    var layoutImpl = registry[ typeKey ] || registry.error;
+    return layoutImpl( parent, data, options );    
+  };
 })();
-
-function refreshTab( tabName )
-{
-  var tab = null;
-  var mgr = $('#tabNav').data( 'tabManager' );
-  if( mgr )
-  {
-    $.each( $('#tabNav').data( 'tabManager' ).options.tabData, function( i, t ) {
-      if( t.name == tabName )
-        tab = t;
-    });
-
-    if( tab )
-    {
-      var holder = tab.view.empty();
-
-      var factory = widget.layout[ tab.type ] || widget.layout.createTabView;
-      var view = factory( holder, tab );
-      holder.append( view );
-    }
-  }
-}
