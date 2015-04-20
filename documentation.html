@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+ <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>widget.js documentation</title>
+
+  <!-- build:css css/widget.css -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/popup.css">
+  <link rel="stylesheet" href="css/nvd3-1.7.1.min.css">
+  <link rel="stylesheet" href="css/widget.base.css">
+  <link rel="stylesheet" href="css/widget.ui.css">
+  <link rel="stylesheet" href="css/widget.chart.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/roboto.css">
+  <!-- /build -->
+
+<style>
+html, button, input, select, textarea {
+  font-family: "Helvetica neue", helvetica, arial, sans-serif;
+}
+
+.fullScreen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.indexFrame {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 80%;
+  overflow: auto;
+  display: inline-block;
+  padding: 10px;
+}
+
+.indexTitle {
+  font-weight: 600;
+}
+
+.indexSection {
+  margin: 10px 20px;
+}
+
+.contentFrame {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20%;
+  right: 0;
+  overflow: auto;
+  display: inline-block;
+}
+
+.widgetDoc {
+  padding: 10px 20px;
+  font-weight: 300;
+}
+
+.widgetDoc .widgetTitle {
+  font-size: 40px;
+  margin-top: 24px;
+}
+
+.widgetDoc .widgetDescription {
+  font-size: 16px;
+}
+
+.widgetDoc .docLabel {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.rawDoc {
+  font-size: 10px;
+  white-space: pre;
+  font-family: monospace;
+}
+</style>
+
+</head>
+<body>
+  <!-- build:js widget.js -->
+  <script src="js/vendor/jquery-1.11.0.min.js"></script>
+  <script src="js/vendor/knockout-3.3.0.min.js"></script>
+  <script src="js/vendor/jquery-ui-1.11.2.min.js"></script>
+  <script src="js/vendor/moment-2.8.2.min.js"></script>
+  <script src="js/vendor/lancasterStemmer.js"></script>
+  <script src="js/vendor/lunr-0.5.6_tj.js"></script>
+  <script src="js/vendor/lzstring-1.3.5.min.js"></script>
+  <script src="js/vendor/d3-3.5.2.min.js"></script>
+  <script src="js/vendor/nvd3-1.7.1.min.js"></script>
+  <script src="js/vendor/gauge-1.2.1.min.js"></script>
+  
+  <script src="js/global.js"></script>
+  
+  <script src="js/widget.js"></script>
+  <script src="js/widget.tracking.js"></script>
+  <script src="js/widget.search.js"></script>
+  <script src="js/widget.layout.js"></script>
+  <script src="js/widget.ui.js"></script>
+  <script src="js/widget.util.js"></script>
+  <script src="js/widget.chart.js"></script>
+  <script src="js/widget.format.js"></script>
+  
+  <script src="js/charts/bar.js"></script>
+  <script src="js/charts/donut.js"></script>
+  <script src="js/charts/gauge.js"></script>
+  <script src="js/charts/horizontalBar.js"></script>
+  <script src="js/charts/interactiveSparkline.js"></script>
+  <script src="js/charts/line.js"></script>
+  <script src="js/charts/pie.js"></script>
+  <script src="js/charts/progressGauge.js"></script>
+  <script src="js/charts/readout.js"></script>
+  <script src="js/charts/sparkline.js"></script>
+  
+  <script src="js/layout/button.js"></script>
+  <script src="js/layout/chart.js"></script>
+  <script src="js/layout/checkBox.js"></script>
+  <script src="js/layout/content.js"></script>
+  <script src="js/layout/error.js"></script>
+  <script src="js/layout/icon.js"></script>
+  <script src="js/layout/iframe.js"></script>
+  <script src="js/layout/image.js"></script>
+  <script src="js/layout/inputField.js"></script>
+  <script src="js/layout/label.js"></script>
+  <script src="js/layout/list.js"></script>
+  <script src="js/layout/namedPanel.js"></script>
+  <script src="js/layout/renderer.js"></script>
+  <script src="js/layout/selector.js"></script>
+  <script src="js/layout/tab.js"></script>
+  <script src="js/layout/tabGroup.js"></script>
+  <!-- /build -->
+  
+  <script>
+$( function() {
+  
+  var layout = {
+    type: 'list',
+    content: [
+      {
+        type: 'list',
+        content: [
+          {
+            type: 'label',
+            name: 'Layout Types',
+            options: {
+              styleClass: 'indexTitle'
+            }
+          },
+          {
+            type: 'list',
+            dataSource: {
+              type: 'widget',
+              path: 'layout.documentation'
+            },
+            options: {
+              defaultRenderer: 'titleRenderer',
+              styleClass: 'indexSection'
+            }
+          }
+        ],
+        options: {
+          styleClass: 'indexFrame'
+        }
+      },
+      {
+        type: 'list',
+        dataSource: {
+          type: 'widget',
+          path: 'layout.documentation'
+        },
+        options: {
+          defaultRenderer: 'rendererDetailRenderer',
+          styleClass: 'contentFrame'
+        }
+      }
+    ],
+    options: { 
+      styleClass: 'fullScreen' 
+    }
+  };
+    
+  widget.util.setData( 'renderers', {
+    titleRenderer: {
+      type: "renderer",
+      options: {
+        styleClass: "valueDescription"
+      },
+      layout: {
+        "type": "label",
+        "name": "${key}",
+        "options": {
+          "styleClass": "title"
+        }
+      }
+    },
+    rendererDetailRenderer: {
+      type: 'renderer',
+      options: {
+        styleClass: 'widgetDoc'
+      },
+      layout: {
+        type: 'list',
+        content: [
+          {
+            type: 'label',
+            name: '${key}',
+            options: {
+              styleClass: 'widgetTitle'
+            }
+          },
+          {
+            type: 'label',
+            name: 'Description',
+            options: { styleClass: 'docLabel' }
+          },
+          {
+            type: 'label',
+            name: '${value.description}',
+            options: {
+              styleClass: 'widgetDescription'
+            }
+          },
+          // {
+          //   type: 'label',
+          //   name: 'Raw documentation',
+          //   options: { styleClass: 'docLabel' }
+          // },
+          // {
+          //   type: "label",
+          //   name: "={ return JSON.stringify( data.value, null, 2 ); }",
+          //   options: {
+          //     styleClass: 'rawDoc'
+          //   }
+          // },
+          {
+            type: 'label',
+            name: 'Default options',
+            options: { styleClass: 'docLabel' }
+          },
+          {
+            type: "label",
+            name: "={ return JSON.stringify( widget.layout.defaults[data.key], null, 2 ); }",
+            options: {
+              styleClass: 'rawDoc'
+            }
+          },
+          {
+            type: 'label',
+            name: 'Implementation',
+            options: { styleClass: 'docLabel' }
+          },
+          {
+            type: "label",
+            name: "={ return $('<div/>').text( widget.layout.registry[data.key].toString()).html().replace(/\\n/g,'<br/>'); }",
+            options: {
+              styleClass: 'rawDoc'
+            }
+          }
+        ]
+      }
+    }
+  });
+  
+  widget.layout( layout.type, $('body'), layout );
+});    
+  </script>
+</body>
+</html>

@@ -57,12 +57,29 @@ widget.layout = (function(){
     };
   }
 
+  function asArray( map )
+  {
+    var result = [];
+    for( var key in map )
+    {
+      result.push( {
+        key: key,
+        value: map[key]
+      });
+    }
+    return result;
+  }
+
   function loadDataSource( dataSource, baseContent, options )
   {
-    var db = widget.util.getData( dataSource.type, {} );
+    var db = widget.util.getData( dataSource.type, window[dataSource.type]||{} );
+    
     var sourceData = widget.get( db, dataSource.path, {} );
-
-    var result = $.extend( {}, (baseContent||{}), sourceData.content );
+    if( sourceData.content && $.isArray( sourceData.content ) )
+      sourceData = sourceData.content;
+      
+    var sourceDataArray = $.isArray( sourceData ) ? sourceData : asArray( sourceData ) || [];
+    var result = $.extend( {}, (baseContent||{}), sourceDataArray );
 
     if( options.sort )
     {
@@ -99,18 +116,15 @@ widget.layout = (function(){
       data.content = loadDataSource( data.dataSource, data.content, options );
     }
     
-    if( factory || data.hasOwnProperty( 'type' ) )
+    configureRenderer( data, options.listOptions );
+
+    if( factory && $.type( factory ) === 'string' )
+      factory = widget.layout.registry[ factory ];
+
+    var handler = factory || widget.layout.registry[data.rendererKey];
+    if( $.isFunction( handler ) )
     {
-      configureRenderer( data, options.listOptions );
-
-      if( factory && $.type( factory ) === 'string' )
-        factory = widget.layout.registry[ factory ];
-
-      var handler = factory || widget.layout.registry[data.rendererKey];
-      if( $.isFunction( handler ) )
-      {
-        return handler( parent, data, options );
-      }
+      return handler( parent, data, options );
     }
 
     if( $.isFunction( defaultHandler ) )
@@ -154,12 +168,20 @@ widget.layout = (function(){
 
   var self = function layout( typeKey, parent, data, options ) {
     var layoutImpl = self.registry[ typeKey ] || self.registry.error;
+  
+    // Generate an options object by considering the layout's default values, 
+    // any options on the data object, and the parameter options (last one wins)
+    options = $.extend( {}, self.defaults[typeKey]||{}, data.options||{}, options||{} );
+
     return layoutImpl( parent, data, options );    
   };
+  
   self.registry = {};
+  self.defaults = {};
   self.documentation = {};
-  self.register = function register( key, implementation, docs ) {
+  self.register = function register( key, implementation, docs, defaults ) {
     self.registry[ key ] = implementation;
+    self.defaults[ key ] = defaults||{};
     
     if( docs )
     {
