@@ -150,6 +150,24 @@ $( function() {
         content: [
           {
             type: 'label',
+            name: 'Templates',
+            options: {
+              styleClass: 'indexTitle'
+            }
+          },
+          {
+            type: 'list',
+            dataSource: {
+              type: 'widget',
+              path: 'parser.tokens'
+            },
+            options: {
+              defaultRenderer: 'titleRenderer',
+              styleClass: 'indexSection'
+            }
+          },
+          {
+            type: 'label',
             name: 'Layout Types',
             options: {
               styleClass: 'indexTitle'

@@ -1,3 +1,7 @@
+widget.parser = {
+  tokens: {}
+};
+
 widget.util = (function(){
   var db = {};
   var visitRecords = null;
@@ -53,41 +57,61 @@ widget.util = (function(){
       return stackVal || "${" + token + "}";
     }
   }
-
-  function expandTokens( str )
-  {
-    var result = [];
-    
-    
-    var token = getToken( '$', str );
-    if( token )
-    {
+  
+  widget.parser.tokens.stack = {
+    prefix: '$',
+    processor: function processStackTemplate( token, str ) {
+      var result = [];
+      
       var i = str.indexOf( token );
       if( i>2 )
         result.push( str.substring( 0, i-2 ) );
-
+  
       result.push( decode(token) );
-
+  
       if( str.length > (i + token.length + 1) )
       {
         result = result.concat( expandTokens( str.substring( i + token.length + 1 ) ) );
       }
+      
+      return result;
     }
-    else
+  };
+  
+  widget.parser.tokens.inlineFunction = {
+    prefix: '=',
+    processor: function processInlineFunction( token, str ) {
+      /* jshint ignore:start */
+      var f = new Function( "data", token );
+      /* jshint ignore:end */
+      var data = widget.util.get( 'stack', 0 );
+      return f( data );
+    }
+  };
+
+  function expandTokens( str )
+  {
+    var result = [];
+    var done = false;
+    
+    for( var key in widget.parser.tokens )
     {
-      token = getToken( '=', str );
+      var tokenImpl = widget.parser.tokens[ key ];
+      var token = getToken( tokenImpl.prefix, str );
       if( token )
       {
-        /* jshint ignore:start */
-        var f = new Function( "data", token );
-        /* jshint ignore:end */
-        var data = widget.util.get( 'stack', 0 );
-        evaluatedToken = f( data );
-        result.push( evaluatedToken );
+        var expansion = tokenImpl.processor( token, str );
+        if( $.type(expansion) == 'array' )
+          result.push.apply( result, expansion );
+        else
+          result.push( expansion );
+          
+        done = true;
       }
-      else 
-        result.push(str);
     }
+    
+    if( !done )
+      result.push( str );
 
     return result.join('');
   }
