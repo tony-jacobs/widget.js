@@ -57,14 +57,19 @@ html, button, input, select, textarea {
   display: inline-block;
 }
 
+.contentTitle {
+  font-size: 48px;
+  margin-top: 40px;
+}
+
 .widgetDoc {
   padding: 10px 20px;
   font-weight: 300;
+  margin-bottom: 24px;
 }
 
 .widgetDoc .widgetTitle {
   font-size: 40px;
-  margin-top: 24px;
 }
 
 .widgetDoc .widgetDescription {
@@ -162,7 +167,7 @@ $( function() {
               path: 'parser.tokens'
             },
             options: {
-              defaultRenderer: 'titleRenderer',
+              defaultRenderer: 'templateTitleRenderer',
               styleClass: 'indexSection'
             }
           },
@@ -191,12 +196,45 @@ $( function() {
       },
       {
         type: 'list',
-        dataSource: {
-          type: 'widget',
-          path: 'layout.documentation'
-        },
+        content: [
+          {
+            type: 'label',
+            name: 'Templates',
+            options: {
+              styleClass: 'contentTitle'
+            }
+          },
+          {
+            type: 'list',
+            dataSource: {
+              type: 'widget',
+              path: 'parser.tokens'
+            },
+            options: {
+              defaultRenderer: 'templateTitleRenderer',
+              styleClass: 'indexSection'
+            }
+          },
+          {
+            type: 'label',
+            name: 'Layout Types',
+            options: {
+              styleClass: 'contentTitle'
+            }
+          },
+          {
+            type: 'list',
+            dataSource: {
+              type: 'widget',
+              path: 'layout.documentation'
+            },
+            options: {
+              defaultRenderer: 'rendererDetailRenderer',
+              styleClass: 'indexSection'
+            }
+          }
+        ],
         options: {
-          defaultRenderer: 'rendererDetailRenderer',
           styleClass: 'contentFrame'
         }
       }
@@ -215,6 +253,19 @@ $( function() {
       layout: {
         "type": "label",
         "name": "${key}",
+        "options": {
+          "styleClass": "title"
+        }
+      }
+    },
+    templateTitleRenderer: {
+      type: "renderer",
+      options: {
+        styleClass: "valueDescription"
+      },
+      layout: {
+        "type": "label",
+        "name": "<code>${value.doc.name}</code>",
         "options": {
           "styleClass": "title"
         }

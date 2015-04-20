@@ -60,6 +60,9 @@ widget.util = (function(){
   
   widget.parser.tokens.stack = {
     prefix: '$',
+    doc: {
+      name: "${<i>variable</i>}"
+    },
     processor: function processStackTemplate( token, str ) {
       var result = [];
       
@@ -80,6 +83,9 @@ widget.util = (function(){
   
   widget.parser.tokens.inlineFunction = {
     prefix: '=',
+    doc: {
+      name: "={<i>function</i>}"
+    },
     processor: function processInlineFunction( token, str ) {
       /* jshint ignore:start */
       var f = new Function( "data", token );
