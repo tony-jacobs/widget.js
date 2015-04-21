@@ -8,7 +8,6 @@ module.exports = function(grunt) {
       },
       dist: {
         src: [
-          'js/vendor/*.js',
           'js/global.js',
           'js/widget.js',
           'js/widget.tracking.js',
@@ -46,12 +45,19 @@ module.exports = function(grunt) {
           'js/layout/tabGroup.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
+      },
+      all: {
+        src: [
+          'js/vendor/*.js',
+          'dist/<%= pkg.name %>.js'
+        ],
+        dest: 'dist/<%= pkg.name %>_all.js'
       }
     },
     concat_css: {
       options: {
       },
-      all: {
+      dist: {
         src: [
           'css/normalize.css',
           'css/popup.css',
@@ -71,18 +77,28 @@ module.exports = function(grunt) {
           { src:'package.json', dest:'dist/' },
           {expand: true, src: ['test.js'], dest: 'dist/', filter: 'isFile' },
           {expand: true, src: ['img/*'], dest: 'dist/', filter: 'isFile' },
-          {expand: true, src: ['fonts/*'], dest: 'dist/', filter: 'isFile' }
+          {expand: true, src: ['fonts/*'], dest: 'dist/', filter: 'isFile' },
+          {expand: true, src: ['js/vendor/*'], dest: 'dist/', filter: 'isFile' }
         ]
       }
     },
     processhtml: {
-      options: {
-        process: true,
-        strip: true
-      },
       dist: {
+        options: {
+          process: true,
+          strip: true
+        },
         files: {
           'dist/index.html': ['index.html']
+        }
+      },
+      doc: {
+        options: {
+          process: true,
+          strip: true
+        },
+        files: {
+          'dist/documentation.html': ['documentation.html']
         }
       }
     },
@@ -130,6 +146,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concat-css');
 
   grunt.registerTask('default', ['compile']);
-  grunt.registerTask('compile', ['clean','jshint', 'concat', 'concat_css', 'copy', 'processhtml']);
+  grunt.registerTask('compile', ['clean','jshint', 'concat', 'concat_css', 'copy', 'processhtml:dist', 'concat:all']);
   grunt.registerTask('dist', ['compile', 'uglify', 'compress']);
 };
