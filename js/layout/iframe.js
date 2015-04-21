@@ -1,13 +1,19 @@
 (function registerInlineFrameLayout(){
   
   widget.layout.register( 'iframe', createInlineFrameView, {
-    description: "TODO!"
+    description: "Creates an iframe element.",
+    data: {
+      url: "URL to use as the src parameter on the iframe"
+    }
+  }, {
+    styleClass: 'frameHolder',
+    browserControls: false
   } );
   
 
   function createInlineFrameView( view, data, options ) {
 
-    var frameHolder = $('<div/>').addClass(options.styleClass || 'frameHolder').appendTo( view );
+    var frameHolder = $('<div/>').addClass(options.styleClass).appendTo( view );
     var iframe = $( '<iframe></iframe>', {
       frameborder:0,
       scrolling:true,

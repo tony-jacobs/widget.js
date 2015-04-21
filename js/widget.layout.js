@@ -190,6 +190,7 @@ widget.layout = (function(){
     
     return dispatch;
   };
+  self.createCooperativeFrame = createCooperativeFrame;
   
   return self;
 })();

@@ -1,18 +1,30 @@
 (function registerIconLayout(){
   
   widget.layout.register( 'icon', createIconView, {
-    description: "TODO!"
+    description: "Generates an icon.",
+    data: {
+      iconUrl: "Templatized URL for the icon image",
+      name: "Templatized label for the image",
+      linkUrl: "Templatized URL for the clickable target of the link.  This path is templatized TWICE, allowing recursion."
+    }
+  }, {
+    styleClass: 'dataIconHolder',
+    iconStyleClass: 'dataIcon',
+    labelStyleClass: 'dataLabel',
+    iconTitleStyleClass: 'icon titleIcon',
+    labelTitleStyleClass: 'titleLabel',
+    trackingKey: null
   } );
 
 
   function createIconView( view, data, options ) {
-    var icon = $('<div/>' ).addClass( options.styleClass || 'dataIconHolder' ).addClass('unselectable').appendTo( view );
+    var icon = $('<div/>' ).addClass( options.styleClass ).addClass('unselectable').appendTo( view );
 
     var iconUrl = widget.util.expandPath( data.iconUrl );
     var displayName = widget.util.expandPath( data.name );
 
-    $('<img/>', {src: iconUrl} ).addClass( options.iconStyleClass || 'dataIcon' ).appendTo( icon );
-    $('<div/>', {html: displayName} ).addClass( options.labelStyleClass || 'dataLabel' ).appendTo( icon );
+    $('<img/>', {src: iconUrl} ).addClass( options.iconStyleClass ).appendTo( icon );
+    $('<div/>', {html: displayName} ).addClass( options.labelStyleClass ).appendTo( icon );
 
     var action = null;
 
@@ -24,11 +36,11 @@
       else if( options.mode=='cooperativeFrame' )
       {
         var label = $( '<div/>' ).addClass( 'toolTitle' );
-        $('<img/>', {src: iconUrl} ).addClass( options.iconTitleStyleClass || 'icon titleIcon' ).appendTo( label );
-        $('<div/>', {html: displayName} ).addClass( options.labelTitleStyleClass || 'titleLabel' ).appendTo( label );
+        $('<img/>', {src: iconUrl} ).addClass( options.iconTitleStyleClass ).appendTo( label );
+        $('<div/>', {html: displayName} ).addClass( options.labelTitleStyleClass ).appendTo( label );
 
         var parent = options.parentSelector ? $(options.parentSelector) : view.parent();
-        action = createCooperativeFrame( parent, linkUrl, label );
+        action = widget.layout.createCooperativeFrame( parent, linkUrl, label );
       }
       if( action && options.trackingKey )
       {

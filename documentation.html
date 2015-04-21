@@ -312,6 +312,18 @@ $( function() {
           // },
           {
             type: 'label',
+            name: 'Data fields',
+            options: { styleClass: 'docLabel' }
+          },
+          {
+            type: "label",
+            name: "={ return JSON.stringify( widget.layout.documentation[data.key].data, null, 2 ); }",
+            options: {
+              styleClass: 'rawDoc'
+            }
+          },
+          {
+            type: 'label',
             name: 'Default options',
             options: { styleClass: 'docLabel' }
           },
