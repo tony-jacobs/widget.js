@@ -104,7 +104,9 @@ widget.layout = (function(){
         data.rendererKey = typeKey;
     }
     
-    options = $.extend( {}, options, data.options||{} );
+    // Generate an options object by considering the layout's default values, 
+    // any options on the data object, and the parameter options (last one wins)
+    options = $.extend( {}, self.defaults[data.rendererKey]||{}, options||{}, data.options||{} );
     var factory = options.factory;
     delete options.factory;
 
@@ -166,14 +168,8 @@ widget.layout = (function(){
       return data;
   }
 
-  var self = function layout( typeKey, parent, data, options ) {
-    var layoutImpl = self.registry[ typeKey ] || self.registry.error;
-  
-    // Generate an options object by considering the layout's default values, 
-    // any options on the data object, and the parameter options (last one wins)
-    options = $.extend( {}, self.defaults[typeKey]||{}, data.options||{}, options||{} );
-
-    return layoutImpl( parent, data, options );    
+  var self = function layout( parent, data, options ) {
+    return dispatch( parent, data, options, self.registry.error );
   };
   
   self.registry = {};

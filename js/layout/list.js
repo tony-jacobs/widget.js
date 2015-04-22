@@ -15,11 +15,14 @@
     });
 
     $.each( listData.content, function( i, item ) {
-      var listItem = dispatch( panel, item, { listOptions: listOptions, factory: listOptions.itemFactory }, function( view, data, options ) {
-        var v = $('<div/>', {text: data} ).appendTo( view );
-        v.addClass( options.styleClass||'listItem' );
-        return v;
+      
+      var typeKey = item.type;
+      var itemOptions = $.extend( {}, widget.layout.defaults[typeKey]||{}, { 
+        listOptions: listOptions, 
+        factory: listOptions.itemFactory
       });
+      
+      var listItem = dispatch( panel, item, itemOptions, widget.layout.registry.error );
 
     } );
     return panel;

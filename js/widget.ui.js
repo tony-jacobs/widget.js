@@ -45,7 +45,8 @@ widget.ui = {
   createRendererPopupAction: function createRendererPopupAction( data, renderer ) {
     var action = function rendererPopupAction() {
       var holder = $('<div/>');
-      var rendererData = $.extend( {}, data, { 
+      var rendererData = $.extend( {}, data, {
+        type: 'renderer',
         dynamicRenderer: renderer 
       });
       
@@ -54,7 +55,7 @@ widget.ui = {
         
       var rendererOptions = {};
       
-      widget.layout( 'renderer', holder, rendererData, rendererOptions );
+      widget.layout( holder, rendererData, rendererOptions );
       showContentPopup( $('#tabNav').parent(), holder );
     };
     
@@ -97,7 +98,7 @@ function createScreen( options )
 
   $.each( options.tabData, function( i, tab ) {
     var holder = $( '.'+options.tabClass+tab.name, screen );
-    widget.layout( tab.type, holder, tab, options );
+    widget.layout( holder, tab, options );
   });
 
   var controlPanel = $('#headerControlPanel');
@@ -157,11 +158,11 @@ function createScreen( options )
         resultStatus.appendTo( resultInfo ).slideDown(350);
     }
     var searchResultFactory = function searchFactory(view, data, options) {
-      return widget.layout( 'listItem', view, data, options );
+      return widget.layout( view, $.extend( {}, data, {type:'listItem'}), options );
     };
 
 console.log( "Search result:", result );
-//    widget.layout( 'list', $( '.widgetTabPanelSearch .contentPane').empty(), { content: result }, { itemFactory: searchResultFactory } );
+//    widget.layout( $( '.widgetTabPanelSearch .contentPane').empty(), { content: result }, { itemFactory: searchResultFactory } );
   };
 
   searchField.on( "propertychange keyup input paste", function( event ) {
@@ -242,7 +243,7 @@ console.log( "Search result:", result );
 
 //    menu.push( { title: 'Log Out', action:logoutAction } );
 
-    widget.layout( 'list', dropDown, { content: menu }, { itemFactory: notificationItem } );
+    widget.layout( dropDown, { type:'list', content: menu }, { itemFactory: notificationItem } );
   };
 
 }
