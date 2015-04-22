@@ -9,13 +9,19 @@
     selectedClass:'tabSelected',
     tabData: [
       { name:'Demo', label:'Demo', type:'Tab', layout:{
-        "type": "list",
-        "content": [
+        type: "list",
+        content: [
           {
-            "type": "label",
-            "name": "Widget.js demo App",
-            "options": {
-              "styleClass": "panelTitle"
+            type: "label",
+            name: "Widget.js demo App",
+            options: {
+              styleClass: "panelTitle",
+              events: {
+                ready: function( context, event ) { console.log( context.data.name, "Ready!", context, event ); },
+                mouseenter: function( context, event ) { console.log( context.data.name, "Rollover!", context, event ); },
+                mouseleave: function( context, event ) { console.log( context.data.name, "Roll Off!", context, event ); },
+                click: function( context, event ) { console.log( context.data.name, "Click!", context, event ); }
+              }
             }
           },
           {

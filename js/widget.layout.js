@@ -89,50 +89,103 @@ widget.layout = (function(){
     return result;
   }
   
-  function dispatch( parent, data, options, defaultHandler ) {
+  function dispatch( parent, data, options, defaultHandler ) 
+  {
+    var w = {
+      parent: parent,
+      data: data,
+      options: options || {}
+    };
     
-    function configureRenderer( data, options ) 
+    function configureRenderer( w, options ) 
     {
-      var typeKey = data.rendererKey || data.type;
+      var typeKey = w.data.rendererKey || w.data.type;
 
       if( options && options.defaultRenderer )
       {
-        data.rendererKey = 'renderer';
-        data.dynamicRenderer = ( options.renderers && options.renderers[ typeKey ] ) ? options.renderers[ typeKey ] : options.defaultRenderer;
+        w.data.rendererKey = 'renderer';
+        w.data.dynamicRenderer = ( options.renderers && options.renderers[ typeKey ] ) ? options.renderers[ typeKey ] : options.defaultRenderer;
       }
       else
-        data.rendererKey = typeKey;
+        w.data.rendererKey = typeKey;
     }
     
     // Generate an options object by considering the layout's default values, 
     // any options on the data object, and the parameter options (last one wins)
-    options = $.extend( {}, self.defaults[data.rendererKey]||{}, options||{}, data.options||{} );
-    var factory = options.factory;
-    delete options.factory;
+    w.options = $.extend( {}, self.defaults[w.data.rendererKey]||{}, w.options||{}, w.data.options||{} );
+    var factory = w.options.factory;
+    delete w.options.factory;
 
     // Make a clone of data since we're monkeying with it's actual fields below..
-    data = $.extend( {}, data );
+    w.data = $.extend( {}, w.data );
+    lifecycle( 'load', w );
 
-    if( data.hasOwnProperty( 'dataSource' ) )
+    if( w.data.hasOwnProperty( 'dataSource' ) )
     {
-      data.content = loadDataSource( data.dataSource, data.content, options );
+      w.data.content = loadDataSource( w.data.dataSource, w.data.content, w.options );
     }
     
-    configureRenderer( data, options.listOptions );
+    lifecycle( 'dataReady', w );
+    configureRenderer( w, w.options.listOptions );
 
     if( factory && $.type( factory ) === 'string' )
       factory = widget.layout.registry[ factory ];
 
-    var handler = factory || widget.layout.registry[data.rendererKey];
+    var handler = factory || widget.layout.registry[w.data.rendererKey];
     if( $.isFunction( handler ) )
     {
-      return handler( parent, data, options );
+      w.view = handler( w.parent, w.data, w.options );
+    }
+    else if( $.isFunction( defaultHandler ) )
+    {
+      w.view = defaultHandler( w.parent, w.data, w.options );
+    }
+    else
+    {
+      w.view = null;
+    }
+    lifecycle( 'layout', w );
+        
+    if( w.view && w.options.events )
+    {
+      if( w.options.events.mouseenter || w.options.events.mouseleave )
+      {
+        w.view.addClass( 'widget-rollover' );
+        w.view.on( 'mouseenter', function() { w.view.toggleClass( 'widget-rollover-on', true ); } );
+        w.view.on( 'mouseleave', function() { w.view.toggleClass( 'widget-rollover-on', false ); } );
+      }
+        
+      if( w.options.events.click )
+        w.view.addClass( 'widget-clickable' );
+      
+      bindIf( 'mouseenter', w.view, w.options.events, w );
+      bindIf( 'mouseleave', w.view, w.options.events, w );
+      bindIf( 'click', w.view, w.options.events, w );
     }
 
-    if( $.isFunction( defaultHandler ) )
-      return defaultHandler( parent, data, options );
-    else
-      return parent;
+    lifecycle( 'ready', w );
+    return w.view;
+  }
+  
+  function callEvent( events, key, context, event )
+  {
+    if( events && events[key] && $.isFunction( events[key]) )
+    {
+      return events[key]( context, event );
+    }
+  }
+  
+  function bindIf( key, view, events, context )
+  {
+    if( events && events[key] )
+      view.on( key, function( event ) { callEvent( events, key, context, event ); } );
+  }
+  
+  function lifecycle( eventKey, w )
+  {
+    return callEvent( w.options.events, eventKey, w, {
+      type: 'lifecycle.'+eventKey
+    } );
   }
 
   function getTimestamp( article )
