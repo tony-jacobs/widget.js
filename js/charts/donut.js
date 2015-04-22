@@ -5,7 +5,7 @@
 
   function createDonut( factory, options ) {
     
-    var chartId = factory.createChartNode( options.parent, 'donut', 'svg' );
+    var chartId = factory.createChartNode( options, 'donut', 'svg' );
     var domSelector = '#'+chartId;
   
     var height = options.height || 350;

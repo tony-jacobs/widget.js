@@ -21,10 +21,12 @@ widget.ChartFactory = (function() {
   };
 
 
-  ChartFactory.prototype.createChartNode = function createChartNode( parent, classKey, nodeType )
+  ChartFactory.prototype.createChartNode = function createChartNode( options, classKey, nodeType )
   {
     var containerId = 'chart-' + Object.keys( charts ).length;
     var className = 'chart';
+    if( options.chartStyleClass )
+      className += ' ' + options.chartStyleClass;
     if( classKey )
       className += ' ' + classKey;
 
@@ -32,7 +34,7 @@ widget.ChartFactory = (function() {
   
     node.setAttribute( 'id', containerId );
     node.setAttribute( 'class', className );
-    $(parent).append( node );
+    $( options.parent ).append( node );
     
     return containerId;
   };

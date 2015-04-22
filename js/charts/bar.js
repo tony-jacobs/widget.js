@@ -6,7 +6,7 @@
 
   function createBarChart( factory, options ) {
     
-    var chartId = factory.createChartNode( options.parent, 'bar', 'svg' );
+    var chartId = factory.createChartNode( options, 'bar', 'svg' );
     var domSelector = '#'+chartId;
   
     var height = options.height || 350;

@@ -6,7 +6,7 @@
 
   function createHorizontalBarChart( factory, options ) {
     
-    var chartId = factory.createChartNode( options.parent, 'horizontalBar', 'svg' );
+    var chartId = factory.createChartNode( options, 'horizontalBar', 'svg' );
     var domSelector = '#'+chartId;
   
     var height = options.height || 350;

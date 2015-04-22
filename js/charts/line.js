@@ -9,7 +9,7 @@
    **/
   function createLineChart( factory, options ) {
     
-    var chartId = factory.createChartNode( options.parent, 'line', 'svg' );
+    var chartId = factory.createChartNode( options, 'line', 'svg' );
     var domSelector = '#'+chartId;
   
     var height = options.height || 350;

@@ -37,7 +37,7 @@
       width = options.width || height;
     }
     
-    var chartId = factory.createChartNode( options.parent, 'progressGauge', 'canvas' );
+    var chartId = factory.createChartNode( options, 'progressGauge', 'canvas', options );
     var domSelector = '#'+chartId;
     var chart = $( domSelector, $(options.parent) )[0];
     var gauge = new Donut( chart );

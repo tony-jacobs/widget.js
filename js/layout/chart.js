@@ -1,12 +1,20 @@
 (function registerChartLayout(){
   
   widget.layout.register( 'chart', createChartView, {
-    description: "TODO!"
-  } );
+    description: "Renders a chart",
+    data: {
+      chartType: "One of the available chart types",
+      dataSource: "Data source, as processed by widget.util.get() -- defaults to 'data'",
+      dataSeriesKey: "Data path within the data source for this series"
+    }
+  },
+  {
+    styleClass: 'chart'
+  });
 
 
   function createChartView( view, data, options ) {
-    var panel = $('<div/>' ).addClass( 'chart' ).appendTo( view );
+    var panel = $('<div/>' ).addClass( options.styleClass ).appendTo( view );
     if( options.chartId )
       panel.attr( 'id', options.chartId );
     

@@ -33,7 +33,7 @@
       width = options.width || height * 1.5;
     }
     
-    var chartId = factory.createChartNode( options.parent, 'gauge', 'canvas' );
+    var chartId = factory.createChartNode( options, 'gauge', 'canvas' );
     var domSelector = '#'+chartId;
     var chart = $( domSelector, $(options.parent) )[0];
     var gauge = new Gauge( chart );

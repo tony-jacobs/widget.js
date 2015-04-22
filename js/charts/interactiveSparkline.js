@@ -5,8 +5,7 @@
 
   function createInteractiveSparkline( factory, options ) {
     var data = options.data;
-    var parentSelector = options.parent;
-    var chartId = factory.createChartNode( parentSelector, 'interactivesparkline', 'svg' );
+    var chartId = factory.createChartNode( options, 'interactivesparkline', 'svg' );
   
     factory.charts[ chartId ] = nv.addGraph(function() {
       var chart = nv.models.sparklinePlus();

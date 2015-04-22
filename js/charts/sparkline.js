@@ -5,8 +5,7 @@
 
   function createSparkline( factory, options ) {
     var data = options.data;
-    var parentSelector = options.parent;
-    var chartId = factory.createChartNode( parentSelector, 'sparkline', 'svg' );
+    var chartId = factory.createChartNode( options, 'sparkline', 'svg' );
     
     var width = options.width || 200;
     var height = options.height || 30;

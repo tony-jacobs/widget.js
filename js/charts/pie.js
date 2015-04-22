@@ -5,7 +5,7 @@
 
   function createPie( factory, options ) {
     
-    var chartId = factory.createChartNode( options.parent, 'pie', 'svg' );
+    var chartId = factory.createChartNode( options, 'pie', 'svg' );
     var domSelector = '#'+chartId;
   
     var height = options.height || 350;

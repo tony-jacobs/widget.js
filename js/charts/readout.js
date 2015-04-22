@@ -5,7 +5,6 @@
 
   function createReadout( factory, options ) {
     var data = options.data;
-    var parentSelector = options.parent;
     var format = options.formatter;
     if( !$.isFunction(format) )
     {
@@ -15,7 +14,7 @@
       };
     }
     
-    var chartId = factory.createChartNode( parentSelector, 'readout', 'div' );
+    var chartId = factory.createChartNode( options, 'readout', 'div' );
     var domSelector = '#'+chartId;
     var chart = $( domSelector, $(options.parent) )[0];
     
