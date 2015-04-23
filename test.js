@@ -271,7 +271,10 @@
     itemGridCell: {
       type: "renderer",
       options: {
-        styleClass: "cardContent"
+        styleClass: "cardContent",
+        events: {
+          mouseenter: function( context, event ) { console.log( context.data.title, "Rollover!", context ); },
+        }
       },
       layout: {
         "type": "list",

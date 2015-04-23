@@ -88,41 +88,53 @@ widget.layout = (function(){
 
     return result;
   }
-  
-  function dispatch( parent, data, options, defaultHandler ) 
+
+  function dispatch( parent, layout, options, defaultHandler, stack ) 
   {
     var w = {
       parent: parent,
-      data: data,
-      options: options || {}
+      data: layout,
+      layout: $.extend( {}, layout ),
+      options: options || {},
+      stack: []
     };
+    
+    // Make a shallow copy of the data stack, as it gets pushed and popped a 
+    // lot, and our downstream code may take a snapshot of things.
+    if( stack )
+    {
+      for( var i=0; i<stack.length; i++ )
+        w.stack.push( stack[i] ); 
+    }
+    else
+      w.stack.push( layout );
+    
+    w.data = w.stack[0];
     
     function configureRenderer( w, options ) 
     {
-      var typeKey = w.data.rendererKey || w.data.type;
+      var typeKey = w.layout.rendererKey || w.layout.type;
 
       if( options && options.defaultRenderer )
       {
-        w.data.rendererKey = 'renderer';
-        w.data.dynamicRenderer = ( options.renderers && options.renderers[ typeKey ] ) ? options.renderers[ typeKey ] : options.defaultRenderer;
+        w.layout.rendererKey = 'renderer';
+        w.layout.dynamicRenderer = ( options.renderers && options.renderers[ typeKey ] ) ? options.renderers[ typeKey ] : options.defaultRenderer;
       }
       else
-        w.data.rendererKey = typeKey;
+        w.layout.rendererKey = typeKey;
     }
-    
+
     // Generate an options object by considering the layout's default values, 
     // any options on the data object, and the parameter options (last one wins)
-    w.options = $.extend( {}, self.defaults[w.data.rendererKey]||{}, w.options||{}, w.data.options||{} );
+    w.options = $.extend( {}, self.defaults[w.layout.rendererKey]||{}, w.options||{}, w.layout.options||{} );
     var factory = w.options.factory;
     delete w.options.factory;
 
-    // Make a clone of data since we're monkeying with it's actual fields below..
-    w.data = $.extend( {}, w.data );
     lifecycle( 'load', w );
 
-    if( w.data.hasOwnProperty( 'dataSource' ) )
+    if( w.layout.hasOwnProperty( 'dataSource' ) )
     {
-      w.data.content = loadDataSource( w.data.dataSource, w.data.content, w.options );
+      w.layout.content = loadDataSource( w.layout.dataSource, w.layout.content, w.options );
     }
     
     lifecycle( 'dataReady', w );
@@ -131,14 +143,14 @@ widget.layout = (function(){
     if( factory && $.type( factory ) === 'string' )
       factory = widget.layout.registry[ factory ];
 
-    var handler = factory || widget.layout.registry[w.data.rendererKey];
+    var handler = factory || widget.layout.registry[w.layout.rendererKey];
     if( $.isFunction( handler ) )
     {
-      w.view = handler( w.parent, w.data, w.options );
+      w.view = handler( w.parent, w.layout, w.options );
     }
     else if( $.isFunction( defaultHandler ) )
     {
-      w.view = defaultHandler( w.parent, w.data, w.options );
+      w.view = defaultHandler( w.parent, w.layout, w.options );
     }
     else
     {

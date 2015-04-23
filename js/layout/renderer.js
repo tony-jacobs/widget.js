@@ -24,11 +24,7 @@
       
       var rendererData = $.extend( {}, renderer.layout );
 
-      var rendererView = dispatch( panel, rendererData, rendererOptions, function( view, data, options ) {
-        var v = $('<div/>', {text: data} ).appendTo( view );
-        v.addClass( options.styleClass||'listItem' );
-        return v;
-      });
+      var rendererView = dispatch( panel, rendererData, rendererOptions, undefined, dataStack );
       
       optionsStack.pop();
       dataStack.pop();
