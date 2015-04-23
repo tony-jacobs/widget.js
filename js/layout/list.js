@@ -13,6 +13,11 @@
       if( listOptions[ key ] ) 
         panel.css( key, listOptions[key] );
     });
+    
+    var holder = panel;
+    
+    if( listOptions.holderClass )
+      holder = $('<div/>' ).addClass( listOptions.holderClass ).appendTo( panel );
 
     $.each( listData.content, function( i, item ) {
       
@@ -22,7 +27,7 @@
         factory: listOptions.itemFactory
       });
       
-      var listItem = dispatch( panel, item, itemOptions, widget.layout.registry.error );
+      var listItem = dispatch( holder, item, itemOptions, widget.layout.registry.error );
 
     } );
     return panel;

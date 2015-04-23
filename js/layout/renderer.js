@@ -1,7 +1,7 @@
 (function registerRenderLayout(){
   
   var dispatch = widget.layout.register( 'renderer', createRendererView, {
-    description: "TODO!"
+    description: "Creates a dynamic renderer via indirection, allowing complex data structures"
   } );
 
   function createRendererView( view, data, options ) {
@@ -9,6 +9,9 @@
     var renderer = widget.util.get( 'renderers', key );
     
     var panel = $('<div/>' ).addClass( 'renderer' ).addClass( key ).appendTo( view );
+    
+    if( options.styleClass )
+      panel.addClass( options.styleClass );
 
     if( renderer && renderer.layout )
     {
@@ -39,7 +42,6 @@
     {
       panel.addClass( 'clickable' ).click( data.action );
     }
-
     
     return panel;
   }
