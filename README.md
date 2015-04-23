@@ -1,4 +1,7 @@
-# widget.js - Layout and Utilities for web apps
+# widget.js 
+
+Layout and Utilities for web apps
+
 
 ## Developer notes
 
