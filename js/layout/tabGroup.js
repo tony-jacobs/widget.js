@@ -12,7 +12,7 @@
       tabData: data.content,
       labelSelector: "." + labelHolderClass
     } );
-    view.append( $('<div/>').addClass( labelHolderClass ) );
+    var tabGroup = $('<div/>').addClass( labelHolderClass ).appendTo( view );
     var tabNav = widget.generateTabs( view, tabOptions );
     var tabManager = tabNav.data('tabManager');
 
@@ -23,6 +23,8 @@
         return v;
       });
     } );
+    
+    return tabGroup;
   }
 
 })();

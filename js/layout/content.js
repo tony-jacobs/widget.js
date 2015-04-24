@@ -2,14 +2,15 @@
   
   widget.layout.register( 'content', createContentView, {
     description: "TODO!"
-  } );
+  },
+  {
+    styleClass: 'dataContent'
+  });
 
   function createContentView( view, data, options ) {
     var name = widget.util.expandPath( data.name );
 
-    var content = $('<div/>', {html: name} ).addClass( 'dataContent' );
-    if( options.styleClass )
-      content.addClass( options.styleClass );
+    var content = $('<div/>', {html: name} );
       
     if( data.action )
     {

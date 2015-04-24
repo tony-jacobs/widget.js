@@ -14,7 +14,7 @@
 
 
   function createChartView( view, data, options ) {
-    var panel = $('<div/>' ).addClass( options.styleClass ).appendTo( view );
+    var panel = $('<div/>' ).appendTo( view );
     if( options.chartId )
       panel.attr( 'id', options.chartId );
     

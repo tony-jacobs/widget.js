@@ -8,7 +8,7 @@
 
   function createListView( parent, listData, listOptions ) {
     
-    var panel = $('<div/>' ).addClass( listOptions.styleClass ).appendTo( parent );
+    var panel = $('<div/>' ).appendTo( parent );
     $.each( ['max-width', 'margin-right'], function( i, key ) {
       if( listOptions[ key ] ) 
         panel.css( key, listOptions[key] );

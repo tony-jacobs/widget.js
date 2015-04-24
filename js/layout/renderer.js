@@ -9,9 +9,6 @@
     var renderer = widget.util.get( 'renderers', key );
     
     var panel = $('<div/>' ).addClass( 'renderer' ).addClass( key ).appendTo( view );
-    
-    if( options.styleClass )
-      panel.addClass( options.styleClass );
 
     if( renderer && renderer.layout )
     {

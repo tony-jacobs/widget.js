@@ -2,10 +2,13 @@
   
   widget.layout.register( 'checkBox', checkBoxView, {
     description: "TODO!"
-  } );
+  }, 
+  {
+    styleClass: 'dataCheckBox'
+  });
 
   function checkBoxView( view, data, options ) {
-    var label = $('<div/>', {html: data.name} ).addClass( options.styleClass || 'dataCheckBox' ).appendTo( view );
+    var label = $('<div/>', {html: data.name} ).appendTo( view );
 
     if( data.excerpt )
       $('<div/>', {html: data.excerpt} ).addClass( options.excerptStyleClass || 'excerpt' ).appendTo( label );

@@ -14,7 +14,7 @@
   function createImageView( view, data, options ) {
     var url = widget.util.expandPath( data.url );
         
-    var image = $('<img/>', {src: url} ).addClass( options.styleClass ).addClass('unselectable').appendTo( view );
+    var image = $('<img/>', {src: url} ).addClass('unselectable').appendTo( view );
     return image;
   }
 

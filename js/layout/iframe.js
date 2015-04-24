@@ -13,7 +13,7 @@
 
   function createInlineFrameView( view, data, options ) {
 
-    var frameHolder = $('<div/>').addClass(options.styleClass).appendTo( view );
+    var frameHolder = $('<div/>').appendTo( view );
     var iframe = $( '<iframe></iframe>', {
       frameborder:0,
       scrolling:true,

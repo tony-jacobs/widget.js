@@ -2,18 +2,20 @@
   
   widget.layout.register( 'inputField', createInputField, {
     description: "TODO!"
+  }, {
+    styleClass: 'inputFieldHolder'
   } );
 
 
   function createInputField( view, data, options )
   {
     var fieldKey = (data.dataSource.path).replace( /\./g, "_" );
-    var panel = $('<div/>' ).addClass( 'inputFieldHolder' ).appendTo( view );
+    var panel = $('<div/>' ).appendTo( view );
     var field = $('<input>').attr( {
       id: fieldKey,
       name: fieldKey,
       placeholder: data.placeholder
-    }).addClass( options.styleClass || 'inputField' ).appendTo( panel );
+    }).addClass( 'inputField' ).appendTo( panel );
 
     if( options.readonly )
       field.addClass('readonly').prop( 'readonly', options.readonly );

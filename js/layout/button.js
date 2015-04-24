@@ -2,10 +2,13 @@
   
   widget.layout.register( 'button', createButtonView, {
     description: "TODO!"
-  } );
+  },
+  {
+    styleClass: 'dataButton'
+  });
 
   function createButtonView( view, data, options ) {
-    var button = $('<div/>', {text: data.name} ).addClass( options.styleClass || 'dataButton' ).appendTo( view );
+    var button = $('<div/>', {text: data.name} ).appendTo( view );
 
     var actionContext = widget.util.get( 'actionManager', data.action );
     if( actionContext )

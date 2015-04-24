@@ -18,7 +18,7 @@
 
 
   function createIconView( view, data, options ) {
-    var icon = $('<div/>' ).addClass( options.styleClass ).addClass('unselectable').appendTo( view );
+    var icon = $('<div/>' ).addClass('unselectable').appendTo( view );
 
     var iconUrl = widget.util.expandPath( data.iconUrl );
     var displayName = widget.util.expandPath( data.name );

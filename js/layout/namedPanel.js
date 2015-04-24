@@ -2,10 +2,12 @@
   
   var dispatch = widget.layout.register( 'namedPanel', createNamedPanelView, {
     description: "TODO!"
+  }, {
+    styleClass: 'namedPanel'
   } );
 
   function createNamedPanelView( parent, panelData, options ) {
-    var panel = $('<div/>' ).addClass( options.styleClass||'namedPanel' );
+    var panel = $('<div/>' );
     var panelTitle = $('<div/>', {text: panelData.name } ).addClass( 'unselectable ' + (options.titleClass||'panelTitle'));
     panel.append( panelTitle );
 

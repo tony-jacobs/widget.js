@@ -156,6 +156,11 @@ widget.layout = (function(){
     {
       w.view = null;
     }
+    if( w.options.styleClass )
+    {
+      w.view.addClass( widget.util.expandPath( w.options.styleClass ) );
+    }
+    
     lifecycle( 'layout', w );
         
     if( w.view && w.options.events )

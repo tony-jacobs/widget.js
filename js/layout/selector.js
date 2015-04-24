@@ -2,7 +2,10 @@
   
   widget.layout.register( 'selector', createSelectorView, {
     description: "TODO!"
-  } );
+  },
+  {
+    styleClass: 'dataSelectLabel'
+  });
 
 
   function createSelectorView( view, data, options ) {
@@ -32,7 +35,7 @@
           opt.prop( 'selected', true );
       } );
 
-      selector.addClass( options.styleClass || 'dataSelectLabel' ).addClass('unselectable');
+      selector.addClass('unselectable');
       selector.on( 'selectmenuchange', function( event ){
         widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
       });

@@ -2,6 +2,7 @@
   
   widget.layout.register( 'label', createLabelView, {
     description: "TODO!"
+  }, {
   } );
 
 
@@ -9,8 +10,6 @@
     var name = widget.util.expandPath( data.name );
 
     var label = $('<div/>', {html: name} ).addClass( 'dataLabel' ).addClass('unselectable');
-    if( options.styleClass )
-      label.addClass( options.styleClass );
       
     if( data.action )
     {
