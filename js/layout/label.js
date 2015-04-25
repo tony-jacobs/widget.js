@@ -6,7 +6,12 @@
   } );
 
 
-  function createLabelView( view, layout, options, def ) {
+  function createLabelView( def )
+  {
+    var view = def.parent;
+    var layout = def.layout;
+    var options = def.options;
+    
     var label = $('<div/>' ).addClass( 'dataLabel' ).addClass('unselectable');
       
     if( layout.action )

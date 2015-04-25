@@ -5,8 +5,12 @@
   } );
 
 
-  function createTabGroup( view, data, options )
+  function createTabGroup( def )
   {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     var labelHolderClass = options.labelHolder || 'labels';
     var tabOptions = $.extend( {}, options, {
       tabData: data.content,

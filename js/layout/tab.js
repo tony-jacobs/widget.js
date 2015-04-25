@@ -32,7 +32,12 @@
     return panel;
   }
 
-  function defaultTabView( parent, tabData, options ) {
+  function defaultTabView( def )
+  {
+    var parent = def.parent;
+    var tabData = def.layout;
+    var options = def.options;
+    
     var tabView = createTab( parent, tabData, function( contentPane, data, options ) {
       contentPane.empty();
 

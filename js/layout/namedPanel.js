@@ -6,7 +6,12 @@
     styleClass: 'namedPanel'
   } );
 
-  function createNamedPanelView( parent, panelData, options ) {
+  function createNamedPanelView( def )
+  {
+    var parent = def.parent;
+    var panelData = def.layout;
+    var options = def.options;
+    
     var panel = $('<div/>' );
     var panelTitle = $('<div/>', {text: panelData.name } ).addClass( 'unselectable ' + (options.titleClass||'panelTitle'));
     panel.append( panelTitle );

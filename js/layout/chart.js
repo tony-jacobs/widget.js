@@ -13,7 +13,12 @@
   });
 
 
-  function createChartView( view, data, options ) {
+  function createChartView( def )
+  {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     var panel = $('<div/>' ).appendTo( view );
     if( options.chartId )
       panel.attr( 'id', options.chartId );

@@ -7,7 +7,12 @@
     styleClass: 'dataCheckBox'
   });
 
-  function checkBoxView( view, data, options ) {
+  function checkBoxView( def )
+  {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     var label = $('<div/>', {html: data.name} ).appendTo( view );
 
     if( data.excerpt )

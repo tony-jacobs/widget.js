@@ -7,7 +7,12 @@
     styleClass: 'dataButton'
   });
 
-  function createButtonView( view, data, options ) {
+  function createButtonView( def )
+  {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     var button = $('<div/>', {text: data.name} ).appendTo( view );
 
     var actionContext = widget.util.get( 'actionManager', data.action );

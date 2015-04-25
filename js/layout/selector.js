@@ -8,7 +8,12 @@
   });
 
 
-  function createSelectorView( view, data, options ) {
+  function createSelectorView( def )
+  {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     if( !data.items )
     {
       var listDataSource = widget.get( options, 'listDataSource', null );

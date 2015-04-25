@@ -156,19 +156,9 @@ widget.layout = (function(){
     if( factory && $.type( factory ) === 'string' )
       factory = widget.layout.registry[ factory ];
 
-    var handler = factory || widget.layout.registry[w.layout.rendererKey];
-    if( $.isFunction( handler ) )
-    {
-      w.view = handler( w.parent, w.layout, w.options, w );
-    }
-    else if( $.isFunction( defaultHandler ) )
-    {
-      w.view = defaultHandler( w.parent, w.layout, w.options, w );
-    }
-    else
-    {
-      w.view = null;
-    }
+    var handler = factory || widget.layout.registry[w.layout.rendererKey] || defaultHandler;
+    w.view = $.isFunction( handler ) ? handler( w ) : null;
+
     if( w.options.styleClass )
     {
       w.view.addClass( widget.util.expandPath( w.options.styleClass ) );

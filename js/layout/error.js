@@ -25,8 +25,12 @@
     return JSON.stringify( o, detectCircularReferences(o), 2 );
   }
 
-  function createErrorView( view, data, options ) 
+  function createErrorView( def )
   {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     console.error( "Error!", view, data, options );
     var panel = $('<div/>' ).addClass( 'errorPanel' ).appendTo( view );
     panel.append( $('<div/>', {text: 'Error:' } ).addClass('title') );

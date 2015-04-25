@@ -16,7 +16,11 @@
     return itemView;
   }
 
-  function createListView( parent, listData, listOptions ) {
+  function createListView( def )
+  {
+    var parent = def.parent;
+    var listData = def.layout;
+    var listOptions = def.options;
     
     var panel = $('<div/>' ).appendTo( parent );
     $.each( ['max-width', 'margin-right'], function( i, key ) {

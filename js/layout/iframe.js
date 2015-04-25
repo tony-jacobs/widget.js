@@ -11,8 +11,12 @@
   } );
   
 
-  function createInlineFrameView( view, data, options ) {
-
+  function createInlineFrameView( def )
+  {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     var frameHolder = $('<div/>').appendTo( view );
     var iframe = $( '<iframe></iframe>', {
       frameborder:0,

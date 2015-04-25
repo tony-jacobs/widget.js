@@ -7,7 +7,12 @@
     styleClass: 'dataContent'
   });
 
-  function createContentView( view, data, options ) {
+  function createContentView( def )
+  {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     var name = widget.util.expandPath( data.name );
 
     var content = $('<div/>', {html: name} );

@@ -7,8 +7,12 @@
   } );
 
 
-  function createInputField( view, data, options )
+  function createInputField( def )
   {
+    var view = def.parent;
+    var data = def.layout;
+    var options = def.options;
+    
     var fieldKey = (data.dataSource.path).replace( /\./g, "_" );
     var panel = $('<div/>' ).appendTo( view );
     var field = $('<input>').attr( {
