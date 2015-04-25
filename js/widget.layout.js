@@ -57,17 +57,30 @@ widget.layout = (function(){
     };
   }
 
-  function asArray( map )
+  function asArray( obj )
   {
-    var result = [];
-    for( var key in map )
+    switch( $.type( obj ) )
     {
-      result.push( {
-        key: key,
-        value: map[key]
-      });
+      case 'array': 
+        return obj;
+        
+      case 'function': 
+        return $.isArray( obj() ) ? obj :  asArray( obj() );
+        
+      case 'object':
+        var result = [];
+        for( var key in obj )
+        {
+          result.push( {
+            key: key,
+            value: map[key]
+          });
+        }
+        return result;
+      
+      default:
+        return [ obj ];
     }
-    return result;
   }
 
   function loadDataSource( dataSource, baseContent, options )
@@ -78,15 +91,14 @@ widget.layout = (function(){
     if( sourceData.content && $.isArray( sourceData.content ) )
       sourceData = sourceData.content;
       
-    var sourceDataArray = $.isArray( sourceData ) ? sourceData : asArray( sourceData ) || [];
-    var result = $.extend( {}, (baseContent||{}), sourceDataArray );
+    var data = asArray( sourceData||[] );
 
     if( options.sort )
     {
-      result = applySort( options.sort, result );
+      data = applySort( options.sort, $.isFunction(data) ? data() : data );
     }
 
-    return result;
+    return data;
   }
 
   function dispatch( parent, layout, options, defaultHandler, stack ) 

@@ -35,35 +35,36 @@
             }
           },
           {
-            "type": "namedPanel",
-            "name": "Grid Layout",
-            "content": {
-              "type": "list",
-              "dataSource": {
-                "type": "data",
-                "path": "testList"
+            type: "namedPanel",
+            name: "Grid Layout",
+            content: {
+              type: "list",
+              dataSource: {
+                type: "data",
+                path: "koList"
               }
             },
-            "options": {
+            options: {
               defaultRenderer: 'itemGridCell',
-              "sort": "newest",
-              "hideOnEmpty": true
+              hideOnEmpty: true
             }
           },
           {
-            "type": "namedPanel",
-            "name": "Table Layout",
-            "content": {
-              "type": "list",
-              "dataSource": {
-                "type": "data",
-                "path": "testList"
+            type: "namedPanel",
+            name: "Table Layout",
+            content: {
+              type: "list",
+              dataSource: {
+                type: "data",
+                path: "testList"
               }
             },
-            "options": {
+            options: {
+              sort: "newest",
               defaultRenderer: 'tableRowRenderer'
             }
           },
+          /*
           {
             "type": "namedPanel",
             "name": "Charts",
@@ -93,6 +94,13 @@
                 },
                 {
                   "type": "chart",
+                  "chartType":"graph",
+                  "dataSeries":"charts",
+                  "options": {
+                  }
+                },
+                {
+                  "type": "chart",
                   "chartType":"horizontalBar",
                   "dataSeries":"charts",
                   "options": {
@@ -109,6 +117,7 @@
               options: { styleClass: 'chartPanel', expandable:true }
             }
           },
+          */
         ]
       } },
       { name:'Search', label:'Search', type:'Tab', layout:
@@ -198,14 +207,14 @@
               height: 40
             }
           },
-          {
-            "type": "chart",
-            "chartType": "progressGauge",
-            'dataSeries': "charts.${dataSeries}",
-            "options": {
-              height: 40
-            }
-          },
+          // {
+          //   "type": "chart",
+          //   "chartType": "progressGauge",
+          //   'dataSeries': "charts.${dataSeries}",
+          //   "options": {
+          //     height: 40
+          //   }
+          // },
           {
             "type": "chart",
             "chartType": "readout",
@@ -273,7 +282,7 @@
       options: {
         styleClass: "cardContent",
         events: {
-          mouseenter: function( context, event ) { console.log( context.data.title, "Rollover!", context ); },
+          click: function( context, event ) { console.log( context.data.title, "Click!", context ); },
         }
       },
       layout: {
@@ -288,22 +297,15 @@
           },
           {
             "type": "label",
-            "name": "={ return moment( data.post_date*1000 ).format('MMM. DD YYYY'); }",
+            "name": "={ return moment( data.post_date ).format('MMM. DD YYYY'); }",
             "options": {
               "styleClass": "datestamp"
             }
           },{
             "type": "label",
-            "name": "={ return moment( data.post_date*1000 ).format('h:mmA'); }",
+            "name": "={ return moment( data.post_date ).format('h:mmA'); }",
             "options": {
               "styleClass": "timestamp"
-            }
-          },
-          {
-            "type": "label",
-            "name": "${excerpt}",
-            "options": {
-              "styleClass": "summary"
             }
           }
         ]
@@ -470,7 +472,12 @@ function startDataManager( onReady, onUpdate ) {
   });
   
   data.charts = generateSampleData();
-  
+  data.koList = ko.observableArray([
+    { title: "Observable 1", lastModified: Date.now() },
+    { title: "Observable 2", lastModified: Date.now() },
+    { title: "Observable 3", lastModified: Date.now() }
+  ]);
+
   onReady( widget.util.setData( 'data', data ), true );
 }
 

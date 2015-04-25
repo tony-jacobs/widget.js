@@ -1,7 +1,7 @@
 (function registerListLayout(){
   
   var dispatch = widget.layout.register( 'list', createListView, {
-    description: "TODO!"
+    description: "Creates a list of widgets from a content array or from a data source"
   }, {
     styleClass: 'listPanel'
   } );
@@ -26,10 +26,31 @@
     
     var holder = panel;
     
+    var data = listData.content || [];
+
+    // if data is a knockout observable, add a listener
+    if( $.isFunction( data ) && $.isFunction( data.subscribe ) )
+    {
+      data.subscribe( function onListChanged( changes ) {
+        for( var i=0; i<changes.length; i++ )
+        {    
+          var change = changes[i];
+
+          if( change.status == 'added' )
+            createItem( holder, change.value, listOptions );
+          else if( change.status == 'deleted' )
+            holder.children()[ change.index ].remove();
+          else
+            console.error( "Unknown array change:", change.index, change.status, change.value ); 
+        }
+      }, undefined, 'arrayChange' );
+      data = listData.content();
+    }
+    
     if( listOptions.holderClass )
       holder = $('<div/>' ).addClass( listOptions.holderClass ).appendTo( panel );
 
-    $.each( listData.content, function( i, item ) {
+    $.each( data, function( i, item ) {
       createItem( holder, item, listOptions );
     } );
     return panel;

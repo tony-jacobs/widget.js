@@ -40,10 +40,21 @@
   cursor: default;
 }
 
-.widget-clickable,
+.widget-clickable .unselectable,
 .clickable .unselectable {
   cursor: pointer;
 }
+
+.widget-clickable,
+.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.widget-clickable:hover,
+.clickable:hover {
+  background-color: rgba( 128, 128, 128, 0.1 );
+}
+
 
 .panelLabel {
   position: fixed;
@@ -78,15 +89,6 @@
   line-height:20px;
   padding-left: 10px
 }
-
-.clickable {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.clickable:hover {
-  background-color: rgba( 128, 128, 128, 0.1 );
-}
-
 
 .widgetTabPanel .decoration {
   position: absolute;
