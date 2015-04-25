@@ -6,6 +6,16 @@
     styleClass: 'listPanel'
   } );
 
+  function createItem( holder, item, listOptions )
+  {
+    var itemView = widget.layout( holder, item, { 
+      listOptions: listOptions, 
+      factory: listOptions.itemFactory
+    } );
+    
+    return itemView;
+  }
+
   function createListView( parent, listData, listOptions ) {
     
     var panel = $('<div/>' ).appendTo( parent );
@@ -20,15 +30,7 @@
       holder = $('<div/>' ).addClass( listOptions.holderClass ).appendTo( panel );
 
     $.each( listData.content, function( i, item ) {
-      
-      var typeKey = item.type;
-      var itemOptions = $.extend( {}, widget.layout.defaults[typeKey]||{}, { 
-        listOptions: listOptions, 
-        factory: listOptions.itemFactory
-      });
-      
-      var listItem = dispatch( holder, item, itemOptions, widget.layout.registry.error );
-
+      createItem( holder, item, listOptions );
     } );
     return panel;
   }

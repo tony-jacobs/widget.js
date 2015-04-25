@@ -239,7 +239,7 @@ widget.layout = (function(){
   }
 
   var self = function layout( parent, data, options ) {
-    return dispatch( parent, data, options, self.registry.error );
+    return dispatch( parent, data, self.getOptions( data.type, options ), self.registry.error );
   };
   
   self.registry = {};
@@ -257,6 +257,11 @@ widget.layout = (function(){
     return dispatch;
   };
   self.createCooperativeFrame = createCooperativeFrame;
+  
+  self.getOptions = function getOptions( type, values )
+  {
+    return $.extend( {}, self.defaults[type]||{}, values||{} );
+  };
   
   return self;
 })();
