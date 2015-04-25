@@ -38,7 +38,7 @@ widget.util = (function(){
     return null;
   }
 
-  function decode( token )
+  function decode( token, context )
   {
     token = expandTokens(token);
     var sep = token.indexOf( ',' );
@@ -53,7 +53,14 @@ widget.util = (function(){
     }
     else
     {
-      var stackVal = decode( "stack,0." + token );
+      var stackVal;
+      if( context )
+      {
+        stackVal = widget.get( context, token );
+      }
+      else
+        stackVal = decode( "stack,0." + token );
+        
       return stackVal || "${" + token + "}";
     }
   }
@@ -63,14 +70,14 @@ widget.util = (function(){
     doc: {
       name: "${<i>variable</i>}"
     },
-    processor: function processStackTemplate( token, str ) {
+    processor: function processStackTemplate( token, str, context ) {
       var result = [];
       
       var i = str.indexOf( token );
       if( i>2 )
         result.push( str.substring( 0, i-2 ) );
   
-      result.push( decode(token) );
+      result.push( decode(token, context) );
   
       if( str.length > (i + token.length + 1) )
       {
@@ -86,16 +93,21 @@ widget.util = (function(){
     doc: {
       name: "={<i>function</i>}"
     },
-    processor: function processInlineFunction( token, str ) {
+    processor: function processInlineFunction( token, str, context ) {
       /* jshint ignore:start */
       var f = new Function( "data", token );
       /* jshint ignore:end */
-      var data = widget.util.get( 'stack', 0 );
+      var data = context||widget.util.get( 'stack', 0 );
       return f( data );
     }
   };
 
-  function expandTokens( str )
+  /**
+   * Decodes an expression such as ${name} or ={return 'foo';}
+   * @param str - The expression that may contain valid expandable tokens
+   * @param context - The value to use as a data context
+   **/
+  function expandTokens( str, context )
   {
     var result = [];
     var done = false;
@@ -106,7 +118,7 @@ widget.util = (function(){
       var token = getToken( tokenImpl.prefix, str );
       if( token )
       {
-        var expansion = tokenImpl.processor( token, str );
+        var expansion = tokenImpl.processor( token, str, context );
         if( $.type(expansion) == 'array' )
           result.push.apply( result, expansion );
         else
@@ -133,6 +145,10 @@ widget.util = (function(){
       config = $.extend( {}, config, options );
     },
 
+    getStack: function getStack() {
+      return db.stack;
+    },
+    
     getData: function getData( key, defaultValue ) {
       if( !db[key] )
         db[key] = defaultValue || {};

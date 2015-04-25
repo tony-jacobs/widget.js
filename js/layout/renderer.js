@@ -4,7 +4,7 @@
     description: "Creates a dynamic renderer via indirection, allowing complex data structures"
   } );
 
-  function createRendererView( view, data, options ) {
+  function createRendererView( view, data, options, def ) {
     var key = widget.get( data, 'dynamicRenderer', 'Unknown Type' );
     var renderer = widget.util.get( 'renderers', key );
     
@@ -12,8 +12,8 @@
 
     if( renderer && renderer.layout )
     {
-      var dataStack = widget.util.getData( 'stack', [] ); 
-      dataStack.push( data );
+      var dataStack = widget.util.getData( 'stack', [] );
+      dataStack.push( def.data );
 
       var rendererOptions = $.extend( {}, renderer.options||{}, {
         rendererKey: key

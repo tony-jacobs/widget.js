@@ -6,17 +6,26 @@
   } );
 
 
-  function createLabelView( view, data, options ) {
-    var name = widget.util.expandPath( data.name );
-
-    var label = $('<div/>', {html: name} ).addClass( 'dataLabel' ).addClass('unselectable');
+  function createLabelView( view, layout, options, def ) {
+    var label = $('<div/>' ).addClass( 'dataLabel' ).addClass('unselectable');
       
-    if( data.action )
+    if( layout.action )
     {
-      label.addClass( 'clickable' ).click( data.action );
+      label.addClass( 'clickable' ).click( layout.action );
     }
-      
-    return label.appendTo( view );
+
+    label.update = function updateLabel( event, context ) {
+      if( context && context.stack )
+      {
+        def.stack = context.stack;
+      }
+
+      label.html( widget.util.expandPath( layout.name, def.stack[0] ) );
+    };
+    
+    label.update();
+    label.appendTo( view );
+    return label;
   }
 
 })();

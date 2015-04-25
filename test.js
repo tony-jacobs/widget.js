@@ -282,7 +282,7 @@
       options: {
         styleClass: "cardContent",
         events: {
-          click: function( context, event ) { console.log( context.data.title, "Click!", context ); },
+          click: function( context, event ) { console.log( context.data.title, "Click!", context ); }
         }
       },
       layout: {

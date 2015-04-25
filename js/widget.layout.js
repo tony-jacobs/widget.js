@@ -113,7 +113,8 @@ widget.layout = (function(){
     
     // Make a shallow copy of the data stack, as it gets pushed and popped a 
     // lot, and our downstream code may take a snapshot of things.
-    if( stack )
+    stack = stack || widget.util.getStack();
+    if( stack && stack.length )
     {
       for( var i=0; i<stack.length; i++ )
         w.stack.push( stack[i] ); 
@@ -158,11 +159,11 @@ widget.layout = (function(){
     var handler = factory || widget.layout.registry[w.layout.rendererKey];
     if( $.isFunction( handler ) )
     {
-      w.view = handler( w.parent, w.layout, w.options );
+      w.view = handler( w.parent, w.layout, w.options, w );
     }
     else if( $.isFunction( defaultHandler ) )
     {
-      w.view = defaultHandler( w.parent, w.layout, w.options );
+      w.view = defaultHandler( w.parent, w.layout, w.options, w );
     }
     else
     {
@@ -172,6 +173,9 @@ widget.layout = (function(){
     {
       w.view.addClass( widget.util.expandPath( w.options.styleClass ) );
     }
+    
+    if( w.view.update )
+      w.view.on( 'widget-update', w.view.update );
     
     lifecycle( 'layout', w );
         
@@ -250,8 +254,8 @@ widget.layout = (function(){
       return data;
   }
 
-  var self = function layout( parent, data, options ) {
-    return dispatch( parent, data, self.getOptions( data.type, options ), self.registry.error );
+  var self = function layout( parent, data, options, stack ) {
+    return dispatch( parent, data, self.getOptions( data.type, options ), self.registry.error, stack );
   };
   
   self.registry = {};
