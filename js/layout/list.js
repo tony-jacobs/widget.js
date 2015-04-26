@@ -1,5 +1,7 @@
 (function registerListLayout(){
   
+  var listUID = 0;
+  
   var dispatch = widget.layout.register( 'list', createListView, {
     description: "Creates a list of widgets from a content array or from a data source"
   }, {
@@ -8,10 +10,12 @@
 
   function createItem( holder, item, listOptions )
   {
+    item._vuid = (listUID++);
     var itemView = widget.layout( holder, item, { 
       listOptions: listOptions, 
       factory: listOptions.itemFactory
     } );
+    itemView.addClass( 'vuid-'+item._vuid );
     
     return itemView;
   }
@@ -41,9 +45,14 @@
           var change = changes[i];
 
           if( change.status == 'added' )
+          {
+            //console.log( "Add!", change.index, change.status, change.value );
             createItem( holder, change.value, listOptions );
+          }
           else if( change.status == 'deleted' )
-            holder.children()[ change.index ].remove();
+          {
+            $(".vuid-"+change.value._vuid).remove();
+          }
           else
             console.error( "Unknown array change:", change.index, change.status, change.value ); 
         }
