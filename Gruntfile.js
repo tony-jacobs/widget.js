@@ -18,6 +18,8 @@ module.exports = function(grunt) {
           'js/widget.util.js',
           'js/widget.chart.js',
           'js/widget.format.js',
+          'js/parser/stack.js',
+          'js/parser/inlineFunction.js',
           'js/charts/bar.js',
           'js/charts/donut.js',
           'js/charts/gauge.js',

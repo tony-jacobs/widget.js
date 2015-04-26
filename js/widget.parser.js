@@ -55,46 +55,6 @@ widget.parser = (function(){
       return stackVal || "${" + token + "}";
     }
   }
-  
-  tokens.stack = {
-    prefix: '$',
-    doc: {
-      name: "${<i>variable</i>}"
-    },
-    processor: function processStackTemplate( token, str, context ) {
-      
-
-      
-      var result = [];
-      
-      var i = str.indexOf( token );
-      if( i>2 )
-        result.push( str.substring( 0, i-2 ) );
-  
-      result.push( decode(token, context) );
-  
-      if( str.length > (i + token.length + 1) )
-      {
-        result = result.concat( expandTokens( str.substring( i + token.length + 1 ) ) );
-      }
-      
-      return result;
-    }
-  };
-  
-  tokens.inlineFunction = {
-    prefix: '=',
-    doc: {
-      name: "={<i>function</i>}"
-    },
-    processor: function processInlineFunction( token, str, context ) {
-      /* jshint ignore:start */
-      var f = new Function( "data", token );
-      /* jshint ignore:end */
-      var data = context||widget.util.get( 'stack', 0 );
-      return f( data );
-    }
-  };
 
   /**
    * Decodes an expression such as ${name} or ={return 'foo';}
@@ -132,7 +92,10 @@ widget.parser = (function(){
   return {
     expandPath: expandTokens,
     decode: decode,
-    registry: tokens
+    registry: tokens,
+    register: function( key, impl ) {
+      tokens[ key ] = impl;
+    }
   };
 })();
 
