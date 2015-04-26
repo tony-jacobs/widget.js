@@ -13,6 +13,7 @@ module.exports = function(grunt) {
           'js/widget.tracking.js',
           'js/widget.search.js',
           'js/widget.layout.js',
+          'js/widget.parser.js',
           'js/widget.ui.js',
           'js/widget.util.js',
           'js/widget.chart.js',

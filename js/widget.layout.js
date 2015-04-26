@@ -74,7 +74,7 @@ widget.layout = (function(){
         {
           result.push( {
             key: key,
-            value: map[key]
+            value: obj[key]
           });
         }
         return result;

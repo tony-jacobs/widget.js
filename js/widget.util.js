@@ -1,6 +1,3 @@
-widget.parser = {
-  tokens: {}
-};
 
 widget.util = (function(){
   var db = {};
@@ -11,132 +8,8 @@ widget.util = (function(){
     keyPrefix: 'widget.js'
   };
 
-  function getToken( flavor, str )
-  {
-    if( str )
-    {
-      var front = -1;
-      var opens = 0;
-
-      for( var i=0; i<str.length; i++ )
-      {
-        var ch = str.charAt(i);
-        if( (ch === flavor ) && (str.charAt( i+1 ) == '{') )
-        {
-          if( front < 0 )
-            front = i+2;
-          opens += 1;
-        }
-        else if( ch == '}' )
-        {
-          opens -= 1;
-          if( opens === 0 )
-            return str.substring( front, i );
-        }
-      }
-    }
-    return null;
-  }
-
-  function decode( token, context )
-  {
-    token = expandTokens(token);
-    var sep = token.indexOf( ',' );
-    if( sep > -1 )
-    {
-      var dbName = token.substring( 0, sep );
-      var path = token.substring( sep+1 ).split( '|', 2 );
-      if( path.length > 1 )
-        return widget.util.get( dbName, path[0], path[1] );
-      else
-        return widget.util.get( dbName, path[0] );
-    }
-    else
-    {
-      var stackVal;
-      if( context )
-      {
-        stackVal = widget.get( context, token );
-      }
-      else
-        stackVal = decode( "stack,0." + token );
-        
-      return stackVal || "${" + token + "}";
-    }
-  }
-  
-  widget.parser.tokens.stack = {
-    prefix: '$',
-    doc: {
-      name: "${<i>variable</i>}"
-    },
-    processor: function processStackTemplate( token, str, context ) {
-      var result = [];
-      
-      var i = str.indexOf( token );
-      if( i>2 )
-        result.push( str.substring( 0, i-2 ) );
-  
-      result.push( decode(token, context) );
-  
-      if( str.length > (i + token.length + 1) )
-      {
-        result = result.concat( expandTokens( str.substring( i + token.length + 1 ) ) );
-      }
-      
-      return result;
-    }
-  };
-  
-  widget.parser.tokens.inlineFunction = {
-    prefix: '=',
-    doc: {
-      name: "={<i>function</i>}"
-    },
-    processor: function processInlineFunction( token, str, context ) {
-      /* jshint ignore:start */
-      var f = new Function( "data", token );
-      /* jshint ignore:end */
-      var data = context||widget.util.get( 'stack', 0 );
-      return f( data );
-    }
-  };
-
-  /**
-   * Decodes an expression such as ${name} or ={return 'foo';}
-   * @param str - The expression that may contain valid expandable tokens
-   * @param context - The value to use as a data context
-   **/
-  function expandTokens( str, context )
-  {
-    var result = [];
-    var done = false;
-    
-    for( var key in widget.parser.tokens )
-    {
-      var tokenImpl = widget.parser.tokens[ key ];
-      var token = getToken( tokenImpl.prefix, str );
-      if( token )
-      {
-        var expansion = tokenImpl.processor( token, str, context );
-        if( $.type(expansion) == 'array' )
-          result.push.apply( result, expansion );
-        else
-          result.push( expansion );
-          
-        done = true;
-      }
-    }
-    
-    if( !done )
-      result.push( str );
-
-    return result.join('');
-  }
-
   var watchers = {};   
   var progressNow = 0;
-
 
   return {
     config: config,
@@ -158,8 +31,8 @@ widget.util = (function(){
       db[key] = data;
       return data;
     },
-    expandPath: expandTokens,
-    decode: decode,
+    expandPath: widget.parser.expandPath,
+    decode: widget.parser.decode,
 
     get: function widgetUtilGet( key, path, defaultValue ) {
       return widget.get( widget.util.getData(key), widget.util.expandPath( path ), defaultValue );
