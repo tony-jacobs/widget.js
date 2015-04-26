@@ -12,6 +12,7 @@ widget.assets = (function(){
 widget.layout = (function(){
   
   var assets = widget.assets;
+  var visionUID = 10000;
 
   function createUrlAction( linkUrl, windowMode ) {
     return function() {
@@ -150,6 +151,9 @@ widget.layout = (function(){
       w.layout.content = loadDataSource( w.layout.dataSource, w.layout.content, w.options );
     }
     
+    if( w.data )
+      w.data._vuid = w.data._vuid||('vuid-'+(visionUID++));
+    
     lifecycle( 'dataReady', w );
     configureRenderer( w, w.options.listOptions );
 
@@ -163,6 +167,10 @@ widget.layout = (function(){
     {
       w.view.addClass( widget.util.expandPath( w.options.styleClass ) );
     }
+    
+    if( w.data && w.data._vuid )
+      w.view.addClass( w.data._vuid );
+
     
     if( w.view.update )
       w.view.on( 'widget-update', w.view.update );
