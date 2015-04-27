@@ -28,7 +28,6 @@
       label.html( widget.util.expandPath( layout.name, def.stack[0] ) );
     };
     
-    label.update();
     label.appendTo( view );
     return label;
   }

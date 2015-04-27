@@ -43,7 +43,10 @@
           if( change.status == 'added' )
             createItem( holder, change.value, listOptions );
           else if( change.status == 'deleted' )
+          {
             $("."+change.value._vuid).remove();
+            $( parent ).trigger( 'widget-update', def );
+          }
           else
             console.error( "Unknown array change:", change.index, change.status, change.value ); 
         }

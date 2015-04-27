@@ -36,6 +36,25 @@
           },
           {
             type: "namedPanel",
+            name: "Empty Layout",
+            content: {
+              type: "list",
+              dataSource: {
+                type: "data",
+                path: "empty"
+              }
+            },
+            options: {
+              defaultRenderer: 'itemGridCell',
+              events: {
+                update: function( context, event ) { 
+                  $( context.view ).toggle( widget.util.get( 'data', 'empty' )().length > 0 );
+                }
+              }
+            }
+          },
+          {
+            type: "namedPanel",
             name: "Grid Layout",
             content: {
               type: "list",
@@ -45,8 +64,7 @@
               }
             },
             options: {
-              defaultRenderer: 'itemGridCell',
-              hideOnEmpty: true
+              defaultRenderer: 'itemGridCell'
             }
           },
           {
@@ -477,6 +495,8 @@ function startDataManager( onReady, onUpdate ) {
     { title: "Observable 2", lastModified: Date.now() },
     { title: "Observable 3", lastModified: Date.now() }
   ]);
+  
+  data.empty = ko.observableArray();
 
   onReady( widget.util.setData( 'data', data ), true );
 }

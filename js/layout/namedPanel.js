@@ -32,13 +32,8 @@
     });
     content.addClass( 'panelContent' );
 
-    if( content.children().length===0 && options.hideOnEmpty )
-      return null;
-    else
-    {
-      parent.append( panel );
-      return panel;
-    }
+    parent.append( panel );
+    return panel;
   }
 
 })();

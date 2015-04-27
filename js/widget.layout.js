@@ -163,17 +163,21 @@ widget.layout = (function(){
     var handler = factory || widget.layout.registry[w.layout.rendererKey] || defaultHandler;
     w.view = $.isFunction( handler ) ? handler( w ) : null;
 
-    if( w.options.styleClass )
+    if( w.view )
     {
-      w.view.addClass( widget.util.expandPath( w.options.styleClass ) );
-    }
-    
-    if( w.data && w.data._vuid )
-      w.view.addClass( w.data._vuid );
+      if( w.data && w.data._vuid )
+        w.view.addClass( w.data._vuid );
 
-    
-    if( w.view.update )
-      w.view.on( 'widget-update', w.view.update );
+      if( w.options.styleClass )
+        w.view.addClass( widget.util.expandPath( w.options.styleClass ) );
+
+
+      w.view.on( 'widget-update', function onUpdate( event, context ) {
+        if( $.isFunction( w.view.update ) )
+          w.view.update( event, context );
+        lifecycle( 'update', w );
+      } );
+    }
     
     lifecycle( 'layout', w );
         
@@ -195,6 +199,10 @@ widget.layout = (function(){
     }
 
     lifecycle( 'ready', w );
+    
+    if( w.view )
+      w.view.trigger( 'widget-update', w );
+    
     return w.view;
   }
   
