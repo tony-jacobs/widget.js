@@ -19,10 +19,15 @@
     var chart = $( domSelector, $(options.parent) )[0];
     
     chart.updateReadout = function updateReadout( oldValue ) {
-      var val = dataSet[ dataSet.length-1 ];
-      var formatString = format( val.y );
-
-      chart.innerHTML = formatString;
+      if( dataSet )
+      {
+        var val = dataSet[ dataSet.length-1 ];
+        var formatString = format( val.y );
+  
+        chart.innerHTML = formatString;
+      }
+      else
+        chart.innerHTML = "data error";
     };
   
     var dataSet = data;

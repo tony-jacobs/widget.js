@@ -49,14 +49,17 @@
     var dataSet = options.data;
     
     chart.updateGauge = function updateGauge( oldValue ) {
-      var val = dataSet[ dataSet.length-1 ].y;
-      
-      if( val < gauge.minValue )
-        val = gauge.minValue;
-  
-      if( val > gauge.maxValue )
-        val = gauge.maxValue;
-      gauge.set( val );
+      if( dataSet )
+      {
+        var val = dataSet[ dataSet.length-1 ].y;
+        
+        if( val < gauge.minValue )
+          val = gauge.minValue;
+    
+        if( val > gauge.maxValue )
+          val = gauge.maxValue;
+        gauge.set( val );
+      }
     };
     
     if( typeof dataSet == 'function' )

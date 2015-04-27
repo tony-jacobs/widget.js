@@ -18,12 +18,15 @@
       var domSelector = '#'+chartId;
       var dataSet = factory.attachDataSource( data, domSelector, chartId, options.maxDataCount );  
     
-      d3.select( domSelector )
-        .datum( dataSet )
-        .style( {width:width+'px', height:height+'px'} )
-        .transition().duration(250)
-        .call(chart);
-  
+      if( dataSet )
+      {
+        d3.select( domSelector )
+          .datum( dataSet )
+          .style( {width:width+'px', height:height+'px'} )
+          .transition().duration(250)
+          .call(chart);
+      }
+      
       factory.charts[ chartId ] = chart;
       return chart;
     });
