@@ -171,14 +171,14 @@
           },
           {
             "type": "label",
-            "name": "${title}",
+            "name": "-=${title}=-",
             "options": {
               "styleClass": "title"
             }
           },
           {
             "type": "label",
-            "name": "={ return moment( data.post_date*1000 ).format('MMM. DD YYYY, h:mm A'); }",
+            "name": "TIME: ={ return moment( data.post_date*1000 ).format('MMM. DD YYYY, h:mm A'); }",
             "options": {
               "styleClass": "postDate"
             }
