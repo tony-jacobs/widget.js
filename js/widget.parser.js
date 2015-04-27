@@ -29,33 +29,6 @@ widget.parser = (function(){
     return null;
   }
 
-  function decode( token, context )
-  {
-    token = expandTokens(token);
-    var sep = token.indexOf( ',' );
-    if( sep > -1 )
-    {
-      var dbName = token.substring( 0, sep );
-      var path = token.substring( sep+1 ).split( '|', 2 );
-      if( path.length > 1 )
-        return widget.util.get( dbName, path[0], path[1] );
-      else
-        return widget.util.get( dbName, path[0] );
-    }
-    else
-    {
-      var stackVal;
-      if( context )
-      {
-        stackVal = widget.get( context, token );
-      }
-      else
-        stackVal = decode( "stack,0." + token );
-        
-      return stackVal || "${" + token + "}";
-    }
-  }
-
   /**
    * Decodes an expression such as ${name} or ={return 'foo';}
    * @param str - The expression that may contain valid expandable tokens
@@ -72,12 +45,21 @@ widget.parser = (function(){
       var token = getToken( tokenImpl.prefix, str );
       if( token )
       {
-        var expansion = tokenImpl.processor( token, str, context );
+        var i = str.indexOf( token );
+        if( i>2 )
+          result.push( str.substring( 0, i-2 ) );
+    
+        var expansion = tokenImpl.processor( token, context, str );
         if( $.type(expansion) == 'array' )
           result.push.apply( result, expansion );
         else
           result.push( expansion );
-          
+
+        if( str.length > (i + token.length + 1) )
+        {
+          result = result.concat( expandTokens( str.substring( i + token.length + 1 ), context ) );
+        }
+
         done = true;
       }
     }
@@ -91,7 +73,6 @@ widget.parser = (function(){
 
   return {
     expandPath: expandTokens,
-    decode: decode,
     registry: tokens,
     register: function( key, impl ) {
       tokens[ key ] = impl;

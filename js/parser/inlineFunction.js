@@ -8,7 +8,7 @@
     processor: processInlineFunction
   });
 
-  function processInlineFunction( token, str, context ) 
+  function processInlineFunction( token, context ) 
   {
     /* jshint ignore:start */
     var f = new Function( "data", token );

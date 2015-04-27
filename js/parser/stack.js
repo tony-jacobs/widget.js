@@ -5,23 +5,34 @@
     doc: {
       name: "${<i>variable</i>}"
     },
-    processor: processStackTemplate
+    processor: decode
   });
     
-  function processStackTemplate( token, str, context ) {
-    var result = [];
-    
-    var i = str.indexOf( token );
-    if( i>2 )
-      result.push( str.substring( 0, i-2 ) );
-
-    result.push( widget.parser.decode(token, context) );
-
-    if( str.length > (i + token.length + 1) )
+  function decode( token, context )
+  {
+    token = widget.parser.expandPath(token);
+    var sep = token.indexOf( ',' );
+    if( sep > -1 )
     {
-      result = result.concat( widget.parser.expandPath( str.substring( i + token.length + 1 ) ) );
+      var dbName = token.substring( 0, sep );
+      var path = token.substring( sep+1 ).split( '|', 2 );
+      if( path.length > 1 )
+        return widget.util.get( dbName, path[0], path[1] );
+      else
+        return widget.util.get( dbName, path[0] );
     }
-    
-    return result;
+    else
+    {
+      var stackVal;
+      if( context )
+      {
+        stackVal = widget.get( context, token );
+      }
+      else
+        stackVal = decode( "stack,0." + token );
+        
+      return stackVal || "${" + token + "}";
+    }
   }
+
 })();
