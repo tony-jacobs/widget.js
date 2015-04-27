@@ -19,7 +19,7 @@
 
     if( str.length > (i + token.length + 1) )
     {
-      result = result.concat( widget.parser.expandTokens( str.substring( i + token.length + 1 ) ) );
+      result = result.concat( widget.parser.expandPath( str.substring( i + token.length + 1 ) ) );
     }
     
     return result;
