@@ -12,19 +12,18 @@
   function decode( token, context )
   {
     var sep = token.indexOf( ',' );
+    var path;
     if( sep > -1 )
     {
       var dbName = token.substring( 0, sep );
-      var path = token.substring( sep+1 ).split( '|', 2 );
-      if( path.length > 1 )
-        return widget.util.get( dbName, path[0], path[1] );
-      else
-        return widget.util.get( dbName, path[0] );
+      path = token.substring( sep+1 ).split( '|', 2 );
+      return widget.util.get( dbName, path[0], path[1] );
     }
     else
     {
       context = context || (widget.util.getStack() || [])[0];
-      return widget.get( context, token ) || "${" + token + "}";
+      path = token.split( '|', 2 );
+      return widget.get( context, path[0], path[1] ) || "${" + token + "}";
     }
   }
 
