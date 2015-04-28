@@ -25,12 +25,12 @@
             }
           },
           {
-            "type": "list",
-            "dataSource": {
-              "type": "data",
-              "path": "testList"
+            type: "list",
+            dataSource: {
+              type: "data",
+              path: "testList"
             },
-            "options": {
+            options: {
               defaultRenderer: 'itemCard'
             }
           },
@@ -190,6 +190,13 @@
           {
             "type": "label",
             "name": "-=${title}=-",
+            "options": {
+              "styleClass": "title"
+            }
+          },
+          {
+            "type": "label",
+            "name": "_{test} ${title} _{xx${title}xx}",
             "options": {
               "styleClass": "title"
             }
@@ -413,7 +420,45 @@
     );
   };
 
+  widget.util.setData( 'localization', {
+    common: {
+      test: 'Test'
+    },
+    en: {
+      vvv: 'Vvv'
+    }
+  });
+  
   launch();
+  
+  function test( str ) {
+    var c = {
+      test: "TEST",
+      foo: 'vvv'
+    };
+    
+    var after = widget.parser.expandPath( str, c );
+    console.log( "'" + str + "' --> '" + after + "'" );
+  }
+  
+  $.each( [
+    "test",
+    "${test}",
+    " $test ",
+    " ${test} ",
+    " _{test} ",
+    " \\{test} ",
+    " {test} ",
+    " ${foo${bar}} ",
+    " ${foo${test}} ",
+    "${foo ${bar} }",
+    "${foo ${test} }",
+    " _{${foo}}",
+    " ${foo} _{foo} ",
+    " ={return 'bah';} ",
+    " ={return '${bah}';} "
+  ], function( i, o ) { test( o ); } );
+  
 })();
 
 
