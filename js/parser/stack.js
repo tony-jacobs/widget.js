@@ -5,12 +5,12 @@
     doc: {
       name: "${<i>variable</i>}"
     },
+    recursive: true,
     processor: decode
   });
     
   function decode( token, context )
   {
-    token = widget.parser.expandPath(token);
     var sep = token.indexOf( ',' );
     if( sep > -1 )
     {
@@ -23,15 +23,8 @@
     }
     else
     {
-      var stackVal;
-      if( context )
-      {
-        stackVal = widget.get( context, token );
-      }
-      else
-        stackVal = decode( "stack,0." + token );
-        
-      return stackVal || "${" + token + "}";
+      context = context || (widget.util.getStack() || [])[0];
+      return widget.get( context, token ) || "${" + token + "}";
     }
   }
 

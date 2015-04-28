@@ -2,31 +2,37 @@ widget.parser = (function(){
   
   var tokens = {};
 
-  function getToken( flavor, str )
+  function tokenize( str )
   {
-    if( str )
+    for( var i=1; i<str.length; i++ )
     {
-      var front = -1;
-      var opens = 0;
-
-      for( var i=0; i<str.length; i++ )
+      var k = str.charAt(i-1);
+      if( str.charAt(i) == '{' && k != ' ' && k != '\\' )
       {
-        var ch = str.charAt(i);
-        if( (ch === flavor ) && (str.charAt( i+1 ) == '{') )
+        var open = 1;
+        for( var j=i+1; j<str.length; j++ )
         {
-          if( front < 0 )
-            front = i+2;
-          opens += 1;
-        }
-        else if( ch == '}' )
-        {
-          opens -= 1;
-          if( opens === 0 )
-            return str.substring( front, i );
+          var ch = str.charAt(j);
+          if( ch == '{')
+            open++;
+          else if( ch == '}' )
+          {
+            open--;
+            if( open === 0 )
+            {
+              var tokens = [];
+              if( i>1 )
+                tokens.push( str.substring(0,i-1) );
+              tokens.push( { flavor:k, token:str.substring(i+1,j) } );
+              if( j+1 < str.length )
+                tokens.push.apply( tokens, tokenize(str.substring(j+1) ) );
+              return tokens;
+            }
+          }
         }
       }
     }
-    return null;
+    return [str];
   }
 
   /**
@@ -36,36 +42,32 @@ widget.parser = (function(){
    **/
   function expandTokens( str, context )
   {
+    if( !str )
+      return str;
+      
+    var t = tokenize( str );
     var result = [];
-    var done = false;
     
-    for( var key in tokens )
+    for( var i=0; i<t.length; i++ )
     {
-      var tokenImpl = tokens[ key ];
-      var token = getToken( tokenImpl.prefix, str );
-      if( token )
+      if( $.type( t[i] ) === 'string' )
+        result.push( t[i] );
+      else
       {
-        var i = str.indexOf( token );
-        if( i>2 )
-          result.push( str.substring( 0, i-2 ) );
-    
-        var expansion = tokenImpl.processor( token, context, str );
-        if( $.type(expansion) == 'array' )
-          result.push.apply( result, expansion );
-        else
-          result.push( expansion );
-
-        if( str.length > (i + token.length + 1) )
+        var token = t[i];
+        var impl = tokens[ token.flavor ];
+        if( impl )
         {
-          result = result.concat( expandTokens( str.substring( i + token.length + 1 ), context ) );
-        }
+          var body = token.token;
+          if( impl.recursive )
+            body = expandTokens( body, context );
 
-        done = true;
+          result.push( impl.processor( body, context, str ) );
+        }
+        else
+          result.push( token.flavor+"{" + token.token + "}" );
       }
     }
-    
-    if( !done )
-      result.push( str );
 
     return result.join('');
   }
@@ -75,8 +77,10 @@ widget.parser = (function(){
     expandPath: expandTokens,
     registry: tokens,
     register: function( key, impl ) {
-      tokens[ key ] = impl;
+      impl.doc = impl.doc || {};
+      impl.doc.key = key;
+      
+      tokens[ impl.prefix ] = impl;
     }
   };
 })();
-
