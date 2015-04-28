@@ -13,7 +13,7 @@
     /* jshint ignore:start */
     var f = new Function( "data", token );
     /* jshint ignore:end */
-    var data = context||widget.util.get( 'stack', 0 );
+    var data = context || (widget.util.getStack() || [])[0];
     return f( data );
   }
 
