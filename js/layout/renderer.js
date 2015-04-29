@@ -10,18 +10,25 @@
     var data = def.layout;
     var options = def.options;
     
-    var key = widget.get( data, 'dynamicRenderer', 'Unknown Type' );
-    var renderer = widget.util.get( 'renderers', key );
+    var renderer = widget.get( data, 'staticRenderer' );
+    var key;
+    if( !renderer )
+    {
+      key = widget.get( data, 'dynamicRenderer', 'Unknown Type' );
+      renderer = widget.util.get( 'renderers', key );
+    }
     
-    var panel = $('<div/>' ).addClass( 'renderer' ).addClass( key ).appendTo( view );
-
+    var panel = $('<div/>' ).addClass( 'renderer' ).appendTo( view );
+    if( key )
+      panel.addClass( key );
+      
     if( renderer && renderer.layout )
     {
       var dataStack = widget.util.getData( 'stack', [] );
       dataStack.push( def.data );
 
       var rendererOptions = $.extend( {}, renderer.options||{}, {
-        rendererKey: key
+        rendererKey: key||'static'
       } );
 
       var optionsStack = widget.util.getData( 'meta', [] ); 

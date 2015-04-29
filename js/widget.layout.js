@@ -134,6 +134,11 @@ widget.layout = (function(){
         w.layout.rendererKey = 'renderer';
         w.layout.dynamicRenderer = ( options.renderers && options.renderers[ typeKey ] ) ? options.renderers[ typeKey ] : options.defaultRenderer;
       }
+      else if( options && options.renderer )
+      {
+        w.layout.rendererKey = 'renderer';
+        w.layout.staticRenderer = options.renderer;
+      }
       else
         w.layout.rendererKey = typeKey;
     }
@@ -169,8 +174,9 @@ widget.layout = (function(){
         w.view.addClass( w.data._vuid );
 
       if( w.options.styleClass )
-        w.view.addClass( widget.util.expandPath( w.options.styleClass ) );
-
+      {
+        w.view.addClass( widget.util.expandPath( w.options.styleClass, w.data ) );
+      }
 
       w.view.on( 'widget-update', function onUpdate( event, context ) {
         if( $.isFunction( w.view.update ) )

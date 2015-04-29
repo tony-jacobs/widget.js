@@ -46,7 +46,8 @@ module.exports = function(grunt) {
           'js/layout/renderer.js',
           'js/layout/selector.js',
           'js/layout/tab.js',
-          'js/layout/tabGroup.js'
+          'js/layout/tabGroup.js',
+          'js/layout/table.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       },

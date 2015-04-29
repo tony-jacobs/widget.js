@@ -8,10 +8,12 @@
 
   function createItem( holder, item, listOptions )
   {
-    var itemView = widget.layout( holder, item, { 
+    var options = { 
       listOptions: listOptions, 
       factory: listOptions.itemFactory
-    } );
+    };
+    
+    var itemView = widget.layout( holder, item, options );
     
     return itemView;
   }

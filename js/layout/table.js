@@ -1,0 +1,100 @@
+(function registerTableLayout(){
+    
+  widget.layout.register( 'table', createTableView, {
+    description: "Creates a table composed of a header and a list of viewers"
+  },{
+    styleClass: 'tableWidget'
+  } );
+
+  function createHeaderLayout( columns, options )
+  {
+    var headerLayout = {
+      type: 'list',
+      content: [],
+      options: $.extend( {}, options, {
+        styleClass: options.headerStyleClass ||'headerRow'
+      })
+    };
+    
+    var i;
+    for( i=0; i<columns.length; i++ )
+    {
+      var col = columns[i];
+      var headerItem = {
+        type: 'label',
+        name: col.name || ('Column ' + (i+1)),
+        options: $.extend( {}, col.options )
+      };
+      var colClass = 'column';
+      if( col.options.styleClass )
+        colClass = colClass + ' ' + col.options.styleClass;
+      headerItem.options.styleClass = colClass;
+      
+      headerLayout.content.push( headerItem );
+    }
+    delete headerLayout.options.events;
+    
+    return headerLayout;
+  }
+  
+  function createContentLayout( columns, dataSource, options )
+  {
+    options = options||{};
+    var renderer = {
+      type: "renderer",
+      options: {
+        styleClass: options.rowStyleClass || 'tableRow'
+      },
+      layout: {
+        type: "list",
+        content: []
+      }
+    };
+      
+    var contentOptions = $.extend( {}, options, {
+      styleClass: options.contentStyleClass ||'tableContent',
+      renderer: renderer
+    });
+    
+    renderer.options.events = options.events;
+    delete contentOptions.events;
+
+    var contentLayout = {
+      type: 'list',
+      dataSource: dataSource,
+      options: contentOptions
+    };
+
+    var i;
+    for( i=0; i<columns.length; i++ )
+    {
+      var col = columns[i];
+      var rowItem = {
+        type: 'label',
+        name: col.data || col.name || ('Column ' + (i+1)),
+        options: $.extend( {}, col.options )
+      };
+      var colClass = 'column';
+      if( col.options.styleClass )
+        colClass = colClass + ' ' + col.options.styleClass;
+      rowItem.options.styleClass = colClass;
+      
+      renderer.layout.content.push( rowItem );
+    }
+   
+    return contentLayout;
+  }
+  
+  function createTableView( def ) 
+  {
+    var headerLayout = createHeaderLayout( def.layout.columns, def.options );
+    var contentLayout = createContentLayout( def.layout.columns, def.layout.dataSource, def.layout.contentOptions );
+    
+    var holder = $('<div/>').addClass( def.options.styleClass );
+    
+    widget.layout( holder, headerLayout );
+    widget.layout( holder, contentLayout );
+    
+    return holder.appendTo( def.parent );
+  }
+})();
