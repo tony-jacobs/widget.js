@@ -36,30 +36,36 @@ widget.ui = {
     });
   },
   
-  createUrlViewAction: function createUrlViewAction( data ) {
+  createUrlViewAction: function createUrlViewAction( data, parent ) {
     return function urlViewAction() {
-      showIframePopup( $('#tabNav').parent(), data.url );
+      showIframePopup( parent || $('body'), data.url );
     };
   },
 
-  createRendererPopupAction: function createRendererPopupAction( data, renderer ) {
+  createRendererPopupAction: function createRendererPopupAction( data, renderer, parent ) {
     var action = function rendererPopupAction() {
-      var holder = $('<div/>');
-      var rendererData = $.extend( {}, data, {
-        type: 'renderer',
-        dynamicRenderer: renderer 
-      });
-      
-      if( rendererData.action == action )
-        delete rendererData.action;
-        
-      var rendererOptions = {};
-      
-      widget.layout( holder, rendererData, rendererOptions );
-      showContentPopup( $('#tabNav').parent(), holder );
+      widget.ui.showRendererPopup( renderer, data, parent );
     };
     
     return action;
+  },
+  
+  showRendererPopup: function showRendererPopup( renderer, data, parent )
+  {
+    var holder = $('<div/>');
+    
+    var layout = {
+      type: 'renderer'
+    };
+    if( $.type( renderer ) === 'string' )
+      layout.dynamicRenderer = renderer;
+    else // renderer is an object
+      layout.staticRenderer = renderer;
+
+    var options = {};
+    
+    widget.layout( holder, layout, options, [ data ] );
+    showContentPopup( parent || $('body'), holder );
   }
 };
 
