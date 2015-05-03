@@ -20,12 +20,8 @@
     var tabNav = widget.generateTabs( view, tabOptions );
     var tabManager = tabNav.data('tabManager');
 
-    $.each( data.content, function( i, tabData ) {
-      var tabContent = dispatch( tabData.view, tabData.content, {}, function( view, data, options ) {
-        var v = $('<div/>', {text: data} ).appendTo( view );
-        v.addClass( options.styleClass||'tabItem' );
-        return v;
-      });
+    $.each( data.content, function( i, tabLayout ) {
+      var tabContent = widget.layout( tabLayout.view, tabLayout, {} );
     } );
     
     return tabGroup;

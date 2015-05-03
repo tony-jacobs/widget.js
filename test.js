@@ -82,6 +82,18 @@
               defaultRenderer: 'tableRowRenderer'
             }
           },
+          {
+            type: 'tabGroup',
+            content: [
+              { type:'Tab', name: 'all', label:'All Sections', layout: { type:'label', name:'content for all' } },
+              { type:'Tab', name: 'a', label:'Section A', layout: { type:'renderer', dynamicRenderer:'simpleRenderer' } },
+              { type:'Tab', name: 'b', label:'Section B', layout: { type:'label', name:'content for B' } },
+              { type:'Tab', name: 'c', label:'Section C', layout: { type:'label', name:'content for C' } },
+            ],
+            options: {
+              labelHolder: 'sectionLabels'
+            }
+          },
           /*
           {
             "type": "namedPanel",
@@ -335,6 +347,10 @@
           }
         ]
       }
+    },
+    simpleRenderer: {
+      type: 'renderer',
+      layout: { type:'label', name:'Hello world' }
     },
     popupRenderer: {
       type: "renderer",
