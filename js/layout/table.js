@@ -22,9 +22,14 @@
       var col = columns[i];
       var headerItem = {
         type: 'label',
-        name: col.name || ('Column ' + (i+1)),
         options: $.extend( {}, col.options )
       };
+      
+      if( col.name !== undefined )
+        headerItem.name = col.name;
+      else
+        headerItem.name = 'Column ' + (i+1);
+      
       var colClass = 'column';
       if( col.options.styleClass )
         colClass = colClass + ' ' + col.options.styleClass;
@@ -69,11 +74,18 @@
     for( i=0; i<columns.length; i++ )
     {
       var col = columns[i];
-      var rowItem = {
-        type: 'label',
-        name: col.data || col.name || ('Column ' + (i+1)),
+      var rowItem = $.extend( {}, col, {
+        type: col.type || 'label',
         options: $.extend( {}, col.options )
-      };
+      });
+      
+      if( col.data !== undefined )
+        rowItem.name = col.data;
+      else if( col.name !== undefined )
+        rowItem.name = col.name;
+      else
+        rowItem.name = 'Column ' + (i+1);
+      
       var colClass = 'column';
       if( col.options.styleClass )
         colClass = colClass + ' ' + col.options.styleClass;
@@ -81,7 +93,7 @@
       
       renderer.layout.content.push( rowItem );
     }
-   
+    
     return contentLayout;
   }
   
