@@ -13,7 +13,8 @@
     var options = def.options;
     
     var panel = $('<div/>' );
-    var panelTitle = $('<div/>', {text: panelData.name } ).addClass( 'unselectable ' + (options.titleClass||'panelTitle'));
+    var name = widget.util.expandPath( panelData.name, def.stack[0] );
+    var panelTitle = $('<div/>', {html: name } ).addClass( 'unselectable ' + (options.titleClass||'panelTitle'));
     panel.append( panelTitle );
 
     var expandedClass = options.expandedClassName || 'expanded';
