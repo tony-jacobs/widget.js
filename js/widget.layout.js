@@ -88,7 +88,8 @@ widget.layout = (function(){
   {
     var db = widget.util.getData( dataSource.type, window[dataSource.type]||{} );
     
-    var sourceData = widget.get( db, dataSource.path, {} );
+    var path = widget.util.expandPath( dataSource.path );
+    var sourceData = widget.get( db, path, {} );
     if( sourceData.content && $.isArray( sourceData.content ) )
       sourceData = sourceData.content;
       
