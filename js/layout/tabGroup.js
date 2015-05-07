@@ -20,8 +20,24 @@
     var tabNav = widget.generateTabs( view, tabOptions );
     var tabManager = tabNav.data('tabManager');
 
-    $.each( data.content, function( i, tabLayout ) {
-      var tabContent = widget.layout( tabLayout.view, tabLayout, {} );
+
+    var dataStack = def.stack || [data];
+    if( def.data )
+      dataStack.unshift( def.data );
+    
+    $.each( data.content, function( i, item ) {
+      
+      var itemData;
+      if( item.data )
+        itemData = item.data;
+      else if( item.dataSource || def.layout.dataSource )
+        itemData = item;
+      
+      if( itemData )
+        dataStack.unshift( itemData );
+      widget.layout( item.view, item, {}, dataStack );
+      if( itemData )
+        dataStack.shift( itemData );
     } );
     
     return tabGroup;

@@ -80,7 +80,10 @@
       });
       
       if( col.data !== undefined )
+      {
         rowItem.name = col.data;
+        delete rowItem.data;
+      }
       else if( col.name !== undefined )
         rowItem.name = col.name;
       else
