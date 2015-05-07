@@ -6,14 +6,14 @@
     styleClass: 'listPanel'
   } );
 
-  function createItem( holder, item, listOptions )
+  function createItem( holder, item, listOptions, stack )
   {
     var options = { 
       listOptions: listOptions, 
       factory: listOptions.itemFactory
     };
     
-    var itemView = widget.layout( holder, item, options );
+    var itemView = widget.layout( holder, item, options, stack );
     
     return itemView;
   }
@@ -33,6 +33,24 @@
     var holder = panel;
     
     var data = listData.content || [];
+    var dataStack = def.stack || [data];
+    
+    if( def.data )
+      dataStack.unshift( def.data );
+      
+    var layoutItem = function layoutItem( item ) {
+      var itemData;
+      if( item.data )
+        itemData = item.data;
+      else if( item.dataSource || def.layout.dataSource )
+        itemData = item;
+
+      if( itemData )
+        dataStack.unshift( itemData );
+      createItem( holder, item, listOptions, dataStack );
+      if( itemData )
+        dataStack.shift( itemData );
+    };
 
     // if data is a knockout observable, add a listener
     if( $.isFunction( data ) && $.isFunction( data.subscribe ) )
@@ -43,7 +61,7 @@
           var change = changes[i];
 
           if( change.status == 'added' )
-            createItem( holder, change.value, listOptions );
+            layoutItem( change.value );
           else if( change.status == 'deleted' )
           {
             $("."+change.value._vuid).remove();
@@ -60,7 +78,7 @@
       holder = $('<div/>' ).addClass( listOptions.holderClass ).appendTo( panel );
 
     $.each( data, function( i, item ) {
-      createItem( holder, item, listOptions );
+      layoutItem( item );
     } );
     return panel;
   }

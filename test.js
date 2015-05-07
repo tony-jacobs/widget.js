@@ -1,4 +1,15 @@
 (function(){
+  var unitTest = false;
+
+widget.util.set( 'nest', 'test', [ {name:'foo'} ] );
+widget.util.set( 'renderers', 'parentRenderer', {
+  type: 'renderer',
+  layout: { type:'list', dataSource: { type:'nest', path:'test' }, options:{ defaultRenderer:'childRenderer' } }
+});
+widget.util.set( 'renderers', 'childRenderer', {
+  type: 'renderer',
+  layout: { type:'label', name: '${name}' }
+});
 
   var mainNav = {
     selector: '#tabNav',
@@ -10,7 +21,13 @@
     tabData: [
       { name:'Demo', label:'Demo', type:'Tab', layout:{
         type: "list",
+        hide: true,
         content: [
+          
+{ type:'renderer', dynamicRenderer:'parentRenderer' },
+{ type:'list', dataSource: { type:'nest', path:'test' }, options:{ defaultRenderer:'childRenderer' } },
+          
+          
           {
             type: "label",
             name: "Widget.js demo App",
@@ -53,6 +70,7 @@
               }
             }
           },
+          
           {
             type: "namedPanel",
             name: "Grid Layout",
@@ -67,6 +85,7 @@
               defaultRenderer: 'itemGridCell'
             }
           },
+          
           {
             type: "namedPanel",
             name: "Table Layout",
@@ -82,6 +101,7 @@
               defaultRenderer: 'tableRowRenderer'
             }
           },
+          
           {
             type: 'tabGroup',
             content: [
@@ -183,8 +203,7 @@
     }
   });
   
-  widget.util.setData( 'renderers', {
-    tableRowRenderer: {
+  widget.util.set( 'renderers', 'tableRowRenderer', {
       type: "renderer",
       options: {
         styleClass: "tableRow"
@@ -260,10 +279,12 @@
               "formatter": "percent"
             }
           }
+          
         ]
       }
-    },
-    itemCard: {
+    });
+    
+    widget.util.set( 'renderers', 'itemCard', {
       type: "renderer",
       options: {
         styleClass: "cardContent"
@@ -313,8 +334,9 @@
           }
         ]
       }
-    },
-    itemGridCell: {
+    });
+    
+    widget.util.set( 'renderers', 'itemGridCell', {
       type: "renderer",
       options: {
         styleClass: "cardContent",
@@ -347,12 +369,14 @@
           }
         ]
       }
-    },
-    simpleRenderer: {
+    });
+    
+    widget.util.set( 'renderers', 'simpleRenderer', {
       type: 'renderer',
       layout: { type:'label', name:'Hello world' }
-    },
-    popupRenderer: {
+    });
+    
+    widget.util.set( 'renderers', 'popupRenderer', {
       type: "renderer",
       layout: {
         "type": "list",
@@ -410,8 +434,7 @@
 
         ]
       }
-    }
-  });
+    });
 
   function createActionEnabler( actionKey ) {
     return function actionEnabler( object, path ) {
@@ -457,24 +480,26 @@
     console.log( "'" + str + "' --> '" + after + "'" );
   }
   
-  $.each( [
-    "test",
-    "${test}",
-    " $test ",
-    " ${test} ",
-    " _{test} ",
-    " \\{test} ",
-    " {test} ",
-    " ${foo${bar}} ",
-    " ${foo${test}} ",
-    "${foo ${bar} }",
-    "${foo ${test} }",
-    " _{${foo}}",
-    " ${foo} _{foo} ",
-    " ={return 'bah';} ",
-    " ={return '${bah}';} "
-  ], function( i, o ) { test( o ); } );
-  
+  if( unitTest )
+  {
+    $.each( [
+      "test",
+      "${test}",
+      " $test ",
+      " ${test} ",
+      " _{test} ",
+      " \\{test} ",
+      " {test} ",
+      " ${foo${bar}} ",
+      " ${foo${test}} ",
+      "${foo ${bar} }",
+      "${foo ${test} }",
+      " _{${foo}}",
+      " ${foo} _{foo} ",
+      " ={return 'bah';} ",
+      " ={return '${bah}';} "
+    ], function( i, o ) { test( o ); } );
+  }
 })();
 
 

@@ -25,7 +25,7 @@
     if( renderer && renderer.layout )
     {
       var dataStack = widget.util.getData( 'stack', [] );
-      dataStack.push( def.data );
+      dataStack.unshift( def.data );
 
       var rendererOptions = $.extend( {}, renderer.options||{}, {
         rendererKey: key||'static'
