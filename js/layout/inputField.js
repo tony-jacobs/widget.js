@@ -19,6 +19,7 @@
     var field = $('<input>').attr( {
       id: fieldKey,
       name: fieldKey,
+      type: data.fieldType || 'text',
       placeholder: data.placeholder
     }).addClass( 'inputField' );
 
