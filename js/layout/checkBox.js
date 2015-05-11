@@ -13,7 +13,7 @@
     var data = def.layout;
     var options = def.options;
     
-    var label = data.name ? $('<div/>', {html: data.name} ) : $("<input type='checkbox'/>");
+    var label = data.name ? $('<div/>', {html: data.name} ) : $("<label><input type='checkbox'/>" + (data.label||'') +"</label>");
 
     if( data.excerpt )
       $('<div/>', {html: data.excerpt} ).addClass( options.excerptStyleClass || 'excerpt' ).appendTo( label );

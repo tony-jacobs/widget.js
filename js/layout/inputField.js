@@ -14,12 +14,13 @@
     var options = def.options;
     
     var fieldKey = (data.dataSource.path).replace( /\./g, "_" );
-    var panel = $('<div/>' ).appendTo( view );
+    var panel = $('<div/>' );
+    
     var field = $('<input>').attr( {
       id: fieldKey,
       name: fieldKey,
       placeholder: data.placeholder
-    }).addClass( 'inputField' ).appendTo( panel );
+    }).addClass( 'inputField' );
 
     if( options.readonly )
       field.addClass('readonly').prop( 'readonly', options.readonly );
@@ -32,7 +33,13 @@
       widget.util.set( data.dataSource.type, data.dataSource.path, field.val() );
     });
 
-    return panel;
+    if( data.label )
+    {
+      panel.append( $('<label/>', { html: data.label } ) );
+    }
+    panel.append( field );
+
+    return panel.appendTo( view );
   }
 
 })();
