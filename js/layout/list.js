@@ -25,6 +25,7 @@
     var listOptions = def.options;
     
     var panel = $('<div/>' ).appendTo( parent );
+    var footer = $('<div/>').addClass( listOptions.footerStyleClass || 'footer' ).appendTo( parent );
     $.each( ['max-width', 'margin-right'], function( i, key ) {
       if( listOptions[ key ] ) 
         panel.css( key, listOptions[key] );
@@ -66,6 +67,7 @@
           {
             $("."+change.value._vuid).remove();
             $( parent ).trigger( 'widget-update', def );
+            footer.toggle( data.length === 0 ); 
           }
           else
             console.error( "Unknown array change:", change.index, change.status, change.value ); 
@@ -80,6 +82,13 @@
     $.each( data, function( i, item ) {
       layoutItem( item );
     } );
+
+    panel.appendTo( parent );
+    footer.appendTo( parent );
+    if( listOptions.footerLayout )
+      widget.layout( footer, listOptions.footerLayout, {}, dataStack );
+    footer.toggle( data.length === 0 );
+
     return panel;
   }
 
