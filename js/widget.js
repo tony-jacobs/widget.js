@@ -14,7 +14,7 @@ var widget = (function(){
       return obj ? ( obj = obj[ key ] ) : false;
     });
 
-    return obj || defaultValue;
+    return (obj===undefined || obj ===null) ? defaultValue : obj;
   }
 
   function set( obj, path, newValue )
