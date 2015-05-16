@@ -23,11 +23,6 @@ widget.util.set( 'renderers', 'childRenderer', {
         type: "list",
         hide: true,
         content: [
-          
-{ type:'renderer', dynamicRenderer:'parentRenderer' },
-{ type:'list', dataSource: { type:'nest', path:'test' }, options:{ defaultRenderer:'childRenderer' } },
-          
-          
           {
             type: "label",
             name: "Widget.js demo App",
@@ -170,23 +165,90 @@ widget.util.set( 'renderers', 'childRenderer', {
           */
         ]
       } },
-      { name:'Search', label:'Search', type:'Tab', layout:
+      { name:'Tests', label:'Tests', type:'Tab', layout:
         {
           "type":"list",
           "content":[
+          
+            { type:'renderer', dynamicRenderer:'parentRenderer' },
+            { type:'list', dataSource: { type:'nest', path:'test' }, options:{ defaultRenderer:'childRenderer' } },
+  
             {
-              "type":"label",
-              "name":"Search",
-              "options":{
-                "styleClass":"searchTitle"
-              }
-            },
-            {
-              "type":"label",
-              "name":"Search results will display here.",
-              "options":{
-                "styleClass":"searchCopy"
-              }
+              type:'list',
+              content:[
+                {
+                  type:'inputField',
+                  label:'Name',
+                  dataSource: { type:'entity', path:'name' }
+                },
+                {
+                  type:'checkBox',
+                  label:'LED 1',
+                  options: { autoHide: true },
+                  dataSource: { type:'entity', path:'led1' }
+                },
+                {
+                  type:'checkBox',
+                  label:'LED 2',
+                  options: { autoHide: true },
+                  dataSource: { type:'entity', path:'led2' }
+                },
+                {
+                  type:'checkBox',
+                  label:'LED 3',
+                  options: { autoHide: true },
+                  dataSource: { type:'entity', path:'led3' }
+                },
+                {
+                  type:'checkBox',
+                  label:'LED 4',
+                  options: { autoHide: true },
+                  dataSource: { type:'entity', path:'led4' }
+                },
+                {
+                  type:'checkBox',
+                  label:'LED 5',
+                  options: { autoHide: false },
+                  dataSource: { type:'entity', path:'led5' }
+                },
+                {
+                  type:'selector',
+                  label:'Buzzer 1',
+                  options: { autoHide: true },
+                  items: [ "Off", "Short", "Long", "Pulse" ],
+                  dataSource: { type:'entity', path:'buzz' }
+                },
+                {
+                  type:'selector',
+                  label:'Buzzer 2',
+                  options: { autoHide: true },
+                  items: [ "Off", "Short", "Long", "Pulse" ],
+                  dataSource: { type:'entity', path:'buzz2' }
+                },
+                {
+                  type:'selector',
+                  label:'Buzzer 3',
+                  options: { autoHide: true },
+                  items: [ "Off", "Short", "Long", "Pulse" ],
+                  dataSource: { type:'entity', path:'buzz3' }
+                },
+                {
+                  type:'list',
+                  options:{ styleClass:'buttonBar' },
+                  content: [
+                    {
+                      type:'button',
+                      name:'Cancel',
+                      action:'dismissNameEditor'
+                    },
+                    {
+                      type:'button',
+                      name:'Save',
+                      action:'saveNameEditor'
+                    }
+                  ]              
+                }
+              ]
             }
           ]
         }
@@ -583,6 +645,8 @@ function startDataManager( onReady, onUpdate ) {
   ]);
   
   data.empty = ko.observableArray();
+  
+  widget.util.setData( 'entity', { name:'test', led1:true, led2:undefined, led4:false, buzz:'Short', buzz2: undefined } );
 
   onReady( widget.util.setData( 'data', data ), true );
 }
