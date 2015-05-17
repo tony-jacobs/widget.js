@@ -28,6 +28,9 @@
       var selector = $('<select/>', {name: data.name, id: data.name} );
 
       var sourceData = widget.util.get( data.dataSource.type, data.dataSource.path );
+      
+      if( sourceData === undefined && options.autoHide )
+        return null;
 
       $.each( data.items, function( i, item ){
         if( $.type( item ) === "string" )
@@ -39,19 +42,25 @@
         if( sourceData && (item.key == sourceData) )
           opt.prop( 'selected', true );
       } );
-
+      
       selector.addClass('unselectable');
       selector.on( 'selectmenuchange', function( event ){
         widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
       });
       var uiMenu = selector.appendTo( view ).selectmenu({
-        width: 360,
-        icons: { button: "fa fa-caret-down" } });
-      return selector;
+        icons: { button: "fa fa-caret-down" } 
+      }).selectmenu('widget');
+      
+      uiMenu.addClass( 'unselectable' );
+      
+      // jquery-ui automatically adds a width to the select menu - we insist 
+      // that the CSS do that instead
+      uiMenu.css('width','');
+      return uiMenu;
     }
     else
     {
-      console.log( "Omitting selector", data, "No list items found" );
+      console.warn( "Omitting selector", data, "No list items found" );
       return null;
     }
   }

@@ -128,7 +128,6 @@
   padding: 12px;
   font-size: 14px;
   font-weight: 300;
-  width: 100%;
 }
 
 ::-webkit-input-placeholder { /* WebKit browsers */
@@ -495,4 +494,8 @@ a { color: inherit; }
 
 .tableWidget .column {
   display: inline-block;
+}
+
+.dataSelectLabel {
+  width: 200px;
 }
