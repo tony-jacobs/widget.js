@@ -182,6 +182,12 @@ widget.util.set( 'renderers', 'childRenderer', {
                   dataSource: { type:'entity', path:'name' }
                 },
                 {
+                  type:'inputField',
+                  label:'Name2',
+                  options: { autoHide: true },
+                  dataSource: { type:'entity', path:'name2' }
+                },
+                {
                   type:'checkBox',
                   label:'LED 1',
                   options: { autoHide: true },

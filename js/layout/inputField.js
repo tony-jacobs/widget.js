@@ -29,6 +29,8 @@
     var sourceData = widget.util.get( data.dataSource.type, data.dataSource.path );
     if( sourceData )
       field.val( sourceData );
+    else if( sourceData === undefined && options.autoHide )
+      return null;
 
     field.on( 'propertychange keyup input paste', function(){
       widget.util.set( data.dataSource.type, data.dataSource.path, field.val() );
