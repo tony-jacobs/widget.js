@@ -220,6 +220,12 @@ widget.util.set( 'renderers', 'childRenderer', {
                 },
                 {
                   type:'selector',
+                  options: { autoHide: true },
+                  items: [ "Off", "Short", "Long", "Pulse" ],
+                  dataSource: { type:'entity', path:'buzz' }
+                },
+                {
+                  type:'selector',
                   label:'Buzzer 2',
                   options: { autoHide: true },
                   items: [ "Off", "Short", "Long", "Pulse" ],

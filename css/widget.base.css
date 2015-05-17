@@ -496,6 +496,10 @@ a { color: inherit; }
   display: inline-block;
 }
 
+.dataSelectLabelLabel {
+  vertical-align:middle;
+}
 .dataSelectLabel {
   width: 200px;
+  vertical-align:middle;
 }

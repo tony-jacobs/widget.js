@@ -47,7 +47,17 @@
       selector.on( 'selectmenuchange', function( event ){
         widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
       });
-      var uiMenu = selector.appendTo( view ).selectmenu({
+
+      if( data.label )
+      {
+        var holder = $('<div/>').addClass( options.holderClass || options.styleClass+"Holder" );
+        var label = $('<span/>', { html:data.label } ).addClass( options.labelClass || options.styleClass+"Label" ).appendTo( holder );
+        view.append( holder.append( label ).append( selector ) );
+      }
+      else
+        selector.appendTo( view );
+
+      var uiMenu = selector.selectmenu({
         icons: { button: "fa fa-caret-down" } 
       }).selectmenu('widget');
       
@@ -56,6 +66,7 @@
       // jquery-ui automatically adds a width to the select menu - we insist 
       // that the CSS do that instead
       uiMenu.css('width','');
+      
       return uiMenu;
     }
     else
