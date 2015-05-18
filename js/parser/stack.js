@@ -24,7 +24,9 @@
     {
       context = context || (widget.util.getStack() || [])[0];
       path = token.split( '|', 2 );
-      result = widget.get( context, path[0], path[1] ) || "${" + token + "}";
+      result = widget.get( context, path[0], path[1] );
+      if( result === undefined || result === null )
+        result = "${" + token + "}";
     }
     
     return $.isFunction(result) ? result.apply( context ) : result;
