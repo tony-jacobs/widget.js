@@ -503,3 +503,8 @@ a { color: inherit; }
   width: 200px;
   vertical-align:middle;
 }
+
+button {
+  border: inherit;
+  font-family: inherit;
+}

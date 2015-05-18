@@ -13,7 +13,7 @@
     var data = def.layout;
     var options = def.options;
     
-    var button = $('<div/>', {text: data.name} ).appendTo( view );
+    var button = $('<button/>', {text: data.name} ).appendTo( view );
 
     var actionContext = widget.util.get( 'actionManager', data.action );
     if( actionContext )
