@@ -31,7 +31,7 @@
         headerItem.name = 'Column ' + (i+1);
       
       var colClass = 'column';
-      if( col.options.styleClass )
+      if( col.options && col.options.styleClass )
         colClass = colClass + ' ' + col.options.styleClass;
       headerItem.options.styleClass = colClass;
       
@@ -90,7 +90,7 @@
         rowItem.name = 'Column ' + (i+1);
       
       var colClass = 'column';
-      if( col.options.styleClass )
+      if( col.options && col.options.styleClass )
         colClass = colClass + ' ' + col.options.styleClass;
       rowItem.options.styleClass = colClass;
       

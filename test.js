@@ -177,6 +177,18 @@ widget.util.set( 'renderers', 'childRenderer', {
               type:'list',
               content:[
                 {
+                  type:'table',
+                  columns: [
+                    { name: 'Off', data:'${off|0}' },
+                    { name: 'On', data:'${on|0}' },
+                    { name: 'Total', data:'${total|0}' },
+                  ],
+                  dataSource: {
+                    type: 'count',
+                    path: 'entityCounts'
+                  }
+                },
+                {
                   type:'inputField',
                   label:'Name',
                   dataSource: { type:'entity', path:'name' }
@@ -659,6 +671,9 @@ function startDataManager( onReady, onUpdate ) {
   data.empty = ko.observableArray();
   
   widget.util.setData( 'entity', { name:'test', led1:true, led2:undefined, led4:false, buzz:'Short', buzz2: undefined } );
+  widget.util.set( 'count', 'entityCounts', [
+    {off:0, on:undefined, total:1}
+  ]);
 
   onReady( widget.util.setData( 'data', data ), true );
 }
