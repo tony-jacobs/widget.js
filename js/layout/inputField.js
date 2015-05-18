@@ -32,8 +32,12 @@
     else if( sourceData === undefined && options.autoHide )
       return null;
 
-    field.on( 'propertychange keyup input paste', function(){
+    field.on( 'propertychange keyup input paste', function( event ){
       widget.util.set( data.dataSource.type, data.dataSource.path, field.val() );
+      if( event.keyCode == 13 )
+      {
+        panel.trigger( 'enter' );
+      }
     });
 
     if( data.label )

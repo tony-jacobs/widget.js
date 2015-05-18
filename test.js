@@ -191,7 +191,14 @@ widget.util.set( 'renderers', 'childRenderer', {
                 {
                   type:'inputField',
                   label:'Name',
-                  dataSource: { type:'entity', path:'name' }
+                  dataSource: { type:'entity', path:'name' },
+                  options: {
+                    events: {
+                      enter: function( a, b, c ) {
+                        console.log( "Enter", a, b, c );
+                      }
+                    }
+                  }
                 },
                 {
                   type:'inputField',
