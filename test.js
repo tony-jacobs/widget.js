@@ -189,6 +189,21 @@ widget.util.set( 'renderers', 'childRenderer', {
                   }
                 },
                 {
+                  type:'table',
+                  columns: [
+                    { name: 'Value', data:'${value}' }
+                  ],
+                  dataSource: {
+                    type: 'random',
+                    path: 'numbers'
+                  },
+                  contentOptions: {
+                    sortBy: function( a, b ) {
+                      return b.value - a.value;
+                    }
+                  }
+                },
+                {
                   type:'inputField',
                   label:'Name',
                   dataSource: { type:'entity', path:'name' },
@@ -681,6 +696,19 @@ function startDataManager( onReady, onUpdate ) {
   widget.util.set( 'count', 'entityCounts', [
     {off:0, on:undefined, total:1}
   ]);
+  
+  // Tests the list and table sort function
+  function addRandomValue() {
+    widget.util.get( 'random', 'numbers' ).push( { value: Math.random() } );
+  }
+  widget.util.set( 'random', 'numbers', new ko.observableArray( [] ) );
+
+  for( var i=0; i<4; i++ )
+  {
+    addRandomValue();
+    setTimeout( addRandomValue, i*150 );
+  }
+
 
   onReady( widget.util.setData( 'data', data ), true );
 }

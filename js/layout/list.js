@@ -14,8 +14,19 @@
     };
     
     var itemView = widget.layout( holder, item, options, stack );
+    $(itemView).data( stack[0] );
     
     return itemView;
+  }
+  
+  function sort( def, holder )
+  {
+    if( def.options.sortBy )
+    {
+      $(holder).children().sortElements( function(a, b){
+        return def.options.sortBy( $(a).data(), $(b).data() );
+      });
+    }
   }
 
   function createListView( def )
@@ -48,7 +59,10 @@
 
       if( itemData )
         dataStack.unshift( itemData );
-      createItem( holder, item, listOptions, dataStack );
+        
+      if( !(def.options) || !(def.options.filter) || (def.options.filter(item)) )  
+        createItem( holder, item, listOptions, dataStack );
+      
       if( itemData )
         dataStack.shift( itemData );
     };
@@ -56,13 +70,17 @@
     // if data is a knockout observable, add a listener
     if( $.isFunction( data ) && $.isFunction( data.subscribe ) )
     {
+      var resort = false;
       data.subscribe( function onListChanged( changes ) {
         for( var i=0; i<changes.length; i++ )
         {    
           var change = changes[i];
 
           if( change.status == 'added' )
+          {
             layoutItem( change.value );
+            resort = true;
+          }
           else if( change.status == 'deleted' )
           {
             $("."+change.value._vuid).remove();
@@ -72,6 +90,8 @@
           else
             console.error( "Unknown array change:", change.index, change.status, change.value ); 
         }
+        if( resort )
+          sort( def, holder );
       }, undefined, 'arrayChange' );
       data = listData.content();
     }
@@ -82,6 +102,8 @@
     $.each( data, function( i, item ) {
       layoutItem( item );
     } );
+
+    sort( def, holder );
 
     panel.appendTo( parent );
     footer.appendTo( parent );
