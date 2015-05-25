@@ -27,10 +27,13 @@
     {
       var selector = $('<select/>', {name: data.name, id: data.name} );
 
-      var sourceData = widget.util.get( data.dataSource.type, data.dataSource.path );
-      
-      if( sourceData === undefined && options.autoHide )
-        return null;
+      if( data.dataSource )
+      {
+        var sourceData = widget.util.get( data.dataSource.type, data.dataSource.path );
+        
+        if( sourceData === undefined && options.autoHide )
+          return null;
+      }
 
       $.each( data.items, function( i, item ){
         if( $.type( item ) === "string" )
@@ -43,11 +46,6 @@
           opt.prop( 'selected', true );
       } );
       
-      selector.addClass('unselectable');
-      selector.on( 'selectmenuchange', function( event ){
-        widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
-      });
-
       if( data.label )
       {
         var holder = $('<div/>').addClass( options.holderClass || options.styleClass+"Holder" );
@@ -61,7 +59,14 @@
         icons: { button: "fa fa-caret-down" } 
       }).selectmenu('widget');
       
+      selector.addClass('unselectable');
       uiMenu.addClass( 'unselectable' );
+
+      selector.on( 'selectmenuchange', function( event ){
+        if( data.dataSource )
+          widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
+        uiMenu.trigger( 'selectmenuchange' );
+      });
       
       // jquery-ui automatically adds a width to the select menu - we insist 
       // that the CSS do that instead

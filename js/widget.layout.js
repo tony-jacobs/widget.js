@@ -204,6 +204,7 @@ widget.layout = (function(){
       bindIf( 'mouseleave', w.view, w.options.events, w );
       bindIf( 'click', w.view, w.options.events, w );
       bindIf( 'enter', w.view, w.options.events, w );
+      bindIf( 'selectmenuchange', w.view, w.options.events, w );
     }
 
     lifecycle( 'ready', w );
