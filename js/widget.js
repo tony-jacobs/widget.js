@@ -194,6 +194,7 @@ var widget = (function(){
           {
             view.children( '.'+options.tabClass ).each( function() { $(this).removeClass( options.selectedClass ).css( {display:'none'} ); } );
             tab.addClass( options.selectedClass ).css( {display:'inline-block'} );
+            tab.children().trigger( 'tabselected' );
 
             tabLabel = tab.data( 'tabLabelView' );
             $.each( options.labelSelector, function( i, labelSelector ) {
@@ -282,7 +283,12 @@ var widget = (function(){
           tab.addClass( options.tabClass );
           tab.addClass( options.tabClass + o.name );
           if( tabIndex === options.defaultSelection )
+          {
             tab.addClass( options.selectedClass );
+            window.setTimeout( function deferredSelectionEvent() {
+              tab.children().trigger( 'tabselected' );
+            }, 0 );
+          }
 
           $.each( options.labelSelector, function( i, labelSelector ) {
             var tabBarHolder = $( labelSelector, view );
