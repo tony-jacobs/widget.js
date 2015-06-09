@@ -42,6 +42,7 @@ module.exports = function(grunt) {
           'js/layout/inputField.js',
           'js/layout/label.js',
           'js/layout/list.js',
+          'js/layout/menu.js',
           'js/layout/namedPanel.js',
           'js/layout/renderer.js',
           'js/layout/selector.js',

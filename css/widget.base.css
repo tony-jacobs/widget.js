@@ -508,3 +508,7 @@ button {
   border: inherit;
   font-family: inherit;
 }
+
+.menuWidget {
+  position: relative;
+}

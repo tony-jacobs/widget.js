@@ -141,6 +141,7 @@ html, button, input, select, textarea {
   <script src="js/layout/inputField.js"></script>
   <script src="js/layout/label.js"></script>
   <script src="js/layout/list.js"></script>
+  <script src="js/layout/menu.js"></script>
   <script src="js/layout/namedPanel.js"></script>
   <script src="js/layout/renderer.js"></script>
   <script src="js/layout/selector.js"></script>
@@ -256,10 +257,17 @@ $( function() {
         styleClass: "valueDescription"
       },
       layout: {
-        "type": "label",
-        "name": "${key}",
-        "options": {
-          "styleClass": "title"
+        type: "label",
+        name: "${key}",
+        options: {
+          styleClass: "title",
+          events: {
+            click: function(context, event) {
+              $('.contentFrame').animate({
+                 scrollTop: $(".widget-"+context.data.key).offset().top
+              });
+            }
+          }
         }
       }
     },
@@ -279,7 +287,7 @@ $( function() {
     rendererDetailRenderer: {
       type: 'renderer',
       options: {
-        styleClass: 'widgetDoc'
+        styleClass: 'widgetDoc widget-${key}'
       },
       layout: {
         type: 'list',

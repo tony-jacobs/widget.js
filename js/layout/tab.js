@@ -45,7 +45,6 @@
         return view.append( $('<pre/>', { text: JSON.stringify( data ) } ) );
       });
     });
-    
     parent.append( tabView );
     return tabView;
   }
