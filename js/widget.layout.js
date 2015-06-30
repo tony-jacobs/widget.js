@@ -103,8 +103,44 @@ widget.layout = (function(){
     return data;
   }
 
+  function loadCss( cssFile )
+  {
+    return $.ajax({
+      url: cssFile,
+      success: function(data){
+        $("head").append("<style>" + data + "</style>");
+      }
+    });
+  }
+  
+  function doPreload( preload )
+  {
+    var addStyle = function( cssData ) {
+      $("head").append("<style>" + cssData + "</style>");
+    };
+    
+    if( ! $.isArray( preload ) )
+      preload = [ preload ];
+      
+    var promises = [];
+    for( var j in preload )
+      promises.push( $.ajax({ url: preload[j], success: addStyle }) );
+
+    return $.when.apply( this, promises );
+  }
+
   function dispatch( parent, layout, options, defaultHandler, stack ) 
   {
+    // If we have a preload list, then create and return a promise that honors 
+    // once all of the preloads are done.
+    if( layout.preload )
+    {
+      return doPreload( layout.preload ).done( function onWidgetLoaded() {
+        delete layout.preload;
+        dispatch( parent, layout, options, defaultHandler, stack );
+      } );
+    }
+
     var w = {
       parent: parent,
       data: layout,

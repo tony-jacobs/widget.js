@@ -81,7 +81,7 @@ module.exports = function(grunt) {
       main: {
         files: [
           { src:'package.json', dest:'dist/' },
-          {expand: true, src: ['test.js'], dest: 'dist/', filter: 'isFile' },
+          {expand: true, src: ['test.*'], dest: 'dist/', filter: 'isFile' },
           {expand: true, src: ['img/*'], dest: 'dist/', filter: 'isFile' },
           {expand: true, src: ['fonts/*'], dest: 'dist/', filter: 'isFile' },
           {expand: true, src: ['js/vendor/*'], dest: 'dist/', filter: 'isFile' }

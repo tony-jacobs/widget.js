@@ -1,0 +1,13 @@
+.hotdogStand {
+  padding: 50px;
+  border: 10px solid green;
+  background-color: green;
+  color: white;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.hotdogStand:before {
+  content: "PASS: ";
+}

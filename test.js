@@ -298,6 +298,17 @@ widget.util.set( 'renderers', 'childRenderer', {
             }
           ]
         }
+      },
+      { 
+        name:'Preload', label:'Preload', type:'Tab', layout: {
+          type:"list",
+          preload: [
+            'test.css'
+          ],
+          content:[
+            { type:'label', name:'preload', options:{ styleClass:'hotdogStand' } }
+          ]
+        }
       }
     ]
   };
