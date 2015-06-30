@@ -17,6 +17,21 @@
     var panelTitle = $('<div/>', {html: name } ).addClass( 'unselectable ' + (options.titleClass||'panelTitle'));
     panel.append( panelTitle );
 
+
+    if( panelData.actionBar )
+    {
+      var actionBarLayout = {
+        type: 'list',
+        content: panelData.actionBar,
+        options: {
+          styleClass: options.actionBarStyleClass||'actionBar'
+        }
+      };
+      var actionBar = widget.layout( panel, actionBarLayout, actionBarLayout.options );
+      panel.append( actionBar );
+      console.log( actionBarLayout, actionBar );
+    }
+
     var expandedClass = options.expandedClassName || 'expanded';
     if( options.expandable )
     {
@@ -28,9 +43,7 @@
     if( options.isExpanded )
       panel.addClass( expandedClass );
 
-    var content = dispatch( panel, panelData.content, options, function( view, data, options ) {
-      return $('<div/>', {text: data} ).appendTo( view );
-    });
+    var content = widget.layout( panel, panelData.content, options );
     content.addClass( 'panelContent' );
 
     parent.append( panel );
