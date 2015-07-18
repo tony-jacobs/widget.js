@@ -299,6 +299,121 @@ widget.util.set( 'renderers', 'childRenderer', {
           ]
         }
       },
+      { name:'ChartDemo', label:'Chart Demo', type:'Tab', layout: 
+        {
+          type:"list",
+          options: {
+            events: {
+              dataReady: function onDataReady() {
+                
+                var series = {
+                  testList: {
+                    type:"list",
+                    content:[
+                      { title:"Item 1", dataSeries: "demoChart.s1" },
+                      { title:"Item 2", dataSeries: "demoChart.s2" },
+                      { title:"Item 3", dataSeries: "demoChart.s3" },
+                      { title:"Item 4", dataSeries: "demoChart.s4" }
+                    ]
+                  }
+                };
+                
+                function createUpdater( seriesKey )
+                {
+                  console.log( seriesKey );
+                  return function dataSeriesUpdater() {
+                    widget.util.get( 'data', seriesKey ).push( {
+                      x: new Date(),
+                      y: Math.random() * 100
+                    });
+                  };
+                }
+                
+                var now = Date.now();
+                for( var i in series.testList.content )
+                {
+                  var o = series.testList.content[i];
+                  var s = widget.chartFactory.createDataSource( [] );
+                  
+                  for( var j=5; j>=0; j-- )
+                  {
+                    s.push( {
+                      x: now-(j*1000), 
+                      y: Math.floor( Math.random() * 100 )
+                    });
+                  }
+                  
+                  var key = o.dataSeries;
+                  widget.util.set( 'data', key, s );
+                  var updater = createUpdater( key );
+                  var timeout = 500 + Math.random()*750;
+                  o._interval = setInterval( updater, timeout );
+                }
+                
+                widget.util.setData( 'demo', series );
+              }
+            }
+          },
+          content:[
+            {
+              type: "list",
+              dataSource: {
+                type: "demo",
+                path: "testList"
+              },
+              options: {
+                defaultRenderer: 'demoItemCard'
+              }
+            },
+            {
+              type: "namedPanel",
+              name: "Charts",
+              content: {
+                type: "list",
+                content: [
+                  {
+                    type: "chart",
+                    chartType:"donut",
+                    dataSeries:"demoChart",
+                    options: {}
+                  },
+                  {
+                    type: "chart",
+                    chartType:"bar",
+                    dataSeries:"demoChart",
+                    options: {}
+                  },
+                  {
+                    type: "chart",
+                    chartType:"pie",
+                    dataSeries:"demoChart",
+                    options: {}
+                  },
+                  {
+                    type: "chart",
+                    chartType:"graph",
+                    dataSeries:"demoChart",
+                    options: {}
+                  },
+                  {
+                    type: "chart",
+                    chartType:"horizontalBar",
+                    dataSeries:"demoChart",
+                    options: {}
+                  },
+                  {
+                    type: "chart",
+                    chartType:"line",
+                    dataSeries:"demoChart",
+                    options: {}
+                  }
+                ],
+                options: { styleClass: 'chartPanel', expandable:true }
+              }
+            }
+          ]
+        }
+      },
       { 
         name:'Preload', label:'Preload', type:'Tab', layout: {
           type:"list",
@@ -399,6 +514,58 @@ widget.util.set( 'renderers', 'childRenderer', {
             }
           }
           
+        ]
+      }
+    });
+    
+    widget.util.set( 'renderers', 'demoItemCard', {
+      type: "renderer",
+      options: {
+        styleClass: "cardContent"
+      },
+      layout: {
+        type: "list",
+        content: [
+          {
+            type:"list",
+            content:[
+              {
+                type: "chart",
+                chartType: "gauge",
+                dataSeries: "${dataSeries}",
+                options: {
+                  width: 150
+                }
+              },
+              {
+                type: "chart",
+                chartType: "readout",
+                dataSeries: "${dataSeries}",
+                options: {
+                  formatter: "percent"
+                }
+              },
+              {
+                type: "chart",
+                chartType: "sparkline",
+                dataSeries: "${dataSeries}",
+                options: {
+                  width: 138,
+                  height: 24
+                }
+              }
+            ],
+            options: {
+              styleClass: "content"
+            }
+          },
+          {
+            type: "label",
+            name: "${title}",
+            options: {
+              styleClass: "title"
+            }
+          }
         ]
       }
     });
