@@ -424,9 +424,70 @@ widget.util.set( 'renderers', 'childRenderer', {
             { type:'label', name:'preload', options:{ styleClass:'hotdogStand' } }
           ]
         }
+      },
+      { 
+        name:'Chat', label:'Chat', type:'Tab', layout: {
+          type:"list",
+          content:[
+            { type:'label', name:'chat' },
+            { 
+              type:'list', 
+              dataSource: { type:'chat', path:'messages' }, 
+              options:{ 
+                defaultRenderer:'chatMessage',
+                events: {
+                  load: function onLoad( context, event ) {
+                    var data = { 
+                      "foo":"bar", 
+                      "baz":"fun"
+                    };
+
+                    widget.util.set( context.layout.dataSource.type, context.layout.dataSource.path, data );
+                    console.log( data, widget.util.get( 'chat', 'messages') );
+                  }
+                }
+              }
+            },
+            { 
+              type:'list', 
+              content: [
+                {
+                  type:'inputField', 
+                  dataSource: { type:'chat', path:'post'}
+                },
+                { 
+                  type:'label', 
+                  name:'postMessage', 
+                  options: {
+                    events: {
+                      click: function onClick( context, event ) {
+                        console.log( "Post", widget.util.get( 'chat', 'post' ) );
+                        var ds = widget.util.get( 'chat', 'messages' );
+                        ds[ Date.now() ] = widget.util.get( 'chat', 'post' );
+                      }
+                    }
+                  } 
+                },
+              ]
+            }
+          ]
+        }
       }
     ]
   };
+  
+  widget.util.set( 'renderers', 'chatMessage', {
+    type: "renderer",
+    options: {
+    },
+    layout: {
+      type: 'list',
+      content: [
+        { type:'label', name:'Key: ${key}' },
+        { type:'label', name:'Value: ${value}', options:{unselectable:false} },
+      ]
+    }
+  });
 
   widget.util.setData( 'actionManager', {
     sampleAction: {

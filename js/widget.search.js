@@ -4,6 +4,9 @@ var Search = (function() {
   //        asynchronous without an actual wait state.
   var DISPATCH_TIMEOUT = 0;
 
+  if( window.lunr === undefined )
+    return {};
+
   var index = lunr(function () {
     this.field('title', {boost: 10});
     this.field('content');

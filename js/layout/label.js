@@ -12,7 +12,10 @@
     var layout = def.layout;
     var options = def.options;
     
-    var label = $('<div/>' ).addClass( 'dataLabel' ).addClass('unselectable');
+    var label = $('<div/>' ).addClass( 'dataLabel' );
+    
+    if( options.unselectable !== false )
+      label.addClass('unselectable');
       
     if( layout.action )
     {
