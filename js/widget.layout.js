@@ -69,14 +69,17 @@ widget.layout = (function(){
         return $.isArray( obj() ) ? obj :  asArray( obj() );
         
       case 'object':
-        var result = [];
-        for( var key in obj )
-        {
+        var result = ko.observableArray();
+        result.onKeyAdded = function( key ) {
           result.push( {
             key: key,
             value: obj[key]
           });
-        }
+        };
+        
+        for( var key in obj )
+          result.onKeyAdded( key );
+
         return result;
       
       default:

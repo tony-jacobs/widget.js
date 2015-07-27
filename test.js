@@ -444,6 +444,9 @@ widget.util.set( 'renderers', 'childRenderer', {
 
                     widget.util.set( context.layout.dataSource.type, context.layout.dataSource.path, data );
                     console.log( data, widget.util.get( 'chat', 'messages') );
+                  },
+                  ready: function onReady( context, event ) {
+                    widget.util.set( context.layout.dataSource.type, '_'+context.layout.dataSource.path, context.layout.content );
                   }
                 }
               }
@@ -462,8 +465,8 @@ widget.util.set( 'renderers', 'childRenderer', {
                       change: function( a, b ) {
                         console.log( "Change", a,b );
                       },
-                      enter: function( a, b ) {
-                        console.log( "Enter", a,b );
+                      enter: function( context, event ) {
+                        $( '.postButton', $(context.view).parent() ).trigger( 'click' );
                       }
                     }
                   }
@@ -472,11 +475,15 @@ widget.util.set( 'renderers', 'childRenderer', {
                   type:'label', 
                   name:'postMessage', 
                   options: {
+                    styleClass: 'postButton',
                     events: {
                       click: function onClick( context, event ) {
-                        console.log( "Post", widget.util.get( 'chat', 'post' ) );
                         var ds = widget.util.get( 'chat', 'messages' );
-                        ds[ Date.now() ] = widget.util.get( 'chat', 'post' );
+                        var key = Date.now();
+                        ds[ key ] = widget.util.get( 'chat', 'post' );
+                        var f = widget.util.get( 'chat', '_messages.onKeyAdded' );
+                        if( $.isFunction( f ) )
+                          f( key );
                       }
                     }
                   } 
