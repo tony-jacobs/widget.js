@@ -33,10 +33,18 @@
       return null;
 
     field.on( 'propertychange keyup input paste', function( event ){
-      widget.util.set( data.dataSource.type, data.dataSource.path, field.val() );
+      var oldVal = widget.util.get( data.dataSource.type, data.dataSource.path );
+      var newVal = field.val();
+      widget.util.set( data.dataSource.type, data.dataSource.path, newVal );
+        
       if( event.keyCode == 13 )
       {
         panel.trigger( 'enter' );
+      }
+      else
+      {
+        if( oldVal != newVal )  
+          panel.trigger( 'fieldChange', { oldVal: oldVal, newVal: newVal } );
       }
     });
 

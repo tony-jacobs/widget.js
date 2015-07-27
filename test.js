@@ -453,7 +453,20 @@ widget.util.set( 'renderers', 'childRenderer', {
               content: [
                 {
                   type:'inputField', 
-                  dataSource: { type:'chat', path:'post'}
+                  dataSource: { type:'chat', path:'post'},
+                  options: {
+                    events: {
+                      fieldChange: function( a, b ) {
+                        console.log( "Field Change", a,b );
+                      },
+                      change: function( a, b ) {
+                        console.log( "Change", a,b );
+                      },
+                      enter: function( a, b ) {
+                        console.log( "Enter", a,b );
+                      }
+                    }
+                  }
                 },
                 { 
                   type:'label', 
