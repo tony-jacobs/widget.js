@@ -106,10 +106,21 @@
     var contentLayout = createContentLayout( def.layout.columns, def.layout.dataSource, def.layout.contentOptions );
     
     var holder = $('<div/>').addClass( def.options.styleClass );
-    
+
     widget.layout( holder, headerLayout );
-    widget.layout( holder, contentLayout );
     
+    def.table = {
+      header: headerLayout,
+      content: contentLayout
+    };
+    
+    contentLayout.options.events = {
+      ready: function onListReady( context, event ) {
+        def.table.data = context.layout.content;
+      }
+    };
+    widget.layout( holder, contentLayout );
+
     return holder.appendTo( def.parent );
   }
 })();
