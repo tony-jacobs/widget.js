@@ -27,9 +27,10 @@
     {
       var selector = $('<select/>', {name: data.name, id: data.name} );
 
+      var sourceData;
       if( data.dataSource )
       {
-        var sourceData = widget.util.get( data.dataSource.type, data.dataSource.path );
+        sourceData = data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path );
         
         if( sourceData === undefined && options.autoHide )
           return null;
@@ -67,7 +68,12 @@
 
       selector.on( 'selectmenuchange', function( event ){
         if( data.dataSource )
-          widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
+        {
+          if( data.dataSource.type )
+            widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
+          else
+            widget.set( def.stack[1], data.dataSource.path, selector.val() );
+        }
         uiMenu.trigger( 'selectmenuchange' );
       });
       
