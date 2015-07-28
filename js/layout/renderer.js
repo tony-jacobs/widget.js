@@ -15,6 +15,7 @@
     if( !renderer )
     {
       key = widget.get( data, 'dynamicRenderer', 'Unknown Type' );
+      key = widget.util.expandPath( key, def.data );
       renderer = widget.util.get( 'renderers', key );
     }
     
