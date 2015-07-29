@@ -244,6 +244,7 @@ widget.layout = (function(){
       bindIf( 'click', w.view, w.options.events, w );
       bindIf( 'change', w.view, w.options.events, w );
       bindIf( 'fieldChange', w.view, w.options.events, w );
+      bindIf( 'toggle', w.view, w.options.events, w );
       bindIf( 'enter', w.view, w.options.events, w );
       bindIf( 'selectmenuchange', w.view, w.options.events, w );
       bindIf( 'tabselected', w.view, w.options.events, w );

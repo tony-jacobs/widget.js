@@ -24,16 +24,24 @@
       event.stopPropagation();
 
       label.toggleClass( 'selected' );
+      var newVal = label.hasClass('selected');
 
       if( data.dataSource )
-        widget.util.set( data.dataSource.type, data.dataSource.path, label.hasClass('selected') );
+      {
+        if( data.dataSource.type )
+          widget.util.set( data.dataSource.type, data.dataSource.path, newVal );
+        else
+          widget.set( def.stack[1], data.dataSource.path, newVal );
+      }
+      
+      label.trigger( 'toggle', { oldVal: !newVal, newVal: newVal } );
     });
 
     var sourceData;
     if( data.value !== undefined )
       sourceData = widget.util.expandPath( data.value, def.stack[0] );
-    else
-      sourceData = widget.util.get( data.dataSource.type, data.dataSource.path );
+    else if( data.dataSource )
+      sourceData = data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path );
       
     if( sourceData )
     {
