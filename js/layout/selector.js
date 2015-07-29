@@ -19,7 +19,7 @@
       var listDataSource = widget.get( options, 'listDataSource', null );
       if( listDataSource )
       {
-        data.items = widget.util.get( listDataSource.type, listDataSource.path );
+        data.items = listDataSource.type ? widget.util.get( listDataSource.type, listDataSource.path ) : widget.get( def.stack[1], listDataSource.path );
       }
     }
 
