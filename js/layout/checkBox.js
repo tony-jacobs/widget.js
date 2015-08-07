@@ -40,8 +40,6 @@
     var sourceData;
     if( data.value !== undefined )
       sourceData = widget.util.expandPath( data.value, def.stack[0] );
-    else if( data.dataSource )
-      sourceData = data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path );
       
     if( sourceData )
     {
@@ -57,7 +55,17 @@
     if( options.autoHide && sourceData === undefined )
       return view;
       
-    return label.appendTo( view );
+    if( data.dataSource )
+    {
+      label.update = function updateCheckbox( event, context ) {
+        var curr = !!(data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path ));
+        label.toggleClass( 'selected', curr );
+        checkbox.attr( 'checked', curr );
+      };
+    }
+
+    label.appendTo( view );
+    return label;
   }
 
 })();

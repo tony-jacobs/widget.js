@@ -36,17 +36,6 @@
           return null;
       }
 
-      $.each( data.items, function( i, item ){
-        if( $.type( item ) === "string" )
-          item = { key:item, name:item, displayName:item };
-
-        var displayName = item.displayName || (item.key + ": " + item.name);
-        var opt = $( '<option/>', { value: item.key, html: displayName } ).appendTo( selector );
-
-        if( sourceData && (item.key == sourceData) )
-          opt.prop( 'selected', true );
-      } );
-      
       if( data.label )
       {
         var holder = $('<div/>').addClass( options.holderClass || options.styleClass+"Holder" );
@@ -77,9 +66,27 @@
         uiMenu.trigger( 'selectmenuchange' );
       });
       
-      // jquery-ui automatically adds a width to the select menu - we insist 
-      // that the CSS do that instead
-      uiMenu.css('width','');
+      uiMenu.update = function updateMenu( event, context ) {
+        var sourceData = data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path );
+
+        selector.empty();
+        $.each( data.items, function( i, item ){
+          if( $.type( item ) === "string" )
+            item = { key:item, name:item, displayName:item };
+  
+          var displayName = item.displayName || (item.key + ": " + item.name);
+          var opt = $( '<option/>', { value: item.key, html: displayName } ).appendTo( selector );
+  
+          if( sourceData && (item.key == sourceData) )
+            opt.prop( 'selected', true );
+        } );
+        
+        selector.selectmenu( "refresh" );
+        
+        // jquery-ui automatically adds a width to the select menu - we insist 
+        // that the CSS do that instead
+        uiMenu.css('width','');
+      };
       
       return uiMenu;
     }

@@ -59,7 +59,16 @@
     }
     panel.append( field );
 
-    return panel.appendTo( view );
+    if( data.dataSource )
+    {
+      panel.update = function updateCheckbox( event, context ) {
+        var curr = (typeKey ? widget.util.get( typeKey, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path ));
+        field.val( curr );
+      };
+    }
+
+    panel.appendTo( view );
+    return panel;
   }
 
 })();
