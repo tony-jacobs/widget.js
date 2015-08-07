@@ -232,6 +232,30 @@ widget.util = (function(){
       }
       else if( force )
         console.log( "STATUS " + msg );
+    },
+    
+    keyPaths: function keyPaths( obj, prefix )
+    {
+      if( prefix )
+        prefix += ".";
+      else
+        prefix = "";
+
+      var paths = [];
+      for( var k in obj )
+      {
+        switch( $.type( obj[k] ) )
+        {
+          case 'array':
+          case 'object':
+            Array.prototype.push.apply( paths, keyPaths( obj[k], (prefix+k) ) );
+            break;
+            
+          default:
+            paths.push( prefix+k );
+        }
+      }
+      return paths;
     }
   };
 })();
