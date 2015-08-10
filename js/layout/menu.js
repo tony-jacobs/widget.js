@@ -21,7 +21,9 @@
     var indicatorClass = def.options.menuIndicatorClass||"menuIndicator";
     var bodyClass = def.options.menuBodyClass||"menuBody";
     
-    var menuContent = ko.observableArray( def.layout.content||[] );
+    var menuContent = def.layout.content||[];
+    if( $.isArray( menuContent ) )
+      menuContent = ko.observableArray( menuContent );
     
     var menuLayout = { 
       type:"list", 
