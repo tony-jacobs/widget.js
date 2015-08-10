@@ -223,6 +223,10 @@ widget.layout = (function(){
           w.view.update( event, context );
         lifecycle( 'update', w );
       } );
+      
+      w.view.on( 'remove', function onRemoved() {
+        lifecycle( 'cleanup', w );
+      });
     }
     
     lifecycle( 'layout', w );
@@ -248,6 +252,7 @@ widget.layout = (function(){
       bindIf( 'enter', w.view, w.options.events, w );
       bindIf( 'selectmenuchange', w.view, w.options.events, w );
       bindIf( 'tabselected', w.view, w.options.events, w );
+      bindIf( 'cleanup', w.view, w.options.events, w );
     }
 
     lifecycle( 'ready', w );
