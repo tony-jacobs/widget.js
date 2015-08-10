@@ -46,6 +46,7 @@ module.exports = function(grunt) {
           'js/layout/namedPanel.js',
           'js/layout/renderer.js',
           'js/layout/selector.js',
+          'js/layout/slider.js',
           'js/layout/tab.js',
           'js/layout/tabGroup.js',
           'js/layout/table.js'

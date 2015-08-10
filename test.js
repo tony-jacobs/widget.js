@@ -100,7 +100,30 @@ widget.util.set( 'renderers', 'childRenderer', {
           {
             type: 'tabGroup',
             content: [
-              { type:'Tab', name: 'all', label:'All Sections', layout: { type:'label', name:'content for all' } },
+              { type:'Tab', name: 'all', label:'All Sections', layout: { type:'list', content: [
+                {type:'label', name:'Slider test' },
+                {type:'slider', dataSource: { type:'test', path:'slider1' }, options: { events: {
+                  change: function( context, event ) {
+                    console.log( "Slider1 change::", widget.util.get( 'test', 'slider1' ) );
+                  }
+                } } },
+                { type:'slider', label: 'slider2', dataSource: { type:'test', path:'slider2' }, options: { readout:true, events: {
+                  fieldChange: function( context, event ) {
+                    console.log( "Slider2 delta::", widget.util.get( 'test', 'slider2' ) );
+                  }
+                } } },
+                { type:'slider', dataSource: { type:'test', path:'slider3' }, options: {
+                  minValue: 0,
+                  maxValue: 1,
+                  stepSize: 0.05,
+                  readout:true, 
+                  events: {
+                    fieldChange: function( context, event ) {
+                      console.log( "Slider3 delta::", widget.util.get( 'test', 'slider3' ) );
+                    }
+                  } 
+                } }
+              ] } },
               { type:'Tab', name: 'a', label:'Section A', layout: { type:'renderer', dynamicRenderer:'simpleRenderer' } },
               { type:'Tab', name: 'b', label:'Section B', layout: { type:'label', name:'content for B' } },
               { type:'Tab', name: 'c', label:'Section C', layout: { type:'label', name:'content for C' } },
