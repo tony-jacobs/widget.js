@@ -29,7 +29,6 @@
       };
       var actionBar = widget.layout( panel, actionBarLayout, actionBarLayout.options );
       panel.append( actionBar );
-      console.log( actionBarLayout, actionBar );
     }
 
     var expandedClass = options.expandedClassName || 'expanded';
