@@ -100,7 +100,23 @@ widget.util.set( 'renderers', 'childRenderer', {
           {
             type: 'tabGroup',
             content: [
-              { type:'Tab', name: 'all', label:'All Sections', layout: { type:'list', content: [
+              { 
+                type:'Tab', 
+                name: 'all', 
+                label:'Selectors', 
+                layout: { 
+                  type:'list', 
+                  content: [
+                    {type:'label', name:'Selector test' },
+                    {type:'selector', name:'Selector', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select1'}, options:{ events:{ load: function(){ widget.util.set('test','select1','three'); } } } },
+//                    {type:'selector', name:'Selector', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select2'}, options:{ editable:true, events:{ load: function(){ widget.util.set('test','select2','three'); } } } },
+                    {type:'selector', name:'Selector', label: 'withLabel', items:['one', 'two', 'three'] },
+//                    {type:'selector', name:'Selector', label: 'Editable with label:', placeholder:'myPlaceholder', items:['one', 'two', 'three'], options:{ editable:true } },
+                  ] 
+                } 
+              },
+              { type:'Tab', name: 'a', label:'Renderer', layout: { type:'renderer', dynamicRenderer:'simpleRenderer' } },
+              { type:'Tab', name: 'b', label:'Sliders', layout: { type:'list', content: [
                 {type:'label', name:'Slider test' },
                 {type:'slider', dataSource: { type:'test', path:'slider1' }, options: { events: {
                   change: function( context, event ) {
@@ -124,8 +140,6 @@ widget.util.set( 'renderers', 'childRenderer', {
                   } 
                 } }
               ] } },
-              { type:'Tab', name: 'a', label:'Section A', layout: { type:'renderer', dynamicRenderer:'simpleRenderer' } },
-              { type:'Tab', name: 'b', label:'Section B', layout: { type:'label', name:'content for B' } },
               { type:'Tab', name: 'c', label:'Section C', layout: { type:'label', name:'content for C' } },
             ],
             options: {

@@ -7,7 +7,6 @@
     styleClass: 'dataSelectLabel'
   });
 
-
   function createSelectorView( def )
   {
     var view = def.parent;
@@ -28,13 +27,13 @@
       var selector = $('<select/>', {name: data.name, id: data.name} );
 
       var sourceData;
-      if( data.dataSource )
-      {
-        sourceData = data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path );
+      var typeKey = data.dataSource ? data.dataSource.type : undefined;
+      var dataPath = data.dataSource ? data.dataSource.path : "selector";
+    
+      sourceData = typeKey ? widget.util.get( typeKey, dataPath ) : widget.get( def.stack[1], dataPath );
         
-        if( sourceData === undefined && options.autoHide )
-          return null;
-      }
+      if( !sourceData && options.autoHide )
+        return null;
 
       if( data.label )
       {
@@ -58,16 +57,16 @@
       selector.on( 'selectmenuchange', function( event ){
         if( data.dataSource )
         {
-          if( data.dataSource.type )
-            widget.util.set( data.dataSource.type, data.dataSource.path, selector.val() );
+          if( typeKey )
+            widget.util.set( typeKey, dataPath, selector.val() );
           else
-            widget.set( def.stack[1], data.dataSource.path, selector.val() );
+            widget.set( def.stack[1], dataPath, selector.val() );
         }
         uiMenu.trigger( 'selectmenuchange' );
       });
       
       uiMenu.update = function updateMenu( event, context ) {
-        var sourceData = data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path );
+        var sourceData = typeKey ? widget.util.get( typeKey, dataPath ) : widget.get( def.stack[1], dataPath );
 
         selector.empty();
         $.each( data.items, function( i, item ){

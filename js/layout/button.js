@@ -29,7 +29,7 @@
       });
     }
     else
-      console.warn( "Unbound Action", data.action );
+      console.warn( "Button Action not found:", data.action );
 
     return button;
   }

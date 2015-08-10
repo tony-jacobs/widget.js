@@ -41,7 +41,6 @@
     };
     
     var readout;
-    console.log( "options", options );
     if( options.readout )
     {
       readout = $('<span></span>', { 
