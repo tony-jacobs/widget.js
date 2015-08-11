@@ -34,6 +34,7 @@ module.exports = function(grunt) {
           'js/layout/button.js',
           'js/layout/chart.js',
           'js/layout/checkBox.js',
+          'js/layout/comboBox.js',
           'js/layout/content.js',
           'js/layout/error.js',
           'js/layout/icon.js',

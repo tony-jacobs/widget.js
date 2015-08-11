@@ -108,10 +108,20 @@ widget.util.set( 'renderers', 'childRenderer', {
                   type:'list', 
                   content: [
                     {type:'label', name:'Selector test' },
-                    {type:'selector', name:'Selector', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select1'}, options:{ events:{ load: function(){ widget.util.set('test','select1','three'); } } } },
-//                    {type:'selector', name:'Selector', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select2'}, options:{ editable:true, events:{ load: function(){ widget.util.set('test','select2','three'); } } } },
-                    {type:'selector', name:'Selector', label: 'withLabel', items:['one', 'two', 'three'] },
-//                    {type:'selector', name:'Selector', label: 'Editable with label:', placeholder:'myPlaceholder', items:['one', 'two', 'three'], options:{ editable:true } },
+                    {type:'selector', name:'Selector', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select1'}, options:{ events:{ 
+                      load: function(){ widget.util.set('test','select1','three'); },
+                      fieldChange: function(context, event) { console.log( "change", context, event ); }
+                    } } },
+                    {type:'combobox', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select2'}, options:{ events:{ 
+                      load: function(){ widget.util.set('test','select2','three'); },
+                      fieldChange: function(context, event) { console.error( "change", context, event ); }
+                    } } },
+                    {type:'selector', name:'Selector', label: 'withLabel', items:['one', 'two', 'three'], options: { events: {
+                      fieldChange: function(context, event) { console.log( "change", context, event ); }
+                    } } },
+                    {type:'combobox', label: 'Editable with label:', placeholder:'myPlaceholder', items:['one', 'two', 'three'], options:{ events:{
+                      fieldChange: function(context, event) { console.log( "change", context, event ); }
+                    } } },
                   ] 
                 } 
               },
