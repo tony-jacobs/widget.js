@@ -44,7 +44,7 @@
     if( sourceData )
     {
       label.toggleClass( 'selected', true );
-      checkbox.attr( 'checked', true );
+      checkbox.prop( 'checked', true );
     }
 
     if( data.dataSource && data.dataSource.storeType )
@@ -58,9 +58,13 @@
     if( data.dataSource )
     {
       label.update = function updateCheckbox( event, context ) {
-        var curr = !!(data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path ));
-        label.toggleClass( 'selected', curr );
-        checkbox.attr( 'checked', curr );
+        var newVal = !!(data.dataSource.type ? widget.util.get( data.dataSource.type, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path ));
+        var oldVal = checkbox.prop('checked');
+        if( oldVal != newVal )
+        {
+          label.toggleClass( 'selected', newVal );
+          checkbox.prop( 'checked', newVal );
+        }
       };
     }
 

@@ -62,8 +62,10 @@
     if( data.dataSource )
     {
       panel.update = function updateCheckbox( event, context ) {
-        var curr = (typeKey ? widget.util.get( typeKey, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path ));
-        field.val( curr );
+        var newVal = (typeKey ? widget.util.get( typeKey, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path ));
+        var oldVal = field.val();
+        if( oldVal != newVal )
+          field.val( newVal );
       };
     }
 

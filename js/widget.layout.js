@@ -215,13 +215,22 @@ widget.layout = (function(){
 
       if( w.options.styleClass )
       {
-        w.view.addClass( widget.util.expandPath( w.options.styleClass, w.data ) );
+        w.options._styleClass = widget.util.expandPath( w.options.styleClass, w.data );
+        w.view.addClass( w.options._styleClass );
       }
 
       w.view.on( 'widget-update', function onUpdate( event, context ) {
         if( $.isFunction( w.view.update ) )
           w.view.update( event, context );
+        
         lifecycle( 'update', w );
+        
+        if( w.options.styleClass )
+        {
+          w.view.removeClass( w.options._styleClass );
+          w.options._styleClass = widget.util.expandPath( w.options.styleClass, w.data );
+          w.view.addClass( w.options._styleClass );
+        }
       } );
       
       w.view.on( 'remove', function onRemoved() {
