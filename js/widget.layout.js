@@ -227,9 +227,13 @@ widget.layout = (function(){
         
         if( w.options.styleClass )
         {
-          w.view.removeClass( w.options._styleClass );
+          var oldStyle = w.options._styleClass;
           w.options._styleClass = widget.util.expandPath( w.options.styleClass, w.data );
-          w.view.addClass( w.options._styleClass );
+          if( oldStyle != w.options._styleClass )
+          {
+            w.view.removeClass( oldStyle );
+            w.view.addClass( w.options._styleClass );
+          }
         }
       } );
       
