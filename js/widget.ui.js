@@ -65,12 +65,12 @@ widget.ui = {
     var options = {};
     
     widget.layout( holder, layout, options, [ data ] );
-    showContentPopup( parent || $('body'), holder );
+    return showContentPopup( parent || $('body'), holder );
   }
 };
 
 function showIframePopup( parent, url ) {
-  widget.showPopup( function( panel, contentHolder ) {
+  return widget.showPopup( function( panel, contentHolder ) {
     contentHolder.addClass( 'iframePopup' );
     contentHolder.html("<iframe width='600' height='600' frameborder='0' scrolling='true' marginheight='0' marginwidth='0' src='"+url+"'></iframe>");
     contentHolder.css("display","block");
@@ -78,7 +78,7 @@ function showIframePopup( parent, url ) {
 }
 
 function showContentPopup( parent, content ) {
-  widget.showPopup( function( panel, contentHolder ) {
+  return widget.showPopup( function( panel, contentHolder ) {
     contentHolder.addClass( 'contentPopup' ).append( $( content ).css("display","block") );
   }, parent );
 }

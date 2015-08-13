@@ -87,6 +87,7 @@ var widget = (function(){
     set: set,
     showPopup: function showPopup( popupFactory, parent, options )
     {
+      parent = $(parent);
       options = options || {};
       var overlay = $('.popupOverlay');
       var panel = $( "<div/>" ).addClass( 'popupHolder' );
@@ -95,6 +96,7 @@ var widget = (function(){
       panel.actions = {
         show: function() {
           parent.prepend( panel );
+          parent.toggleClass( 'widget-popup-active', true );
           overlay.one( 'click', panel.actions.hide );
           panel.one( 'click', panel.actions.hide );
 
@@ -105,9 +107,10 @@ var widget = (function(){
             if( $.isFunction( options.onReady ) )
               setTimeout( options.onReady, 450 );
           }, 0 );
-          return true;
+          return panel;
         },
         hide: function() {
+          parent.toggleClass( 'widget-popup-active', false );
           panel.removeClass( 'popupTransition' );
           overlay.off( 'click', panel.actions.hide );
           panel.one("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend", function() {
