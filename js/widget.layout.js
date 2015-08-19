@@ -258,6 +258,7 @@ widget.layout = (function(){
       
       bindIf( 'mouseenter', w.view, w.options.events, w );
       bindIf( 'mouseleave', w.view, w.options.events, w );
+      bindIf( 'mousemove', w.view, w.options.events, w );
       bindIf( 'click', w.view, w.options.events, w );
       bindIf( 'change', w.view, w.options.events, w );
       bindIf( 'fieldChange', w.view, w.options.events, w );
