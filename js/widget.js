@@ -29,7 +29,7 @@ var widget = (function(){
       }
       else
       {
-        if( obj[key] === undefined )
+        if( obj[key] === undefined || obj[key] === null )
         {
           obj[key] = {};
         }
