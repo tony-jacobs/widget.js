@@ -223,7 +223,7 @@ widget.layout = (function(){
         if( $.isFunction( w.view.update ) )
           w.view.update( event, context );
         
-        lifecycle( 'update', w );
+        lifecycle( 'update', w, context );
         
         if( w.options.styleClass )
         {
@@ -291,11 +291,15 @@ widget.layout = (function(){
       view.on( key, function( event ) { callEvent( events, key, context, event ); } );
   }
   
-  function lifecycle( eventKey, w )
+  function lifecycle( eventKey, w, data )
   {
-    return callEvent( w.options.events, eventKey, w, {
+    var event = {
       type: 'lifecycle.'+eventKey
-    } );
+    };
+    if( data )
+      event = $.extend( {}, data, event );
+      
+    return callEvent( w.options.events, eventKey, w, event );
   }
 
   function getTimestamp( article )
