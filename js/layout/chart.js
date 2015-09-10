@@ -19,7 +19,7 @@
     var data = def.layout;
     var options = def.options;
     
-    var panel = $('<div/>' ).appendTo( view );
+    var panel = $('<div/>' ).appendTo( view ).css({display:'none'});
     if( options.chartId )
       panel.attr( 'id', options.chartId );
     
@@ -46,6 +46,16 @@
         if( chart && chart.domSelector )
           d3.select( chart.domSelector ).call( chart );
       } );
+      
+      if( options.animated )
+      {
+        var w = panel.width();
+        panel.css({ width:'0px', display:'auto'});
+        panel.animate( {width:w+'px'} );
+      }
+      else
+        panel.css({display:'auto'});
+
     });
     
     return panel;
