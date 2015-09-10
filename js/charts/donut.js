@@ -11,7 +11,8 @@
     var height = options.height || 350;
     var width = options.width || 350;
     
-    factory.charts[ chartId ] = nv.addGraph( function() {
+    var chartPromise = $.Deferred();
+    nv.addGraph( function() {
       
       var dataProjection = [];
       
@@ -57,8 +58,10 @@
         .call( donutChart );
   
       factory.charts[ chartId ] = donutChart;
-      return donutChart;
+      chartPromise.resolve( donutChart );
     });
+
+    return chartPromise;
   }
 
 

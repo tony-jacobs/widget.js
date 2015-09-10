@@ -39,7 +39,9 @@
     
     factory.charts[ chartId ] = chart;
     chart.updateReadout();
-    return chart;
+    var chartPromise = $.Deferred();
+    chartPromise.resolve( chart );
+    return chartPromise;
   }
 
 })();

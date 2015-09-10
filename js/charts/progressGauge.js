@@ -73,7 +73,9 @@
     $(chart).css( {width:width+'px', height:height+'px'} );
     chart.updateGauge();
 
-    return gauge;
+    var chartPromise = $.Deferred();
+    chartPromise.resolve( gauge );
+    return chartPromise;
   }
 
 })();

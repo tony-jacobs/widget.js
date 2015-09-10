@@ -23,8 +23,16 @@
     if( options.chartId )
       panel.attr( 'id', options.chartId );
     
-    var dataSeriesKey = widget.util.expandPath( data.dataSeries );
-    var chartData = widget.util.get( data.dataSource||'data', dataSeriesKey );
+    var chartData;
+    if( def.layout.data )
+    {
+      chartData = def.layout.data;
+    }
+    else
+    {
+      var dataSeriesKey = widget.util.expandPath( data.dataSeries );
+      chartData = widget.util.get( data.dataSource||'data', dataSeriesKey );
+    }
 
     var chartOptions = $.extend( {}, options, {
       type:data.chartType, 
@@ -32,7 +40,14 @@
       parent:panel
     });
     
-    widget.chartFactory.create( chartOptions );
+    var chartPromise = widget.chartFactory.create( chartOptions );
+    chartPromise.then( function( chart ) {
+      panel.on( 'refreshData', function updateChart( event, context ) {
+        if( chart && chart.domSelector )
+          d3.select( chart.domSelector ).call( chart );
+      } );
+    });
+    
     return panel;
   }
 

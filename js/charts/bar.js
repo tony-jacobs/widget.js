@@ -12,7 +12,8 @@
     var height = options.height || 350;
     var width = options.width || 350;
     
-    factory.charts[ chartId ] = nv.addGraph( function() {
+    var chartPromise = $.Deferred();
+    nv.addGraph( function() {
       
       var dataValues = [];
       var dataProjection = [{
@@ -58,8 +59,10 @@
       ;
   
       factory.charts[ chartId ] = barChart;
-      return barChart;
+      chartPromise.resolve( barChart );
     });
+
+   return chartPromise;    
   }
 
 })();

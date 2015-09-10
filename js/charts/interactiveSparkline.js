@@ -7,7 +7,8 @@
     var data = options.data;
     var chartId = factory.createChartNode( options, 'interactivesparkline', 'svg' );
   
-    factory.charts[ chartId ] = nv.addGraph(function() {
+    var chartPromise = $.Deferred();
+    nv.addGraph(function() {
       var chart = nv.models.sparklinePlus();
       
       var domSelector = '#'+chartId;
@@ -31,8 +32,10 @@
         .call(chart);
   
       factory.charts[ chartId ] = chart;
-      return chart;
+      chartPromise.resolve( chart );
     });
+
+    return chartPromise;
   }
 
 })();

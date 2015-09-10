@@ -10,10 +10,13 @@
     var width = options.width || 200;
     var height = options.height || 30;
     
-    factory.charts[ chartId ] = nv.addGraph(function() {
+    var chartPromise = $.Deferred();
+    nv.addGraph(function() {
       var chart = nv.models.sparkline();
       chart.width( width );
       chart.height( height );
+  
+      chart.color( options.colors || ["#000000"] );
   
       var domSelector = '#'+chartId;
       var dataSet = factory.attachDataSource( data, domSelector, chartId, options.maxDataCount );  
@@ -28,8 +31,11 @@
       }
       
       factory.charts[ chartId ] = chart;
-      return chart;
+      chartPromise.resolve( chart );
+      chart.domSelector = domSelector;
     });
+    
+    return chartPromise;
   }
 
 })();
