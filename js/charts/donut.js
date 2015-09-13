@@ -58,6 +58,7 @@
         .call( donutChart );
   
       factory.charts[ chartId ] = donutChart;
+      donutChart.domSelector = domSelector;
       chartPromise.resolve( donutChart );
     });
 

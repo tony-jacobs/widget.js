@@ -55,6 +55,7 @@
         .call( pieChart );
   
       factory.charts[ chartId ] = pieChart;
+      pieChart.domSelector = domSelector;
       chartPromise.resolve( pieChart );
     });
     

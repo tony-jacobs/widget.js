@@ -1,6 +1,7 @@
 
 widget.ChartFactory = (function() {
   
+  var chartId = 0;
   var charts = {};
   var chartRegistry = {};
   
@@ -23,7 +24,7 @@ widget.ChartFactory = (function() {
 
   ChartFactory.prototype.createChartNode = function createChartNode( options, classKey, nodeType )
   {
-    var containerId = 'chart-' + Object.keys( charts ).length;
+    var containerId = 'chart-' + (chartId++);
     var className = 'chart';
     if( options.chartStyleClass )
       className += ' ' + options.chartStyleClass;

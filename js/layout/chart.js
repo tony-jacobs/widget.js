@@ -42,6 +42,7 @@
     
     var chartPromise = widget.chartFactory.create( chartOptions );
     chartPromise.then( function( chart ) {
+      
       panel.on( 'refreshData', function updateChart( event, context ) {
         if( chart && chart.domSelector )
           d3.select( chart.domSelector ).call( chart );
@@ -55,7 +56,6 @@
       }
       else
         panel.css({display:'auto'});
-
     });
     
     return panel;

@@ -64,6 +64,7 @@
       ;
   
       factory.charts[ chartId ] = barChart;
+      barChart.domSelector = domSelector;
       chartPromise.resolve( barChart );
     });
     

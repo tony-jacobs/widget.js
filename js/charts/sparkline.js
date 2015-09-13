@@ -31,8 +31,8 @@
       }
       
       factory.charts[ chartId ] = chart;
-      chartPromise.resolve( chart );
       chart.domSelector = domSelector;
+      chartPromise.resolve( chart );
     });
     
     return chartPromise;

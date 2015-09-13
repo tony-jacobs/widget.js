@@ -73,6 +73,7 @@
     chart.updateGauge();
 
     var chartPromise = $.Deferred();
+    gauge.domSelector = domSelector;
     chartPromise.resolve( gauge );
     return chartPromise;
   }

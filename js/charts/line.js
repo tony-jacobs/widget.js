@@ -44,6 +44,7 @@
       ;
   
       factory.charts[ chartId ] = lineChart;
+      lineChart.domSelector = domSelector;
       chartPromise.resolve( lineChart );
     });
     

@@ -32,6 +32,7 @@
         .call(chart);
   
       factory.charts[ chartId ] = chart;
+      chart.domSelector = domSelector;
       chartPromise.resolve( chart );
     });
 

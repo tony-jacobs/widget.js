@@ -40,6 +40,7 @@
     factory.charts[ chartId ] = chart;
     chart.updateReadout();
     var chartPromise = $.Deferred();
+    chart.domSelector = domSelector;
     chartPromise.resolve( chart );
     return chartPromise;
   }
