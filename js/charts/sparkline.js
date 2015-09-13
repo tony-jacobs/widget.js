@@ -13,7 +13,7 @@
     var chartPromise = $.Deferred();
     nv.addGraph(function() {
       var chart = nv.models.sparkline();
-      chart.width( width );
+      chart.width( width-2 );
       chart.height( height );
   
       chart.color( options.colors || ["#000000"] );
