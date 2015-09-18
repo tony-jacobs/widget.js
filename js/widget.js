@@ -87,44 +87,8 @@ var widget = (function(){
     set: set,
     showPopup: function showPopup( popupFactory, parent, options )
     {
-      parent = $(parent);
-      options = options || {};
-      var overlay = $('.popupOverlay');
-      var panel = $( "<div/>" ).addClass( 'popupHolder' );
-      var contentHolder = $("<div/>").addClass( 'popupContent' ).appendTo( panel );
-
-      panel.actions = {
-        show: function() {
-          parent.prepend( panel );
-          parent.toggleClass( 'widget-popup-active', true );
-          overlay.one( 'click', panel.actions.hide );
-          panel.one( 'click', panel.actions.hide );
-
-          // tonyj:  Let the parenting operation complete before CSS transition, so we yield our event loop slot with a setTimeout( xx, 0ms )
-          setTimeout( function() {
-            panel.addClass( 'popupTransition' );
-
-            if( $.isFunction( options.onReady ) )
-              setTimeout( options.onReady, 450 );
-          }, 0 );
-          return panel;
-        },
-        hide: function() {
-          parent.toggleClass( 'widget-popup-active', false );
-          panel.removeClass( 'popupTransition' );
-          overlay.off( 'click', panel.actions.hide );
-          panel.one("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend", function() {
-            panel.remove();
-            if( $.isFunction( options.onDismiss ) )
-              options.onDismiss();
-         });
-         return false;
-        }
-      };
-
-      contentHolder.append( popupFactory( panel, contentHolder ) );
-
-      return panel.actions.show();
+      console.error( "widget.showPopup is deprecated.  Use widget.ui.showPopup() instead" );
+      return widget.ui.showPopup( popupFactory, parent, options );
     },
 
     generateTabs: function generateTabs( selector, options )

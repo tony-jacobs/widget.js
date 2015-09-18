@@ -66,11 +66,53 @@ widget.ui = {
     
     widget.layout( holder, layout, options, [ data ] );
     return showContentPopup( parent || $('body'), holder );
+  },
+  
+  showPopup: function showPopup( popupFactory, parent, options )
+  {
+    parent = $(parent);
+    options = options || {};
+    var overlay = $('.popupOverlay');
+    var panel = $( "<div/>" ).addClass( 'popupHolder' );
+    var contentHolder = $("<div/>").addClass( 'popupContent' ).appendTo( panel );
+
+    panel.actions = {
+      show: function() {
+        parent.prepend( panel );
+        parent.toggleClass( 'widget-popup-active', true );
+        overlay.one( 'click', panel.actions.hide );
+        panel.one( 'click', panel.actions.hide );
+
+        // tonyj:  Let the parenting operation complete before CSS transition, so we yield our event loop slot with a setTimeout( xx, 0ms )
+        setTimeout( function() {
+          panel.addClass( 'popupTransition' );
+
+          if( $.isFunction( options.onReady ) )
+            setTimeout( options.onReady, 450 );
+        }, 0 );
+        return panel;
+      },
+      hide: function() {
+        parent.toggleClass( 'widget-popup-active', false );
+        panel.removeClass( 'popupTransition' );
+        overlay.off( 'click', panel.actions.hide );
+        panel.one("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend", function() {
+          panel.remove();
+          if( $.isFunction( options.onDismiss ) )
+            options.onDismiss();
+       });
+       return false;
+      }
+    };
+
+    contentHolder.append( popupFactory( panel, contentHolder ) );
+
+    return panel.actions.show();
   }
 };
 
 function showIframePopup( parent, url ) {
-  return widget.showPopup( function( panel, contentHolder ) {
+  return widget.ui.showPopup( function( panel, contentHolder ) {
     contentHolder.addClass( 'iframePopup' );
     contentHolder.html("<iframe width='600' height='600' frameborder='0' scrolling='true' marginheight='0' marginwidth='0' src='"+url+"'></iframe>");
     contentHolder.css("display","block");
@@ -78,7 +120,7 @@ function showIframePopup( parent, url ) {
 }
 
 function showContentPopup( parent, content ) {
-  return widget.showPopup( function( panel, contentHolder ) {
+  return widget.ui.showPopup( function( panel, contentHolder ) {
     contentHolder.addClass( 'contentPopup' ).append( $( content ).css("display","block") );
   }, parent );
 }
