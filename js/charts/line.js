@@ -113,7 +113,9 @@
   }
   
   
-  // Override nvd3 line chart with something that populates sourcedata on the tooltip
+// Override nvd3 line chart with something that populates sourcedata on the tooltip
+if( window.nv )
+{  
   nv.models.lineChart = function() {
     "use strict";
 
@@ -542,6 +544,6 @@
     nv.utils.initOptions(chart);
 
     return chart;
-};
-
+  };
+}
 })();
