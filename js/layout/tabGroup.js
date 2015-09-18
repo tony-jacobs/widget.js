@@ -17,7 +17,7 @@
       labelSelector: "." + labelHolderClass
     } );
     var tabGroup = $('<div/>').addClass( labelHolderClass ).appendTo( view );
-    var tabNav = widget.generateTabs( view, tabOptions );
+    var tabNav = widget.ui.generateTabs( view, tabOptions );
     var tabManager = tabNav.data('tabManager');
 
 
