@@ -40,7 +40,8 @@
       parent:panel
     });
     
-    var chartPromise = widget.chartFactory.create( chartOptions );
+    var chartPromise = $.when( widget.chartFactory.create( chartOptions ) );
+    
     chartPromise.then( function( chart ) {
       
       panel.on( 'refreshData', function updateChart( event, context ) {
@@ -56,6 +57,9 @@
       }
       else
         panel.css({display:'auto'});
+        
+      if( chart && $.isFunction( chart.update ) )
+        chart.update();
     });
     
     return panel;
