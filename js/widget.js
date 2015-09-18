@@ -404,63 +404,6 @@ var widget = (function(){
       return view;
     },
 
-    showMessage: function showMessage( msg, options )
-    {
-      var slideDuration = 350;
-      var messageView = null;
-      options = $.extend( { messageType: 'info' }, (options || {}) );
-      var type = options.messageType;
-
-      var lastTimer = self._messageTimer || options.timer;
-      if( lastTimer )
-      {
-        clearTimeout( lastTimer );
-        delete options.timer;
-        delete self._messageTimer;
-      }
-
-      var holder = $('.statusHolder');
-      if( msg )
-      {
-        messageView = $( '<div/>', { text:msg } );
-        messageView.options = options;
-
-        $( '.statusMessage', holder ).empty().removeClass().addClass( 'statusMessage '+type ).append( messageView );
-        holder.animate( { height:30 }, {
-          duration: slideDuration,
-          step:options.step
-        } );
-
-        lastTimer = null;
-        if( options.timeout ){
-          lastTimer = setTimeout( showMessage, options.timeout, "", { step: options.step } );
-          self._messageTimer = lastTimer;
-        }
-
-        var clickHandler = options.click || function() {
-          showMessage("", { timer: lastTimer, step: options.step });
-        };
-        messageView.click( clickHandler );
-
-        if( options.audio ) new Audio( options.audio ).play();
-
-        $('#statusBackground').removeClass().addClass( type+"Background" );
-      }
-      else
-      {
-        holder.animate( { height:0 }, {
-          duration: slideDuration,
-          easing: 'swing',
-          complete:function() {
-            $( '.statusMessage', holder ).empty();
-            $('#statusBackground').removeClass();
-          },
-          step: options.step
-        } );
-      }
-      return messageView;
-    },
-
     symbol: function symbol( fontAwesomeKey, additionalClasses ) {
       var v = $( '<i/>' ).addClass( 'fa fa-' + fontAwesomeKey );
       if( additionalClasses )
