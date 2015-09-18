@@ -6,6 +6,19 @@ module.exports = function(grunt) {
       options: {
         separator: ';'
       },
+      util: {
+        src: [
+          'js/global.js',
+          'js/widget.js',
+          'js/widget.parser.js',
+          'js/widget.util.js',
+          'js/widget.format.js',
+          'js/parser/stack.js',
+          'js/parser/inlineFunction.js',
+          'js/parser/localize.js',
+        ],
+        dest: 'dist/<%= pkg.name %>-util.js'
+      },
       dist: {
         src: [
           'js/global.js',
@@ -116,7 +129,8 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+          'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>'],
+          'dist/<%= pkg.name %>-util.min.js': ['<%= concat.util.dest %>']
         }
       }
     },
@@ -154,6 +168,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concat-css');
 
   grunt.registerTask('default', ['compile']);
-  grunt.registerTask('compile', ['clean','jshint', 'concat', 'concat_css', 'copy', 'processhtml:dist', 'concat:all']);
+  grunt.registerTask('compile', ['clean','jshint', 'concat', 'concat:util', 'concat_css', 'copy', 'processhtml:dist', 'concat:all']);
   grunt.registerTask('dist', ['compile', 'uglify', 'compress']);
 };
