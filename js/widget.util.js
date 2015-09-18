@@ -142,44 +142,6 @@ widget.util = (function(){
       }
     },
 
-    getMessages: function getMessages( dataKey, filterUnread, changeListener, refreshTime )
-    {
-      var refilter = function refilterMessages() {
-        var data = widget.util.getData( dataKey );
-        var messages = {};
-        $.each( ['alert','news'], function( i, key ) {
-          if( data[key] )
-          {
-            $.each( data[key].content, function( j, msg ) {
-              if( msg.unread || !filterUnread )
-              {
-                messages[ msg.id ] = msg;
-              }
-            });
-          }
-        });
-        if( $.isFunction( changeListener ) )
-          changeListener( messages );
-
-        return messages;
-      };
-
-      if( refreshTime )
-      {
-        setInterval( refilter, refreshTime );
-      }
-      else
-      {
-        $.each( ['alert','news'], function( i, key ) {
-          widget.util.watch( "data", key, function( key, newValue ) {
-            refilter();
-          });
-        });
-      }
-
-      return refilter();
-    },
-
     setProgress: function setProgress( msg, pct, force ) {
       var seconds = Math.floor( (new Date().getTime()) / 1000 );
       if( seconds > progressNow )
