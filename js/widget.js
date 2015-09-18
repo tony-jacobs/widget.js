@@ -127,23 +127,6 @@ var widget = (function(){
       return panel.actions.show();
     },
 
-    generateList: function generateList( selector, dataList, options, itemFactory )
-    {
-      var view = $( selector );
-      itemFactory = itemFactory || function(){ return  $("<div/>", { text:'default item' } ); };
-
-      options = $.extend( {}, options );
-      options.itemOptions = $.extend( { itemClass: 'listItem' }, options.itemOptions );
-
-      $.each( dataList, function( i, data ) {
-        var item = itemFactory( data, options.itemOptions );
-        view.append( item );
-        attachEvents( item, options.itemOptions.events, { source:item, data:data } );
-      });
-
-      return view;
-    },
-
     generateTabs: function generateTabs( selector, options )
     {
       options = $.extend( {
@@ -377,90 +360,6 @@ var widget = (function(){
             window.localStorage.setItem( key, encodeStorage( value, useCompression, key ) );
           }
         };
-    },
-
-    createText: function createText( options )
-    {
-      var textWidget = {
-        options: options,
-        createView: function() {
-          var view = $('<div/>', {text:options.text});
-          if( options.class )
-            view.addClass( options.class );
-          if( options.id )
-            view.attr( 'id', options.id );
-          if( $.isFunction( options.action ) )
-            view.click( options.action );
-
-          return (textWidget.view = view);
-        },
-        getView: function() {
-          if( !textWidget.view )
-            textWidget.view = textWidget.createView();
-          return textWidget.view;
-        }
-      };
-      return textWidget;
-    },
-
-    createButton: function createButton( options )
-    {
-      if( !options.action ) options.action = function() { console.log( options.key + " clicked" ); };
-
-      var button = {
-        options: options,
-        createView: function() {
-          var view = $('<img/>', {src:options.icon});
-          view.addClass( options.key+"Button operationButton" );
-          if( options.id )
-            view.attr( 'id', options.id );
-          view.click( options.action );
-
-          return (button.view = view);
-        },
-        getView: function() {
-          if( !button.view )
-            button.view = button.createView();
-          return button.view;
-        }
-      };
-      return button;
-    },
-
-    createToggleButton: function createToggleButton( options )
-    {
-      if( !options.action ) options.action = function( state ) { console.log( options.key + " clicked", state ); };
-
-      var button = {
-        options: options,
-        toggleState: (options.initialState || false),
-
-        toggle: function() {
-          var newState = !button.toggleState;
-          button.options.action( newState );
-          button.toggleState = newState;
-          button.view.attr( 'src', button.getIcon() );
-        },
-        getIcon: function() {
-          var stateKey = button.toggleState ? "iconOn" : "iconOff";
-          return button.options[ stateKey ] || button.options.icon;
-        },
-        createView: function() {
-          var view = $('<img/>', {src: button.getIcon() });
-          view.addClass( options.key+"Button operationButton" );
-          if( options.id )
-            view.attr( 'id', options.id );
-          view.click( button.toggle );
-
-          return (button.view = view);
-        },
-        getView: function() {
-          if( !button.view )
-            button.view = button.createView();
-          return button.view;
-        }
-      };
-      return button;
     },
 
     getAncestorData: function getAncestorData( cxt, key, defaultValue )
