@@ -1,7 +1,6 @@
 
 widget.util = (function(){
   var db = {};
-  var visitRecords = null;
   var config = {
     mode: 'ajax',
     endpoint: 'service/',
@@ -92,16 +91,7 @@ widget.util = (function(){
                 callback( response );
             }
           };
-  
-          if( null === visitRecords )
-          {
-            widget.getStorage().get( config.keyprefix+'.visitRecords', function( value ){
-              visitRecords = value || {};
-              $.ajax( ajaxOpts );
-            }, true );
-          }
-          else
-            $.ajax( ajaxOpts );
+          $.ajax( ajaxOpts );
         }
       };
 
@@ -190,33 +180,6 @@ widget.util = (function(){
       return refilter();
     },
 
-    isRead: function isRead( key ) {
-      var isUnread = visitRecords[key];
-      return ( undefined === isUnread ) ? true : isUnread;
-    },
-
-    markAsRead: function markAsRead( data, key ) {
-      key = key || data.key;
-      event = data.type.toUpperCase() + "TITLEREAD";
-      if( data.unread )
-      {
-        event = "NEW"+event;
-        widget.util.set( "data", data.path+".unread", false );
-        visitRecords[ key ] = false;
-        widget.getStorage().set( config.keyprefix+'.visitRecords', visitRecords, true );
-      }
-      var obj = {};
-      obj[ event ] = data.title;
-      widget.util.track( obj );
-    },
-
-    resetUnread: function resetUnread() {
-      console.log( "Resetting all message read indicators" );
-      visitRecords = {};
-      widget.getStorage().set( config.keyprefix+'.visitRecords', visitRecords, true );
-      $.each( index.data, function(i,o){ o.unread = true; } );
-    },
-    
     setProgress: function setProgress( msg, pct, force ) {
       var seconds = Math.floor( (new Date().getTime()) / 1000 );
       if( seconds > progressNow )
