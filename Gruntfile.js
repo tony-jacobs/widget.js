@@ -82,7 +82,7 @@ module.exports = function(grunt) {
         src: [
           'css/normalize.css',
           'css/popup.css',
-          'css/nvd3-1.7.1.min.css',
+          'css/nvd3-1.8.1-lev.min.css',
           'css/widget.base.css',
           'css/widget.ui.css',
           'css/widget.chart.css',

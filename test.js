@@ -452,7 +452,17 @@ widget.util.set( 'renderers', 'childRenderer', {
                     type: "chart",
                     chartType:"line",
                     dataSeries:"demoChart",
-                    options: {}
+                    options: {
+                      events: {
+                        rollover: function onRollover( options, series ) {
+                          var rollover = [];
+                          
+                          for( var i in series )
+                            rollover.push( series[i] );            
+                          console.log( "rollover", options, series, JSON.stringify( rollover ) );
+                        }
+                      }
+                    }
                   }
                 ],
                 options: { styleClass: 'chartPanel', expandable:true }
