@@ -49,7 +49,7 @@
       if( options.title )
         donutChart.title( options.title );
   
-      donutChart.pie.donutLabelsOutside(true);
+      donutChart.pie.labelsOutside(true);
       
       d3.select( domSelector )
         .style( {width:width+'px', height:height+'px'} )
