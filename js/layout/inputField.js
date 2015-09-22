@@ -15,7 +15,10 @@
     
     var typeKey = data.dataSource ? data.dataSource.type : undefined;
     
-    var fieldKey = (data.dataSource.path).replace( /\./g, "_" );
+    var fieldKey = data.dataSource ? data.dataSource.path : undefined;
+    if( fieldKey )
+      fieldKey = fieldKey.replace( /\./g, "_" );
+      
     var panel = $('<div/>' );
     
     var field = $('<input>').attr( {
