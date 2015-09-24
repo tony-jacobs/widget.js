@@ -85,22 +85,37 @@
       ;
 
       // This logic requires NVD3 v1.8.1 or later.
-      if( options.interactive=='guideline' && options.events && $.isFunction( options.events.rollover ) )
+      if( options.interactive=='guideline' && options.events )
       {
         var data;
         var chartView = $(domSelector);
-        chartView.on( 'mousemove', function( event ){ 
-
-          var oldData = data;
-          if( $( '.nv-guideline', chartView ).length )
-            data = chart.interactiveLayer.tooltip.data();
-          else
-            data = null;
-          
-          // fire event if the index changed, or the value went to or from null.
-          if( ( !data && oldData ) || (data && (!oldData || (oldData.index != data.index) ) ) )
-            options.events.rollover( options, data );
-        } );
+        if( $.isFunction( options.events.rollover ) )
+        {
+          chartView.on( 'mousemove', function( event ){ 
+  
+            var oldData = data;
+            if( $( '.nv-guideline', chartView ).length )
+              data = chart.interactiveLayer.tooltip.data();
+            else
+              data = null;
+            
+            // fire event if the index changed, or the value went to or from null.
+            if( ( !data && oldData ) || (data && (!oldData || (oldData.index != data.index) ) ) )
+              options.events.rollover( options, data );
+          } );
+        }
+        if( $.isFunction( options.events.select ) )
+        {
+          chartView.on( 'click', function( event ){ 
+  
+            if( $( '.nv-guideline', chartView ).length )
+              data = chart.interactiveLayer.tooltip.data();
+            else
+              data = null;
+            
+            options.events.select( options, data );
+          } );
+        }
       }
       
       factory.charts[ chartId ] = chart;
