@@ -34,6 +34,7 @@
       showXAxis: true,
       showYAxis: true,
       showLegend: true,
+      showFocus: false,
       xFormat: 'date',
       yFormat: 'default'
     }, options );
@@ -51,7 +52,7 @@
         if( $.isArray( dataHolder ) || $.isFunction( dataHolder ) )
         {
           var datum = {
-            key: key,
+            key: widget.util.expandPath( '_{'+ key.replace(/\./g, "_") +'}' ),
             values: factory.attachDataSource( dataHolder, domSelector, chartId )
           };
           dataProjection.push( datum );
@@ -62,17 +63,19 @@
         .id( 'line-chart' )
         .margin({
           left: options.leftMargin,
-          right: options.rightMargin
+          right: options.rightMargin,
+          bottom: 30
         }) 
         .useInteractiveGuideline( (options.interactive=='guideline')?true:false )
         .showLegend( options.showLegend?true:false )
+        .focusEnable( options.showFocus?true:false )
         .showYAxis( options.showYAxis?true:false )
         .showXAxis( options.showXAxis?true:false )
         .interactive( (options.interactive=='hover')?true:false )
       ;
       
-      chart.xAxis.tickFormat( getFormatter( options.xFormat ) );
-      chart.yAxis.tickFormat( getFormatter( options.yFormat ) );
+      chart.xTickFormat( getFormatter( options.xFormat ) );
+      chart.yTickFormat( getFormatter( options.yFormat ) );
 
 
       if( options.title )
