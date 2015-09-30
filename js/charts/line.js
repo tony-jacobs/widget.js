@@ -74,8 +74,19 @@
         .interactive( (options.interactive=='hover')?true:false )
       ;
       
-      chart.xTickFormat( getFormatter( options.xFormat ) );
       chart.yTickFormat( getFormatter( options.yFormat ) );
+
+      var xFormat = getFormatter( options.xFormat );
+      var getAxisFormatter = function( axis ) {
+        return function( data, tick, series ) {
+          return xFormat( data, tick, series, axis );
+        };
+      };
+
+      chart.tooltip.headerFormatter( xFormat );
+      chart.interactiveLayer.tooltip.headerFormatter( xFormat );
+      chart.xAxis.tickFormat( getAxisFormatter( chart.xAxis ) );      
+      chart.x2Axis.tickFormat( getAxisFormatter( chart.x2Axis ) );      
 
 
       if( options.title )
