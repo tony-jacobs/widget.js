@@ -382,7 +382,7 @@ widget.util.set( 'renderers', 'childRenderer', {
                   var o = series.testList.content[i];
                   var s = widget.chartFactory.createDataSource( [] );
                   
-                  for( var j=5; j>=0; j-- )
+                  for( var j=50; j>=0; j-- )
                   {
                     s.push( {
                       x: now-(j*1000), 
@@ -394,7 +394,7 @@ widget.util.set( 'renderers', 'childRenderer', {
                   widget.util.set( 'data', key, s );
                   var updater = createUpdater( key );
                   var timeout = 500 + Math.random()*750;
-                  o._interval = setInterval( updater, timeout );
+                  //o._interval = setInterval( updater, timeout );
                 }
                 
                 widget.util.setData( 'demo', series );
@@ -447,6 +447,24 @@ widget.util.set( 'renderers', 'childRenderer', {
                     chartType:"horizontalBar",
                     dataSeries:"demoChart",
                     options: {}
+                  },
+                  {
+                    type: "chart",
+                    chartType:"line",
+                    dataSeries:"demoChart",
+                    options: {
+                      showFocus: true,
+                      defaultFocusRange: 5000,
+                      focusRangeLabel: 'Time interval',
+                      ranges: [
+                        {key:0,displayName:'manual'},
+                        {key:5000,displayName:'5s'},
+                        {key:10000,displayName:'10s'},
+                        {key:25000,displayName:'25s'},
+                        {key:40000,displayName:'40s'},
+                        {key:2*60*1000,displayName:'2 min'}
+                      ]
+                    }
                   },
                   {
                     type: "chart",
@@ -1075,11 +1093,11 @@ function generateSampleData()
     });
   });
   
-  Object.keys( data ).forEach( function( seriesKey ) {
-    var updater = createUpdater( seriesKey );
-    var timeout = 500 + Math.random()*750;
-    setInterval( updater, timeout );
-  });  
+  // Object.keys( data ).forEach( function( seriesKey ) {
+  //   var updater = createUpdater( seriesKey );
+  //   var timeout = 500 + Math.random()*750;
+  //   setInterval( updater, timeout );
+  // });  
 
   return data;
 }

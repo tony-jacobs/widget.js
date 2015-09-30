@@ -48,6 +48,7 @@
         icons: { button: "fa fa-caret-down" } 
       }).selectmenu('widget');
       
+      uiMenu.addClass( 'widget-select' );
       var uiMenuDropdown = selector.selectmenu( "menuWidget" );
       uiMenuDropdown.addClass( options.menuClass || options.styleClass+"Menu" );
       

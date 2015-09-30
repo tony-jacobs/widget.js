@@ -20,6 +20,41 @@
       return formatters[fmt] || formatters['default'];
   }
 
+  function setFocusRange( chart, range ) 
+  {
+    var domain = chart.x2Axis.domain();
+    var val = range || domain[1];  // domain[1] is a range covering ALL TIME
+
+    chart.brushExtent( [ Math.max( domain[0], domain[1]-val ), domain[1] ] );
+    chart.update();
+  }
+
+  function createRangeChooser( chart, ranges, label )
+  {
+    var chooser = $( '<div/>' ).addClass( 'chartRangeChooser' );
+    var cxt = {};
+    
+    var layout = {
+      type:'selector',
+      items:ranges, 
+      dataSource: { path:'chartRange' },
+      options:{ 
+        events:{ 
+          selectmenuchange: function(context, event) { 
+            setFocusRange( chart, ranges.chartRange );
+          }
+        } 
+      } 
+    };
+    
+    if( label )
+      layout.label = label;
+                    
+    widget.layout( chooser, layout, undefined, [chart,ranges] );
+    
+    return chooser;
+  }
+
   function createLineChart( factory, options ) {
     
     var chartId = factory.createChartNode( options, 'line', 'svg' );
@@ -91,13 +126,46 @@
 
       if( options.title )
         $( '<div/>', {html: options.title} ).addClass( 'chartTitle' ).prependTo( options.parent );
-  
+
+      var rangeChooser = null;
+      if( options.ranges )
+      {
+        rangeChooser = createRangeChooser( chart, options.ranges, options.focusRangeLabel );
+        $( rangeChooser ).appendTo( options.parent );
+        
+        chart.dispatch.on( 'brush', function brushListener( event ) {
+          var currentRange = +$('select', rangeChooser).val();
+          var dx = event.extent[1] - event.extent[0];
+          if( currentRange && (dx != currentRange) )
+          {
+            options.ranges.chartRange = options.ranges[0].key;
+            $('.widget-select', rangeChooser).trigger('widget-update');
+          }
+        });
+      }
+      
       d3.select( domSelector )
         .style( {width:width, height:height} )
         .datum( dataProjection )
         .call( chart )
       ;
 
+      if( options.defaultFocusRange )
+      {
+        setFocusRange( chart, options.defaultFocusRange );
+        if( options.ranges )
+        {
+          for( var r in options.ranges )
+          {
+            if( options.defaultFocusRange == options.ranges[r].key )
+            {
+              if( rangeChooser )
+                $('.ui-selectmenu-text', rangeChooser ).html( options.ranges[r].displayName );
+            }
+          }
+        }
+      }
+  
       // This logic requires NVD3 v1.8.1 or later.
       if( options.interactive=='guideline' && options.events )
       {
