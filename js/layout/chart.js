@@ -45,8 +45,14 @@
     chartPromise.then( function( chart ) {
       
       panel.on( 'refreshData', function updateChart( event, context ) {
-        if( chart && chart.domSelector )
+        if( chart && $.isFunction( chart.refreshData ) )
+        {
+          chart.refreshData( event, context );
+        }
+        else if( chart && chart.domSelector )
+        {
           d3.select( chart.domSelector ).call( chart );
+        }
       } );
       
       if( options.animated )

@@ -23,10 +23,16 @@
   function setFocusRange( chart, range ) 
   {
     var domain = chart.x2Axis.domain();
-    var val = range || domain[1];  // domain[1] is a range covering ALL TIME
-
-    chart.brushExtent( [ Math.max( domain[0], domain[1]-val ), domain[1] ] );
-    chart.update();
+    if( range === 0 || (domain[1]-range < domain[0]) )
+    {
+      chart.brushExtent( [0,0] );
+      chart.update();
+    }      
+    else
+    {
+      chart.brushExtent( [ domain[1]-range, domain[1] ] );
+      chart.update();
+    }
   }
 
   function createRangeChooser( chart, ranges, label )
@@ -41,6 +47,7 @@
       options:{ 
         events:{ 
           selectmenuchange: function(context, event) { 
+            delete chart.defaultFocusRange;
             setFocusRange( chart, ranges.chartRange );
           }
         } 
@@ -149,23 +156,43 @@
         .datum( dataProjection )
         .call( chart )
       ;
-
-      if( options.defaultFocusRange )
-      {
-        setFocusRange( chart, options.defaultFocusRange );
-        if( options.ranges )
+      
+      var defaultRangeApplied = false;
+      chart.defaultFocusRange = options.defaultFocusRange;
+      function applyDefaultFocusRange() {
+        if( chart.defaultFocusRange )
         {
-          for( var r in options.ranges )
+          var domain = chart.x2Axis.domain();
+          var dx = (domain[1] - domain[0]);
+          
+          if( defaultRangeApplied && dx < chart.defaultFocusRange )
           {
-            if( options.defaultFocusRange == options.ranges[r].key )
+            // Chart lost data and now we're under the default range - reset.
+            defaultRangeApplied = false;
+            setFocusRange( chart, 0 );
+          }  
+          else if( !defaultRangeApplied && dx > chart.defaultFocusRange )
+          {
+            // Chart gained data and we're over the default range, so apply the 
+            // default and update the range chooser
+            defaultRangeApplied = true;
+            setFocusRange( chart, chart.defaultFocusRange, options.ranges );
+            if( options.ranges )
             {
-              if( rangeChooser )
-                $('.ui-selectmenu-text', rangeChooser ).html( options.ranges[r].displayName );
+              options.ranges.chartRange = chart.defaultFocusRange;
+              $('.widget-select', rangeChooser).trigger('widget-update');
             }
           }
         }
       }
-  
+      
+      chart.refreshData = function refreshData() {
+        d3.select( chart.domSelector ).call( chart );
+        applyDefaultFocusRange();
+      };
+
+      applyDefaultFocusRange();
+
       // This logic requires NVD3 v1.8.1 or later.
       if( options.interactive=='guideline' && options.events )
       {
