@@ -107,7 +107,9 @@
           left: options.leftMargin,
           right: options.rightMargin,
           bottom: 30
-        }) 
+        })
+        .focusHeight( 55 )
+        .focusMargin({ bottom: 25 })
         .useInteractiveGuideline( (options.interactive=='guideline')?true:false )
         .showLegend( options.showLegend?true:false )
         .focusEnable( options.showFocus?true:false )
