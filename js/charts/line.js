@@ -47,7 +47,7 @@
       options:{ 
         events:{ 
           selectmenuchange: function(context, event) { 
-            delete chart.defaultFocusRange;
+            chart.defaultFocusRange = ranges.chartRange;
             setFocusRange( chart, ranges.chartRange );
           }
         } 
@@ -147,8 +147,10 @@
         chart.dispatch.on( 'brush', function brushListener( event ) {
           var currentRange = +$('select', rangeChooser).val();
           var dx = event.extent[1] - event.extent[0];
-          if( currentRange && (dx != currentRange) )
+          var domain = chart.x2Axis.domain();
+          if( currentRange && (dx != currentRange) && (domain[1] != event.extent[1] ) )
           {
+            delete chart.defaultFocusRange;
             options.ranges.chartRange = options.ranges[0].key;
             $('.widget-select', rangeChooser).trigger('widget-update');
           }
@@ -186,6 +188,10 @@
               options.ranges.chartRange = chart.defaultFocusRange;
               $('.widget-select', rangeChooser).trigger('widget-update');
             }
+          }
+          else if( defaultRangeApplied )
+          {
+            setFocusRange( chart, chart.defaultFocusRange );
           }
         }
       }
