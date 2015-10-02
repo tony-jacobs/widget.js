@@ -49,12 +49,6 @@ widget.util = (function(){
       };
       
       options.layoutDataSource = options.layoutDataSource || ( options.layout ? 'options.layout' : config.mode );
-      
-      if( options.profile )
-      {
-        args.division = widget.get( options, 'profile.division' );
-        args.area = widget.get( options, 'profile.region' );
-      }
 
       if( widget.get( options, 'args.lastMod' ) )
       {

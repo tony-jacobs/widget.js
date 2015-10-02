@@ -89,14 +89,16 @@
       
       var dataProjection = [];
       
+      var i=0;
       $.each( options.data, function( key, dataHolder ) {
-        
         if( $.isArray( dataHolder ) || $.isFunction( dataHolder ) )
         {
           var datum = {
             key: widget.util.expandPath( '_{'+ key.replace(/\./g, "_") +'}' ),
-            values: factory.attachDataSource( dataHolder, domSelector, chartId )
+            values: factory.attachDataSource( dataHolder, domSelector, chartId ),
           };
+          if( dataHolder.disabled !== undefined )
+            datum.disabled = dataHolder.disabled;
           dataProjection.push( datum );
         }
       });
