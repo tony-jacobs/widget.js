@@ -118,6 +118,7 @@
         .showYAxis( options.showYAxis?true:false )
         .showXAxis( options.showXAxis?true:false )
         .interactive( (options.interactive=='hover')?true:false )
+        .duration(0)
       ;
       
       chart.yTickFormat( getFormatter( options.yFormat ) );
@@ -165,7 +166,9 @@
       
       var defaultRangeApplied = false;
       chart.defaultFocusRange = options.defaultFocusRange;
-      function applyDefaultFocusRange() {
+      function updateWithDefaultFocusRange() {
+        var now = Date.now();
+
         if( chart.defaultFocusRange )
         {
           var domain = chart.x2Axis.domain();
@@ -193,15 +196,17 @@
           {
             setFocusRange( chart, chart.defaultFocusRange );
           }
+          else
+            chart.update();
         }
+        else
+          chart.update();
+        console.log( "Refreshed chart in", (Date.now()-now) + " ms" );
       }
       
-      chart.refreshData = function refreshData() {
-        d3.select( chart.domSelector ).call( chart );
-        applyDefaultFocusRange();
-      };
+      chart.refreshData = updateWithDefaultFocusRange;
 
-      applyDefaultFocusRange();
+      updateWithDefaultFocusRange();
 
       // This logic requires NVD3 v1.8.1 or later.
       if( options.interactive=='guideline' && options.events )
