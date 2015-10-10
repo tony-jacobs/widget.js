@@ -11,13 +11,33 @@
 
 
   function createTab( parent, options, dataReadyCallback ) {
-    var labelHolder = $('<div/>' ).addClass( 'panelLabel unselectable' ).addClass( options.name +"Header" );
-
-    var titleBlock = $('<span/>').addClass( 'tabTitle' ).appendTo( labelHolder );
-    titleBlock.append( $( '<img/>', { src: options.icon_on || options.icon } ).addClass('icon') );
-    titleBlock.append( $( '<div/>', { text: options.label || options.name } ) );
-    labelHolder.hide();
-    $('#appHeader').append( labelHolder );
+    
+    if( options.tabHeader )
+    {
+      var labelHolder = $('<div/>' ).addClass( 'panelLabel unselectable' ).addClass( options.name +"Header" );
+  
+      var titleBlock = $('<span/>').addClass( 'tabTitle' );
+      if( "object" == $.type( options.headerLabel ) )
+      {
+        widget.layout( titleBlock, options.headerLabel );
+      }
+      else
+      {
+        var icon = options.icon_on || options.icon;
+        if( icon )
+          titleBlock.append( $( '<img/>', { src: icon } ).addClass('icon') );
+        
+        var name = options.label || options.name;
+        if( name )
+          titleBlock.append( $( '<div/>', { text: name } ) );
+      }
+      
+      labelHolder.append( titleBlock );
+      
+      labelHolder.hide();
+      $( options.tabHeader ).append( labelHolder );
+    }
+    
     var panel = $('<div/>').addClass( 'tabContentHolder' );
 
     var contentPane = $( '<div/>' ).addClass( 'contentPane' ).appendTo( panel );

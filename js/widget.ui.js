@@ -203,13 +203,21 @@ widget.ui = {
       var tabLabel;
       if( o.type == 'Tab' )
       {
-        var iconKey = ( tabIndex === options.defaultSelection ) ? 'icon_on' : 'icon_off';
-        var tabIcon = o[ iconKey ] || o.icon;
         tabLabel = $("<div/>").addClass( 'clickable unselectable ' + options.labelClass).addClass(options.labelClass+o.name).click( function() {
           tabManager.performSelection( o.view );
         });
-        var label = o.label || o.name;
-        tabLabel.append( $("<div/>").append( tabIcon ? $("<img/>", {src:tabIcon} ).addClass('iconHolder') : $("<div/>", { text: label } ) ) );
+
+        if( "object" == $.type( o.label ) )
+        {
+          widget.layout( tabLabel, o.label );
+        }
+        else
+        {
+          var iconKey = ( tabIndex === options.defaultSelection ) ? 'icon_on' : 'icon_off';
+          var tabIcon = o[ iconKey ] || o.icon;
+          var label = o.label || o.name;
+          tabLabel.append( $("<div/>").append( tabIcon ? $("<img/>", {src:tabIcon} ).addClass('iconHolder') : $("<div/>", { text: label } ) ) );
+        }
         tabLabel.data( o );
 
         if( tabIndex === options.defaultSelection )
