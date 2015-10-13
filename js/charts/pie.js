@@ -50,8 +50,8 @@
       pieChart.showLabels( options.showLabels===undefined ? true : options.showLabels );
 
       if( options.title )
-        pieChart.title( options.title );
-  
+        $( '<div/>', {html: options.title} ).addClass( 'chartTitle' ).prependTo( options.parent );
+
       d3.select( domSelector )
         .style( {width:width+'px', height:height+'px'} )
         .datum( dataProjection )
