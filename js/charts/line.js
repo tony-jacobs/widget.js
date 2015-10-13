@@ -19,10 +19,33 @@
     else
       return formatters[fmt] || formatters['default'];
   }
+  
+  function getDataDomain( dataProjection ) {
+    var domain = [Infinity,-Infinity];
+    for( var key in dataProjection )
+    {
+      var values = dataProjection[key].values;
+      if( values )
+      {
+        // decompose a knockout value set
+        if( $.isFunction( values ) )
+          values = values();
+        
+        if( values[0].x < domain[0] )
+          domain[0] = values[0].x;
+          
+        var last = values.length-1;
+        if( values[ last ].x > domain[1] )
+          domain[1] = values[last].x;
+
+      }
+    }
+    return domain;
+  }
 
   function setFocusRange( chart, range ) 
   {
-    var domain = chart.x2Axis.domain();
+    var domain = getDataDomain( chart.dataProjection );
     if( range === 0 || (domain[1]-range < domain[0]) )
     {
       chart.brushExtent( [0,0] );
