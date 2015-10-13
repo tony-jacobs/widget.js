@@ -110,22 +110,6 @@
     var chartPromise = $.Deferred();
     nv.addGraph( function() {
       
-      var dataProjection = [];
-      
-      var i=0;
-      $.each( options.data, function( key, dataHolder ) {
-        if( $.isArray( dataHolder ) || $.isFunction( dataHolder ) )
-        {
-          var datum = {
-            key: widget.util.expandPath( '_{'+ key.replace(/\./g, "_") +'}' ),
-            values: factory.attachDataSource( dataHolder, domSelector, chartId ),
-          };
-          if( dataHolder.disabled !== undefined )
-            datum.disabled = dataHolder.disabled;
-          dataProjection.push( datum );
-        }
-      });
-      
       var chart = nv.models.lineChart()
         .id( 'line-chart' )
         .margin({
@@ -143,7 +127,24 @@
         .interactive( (options.interactive=='hover')?true:false )
         .duration(0)
       ;
+
       
+      var dataProjection = [];
+      var i=0;
+      $.each( options.data, function( key, dataHolder ) {
+        if( $.isArray( dataHolder ) || $.isFunction( dataHolder ) )
+        {
+          var datum = {
+            key: widget.util.expandPath( '_{'+ key.replace(/\./g, "_") +'}' ),
+            values: factory.attachDataManager( dataHolder, chart ),
+          };
+          if( dataHolder.disabled !== undefined )
+            datum.disabled = dataHolder.disabled;
+          dataProjection.push( datum );
+        }
+      });
+      
+      chart.dataProjection = dataProjection;
       chart.yTickFormat( getFormatter( options.yFormat ) );
 
       var xFormat = getFormatter( options.xFormat );
@@ -190,8 +191,6 @@
       var defaultRangeApplied = false;
       chart.defaultFocusRange = options.defaultFocusRange;
       function updateWithDefaultFocusRange() {
-        var now = Date.now();
-
         if( chart.defaultFocusRange )
         {
           var domain = chart.x2Axis.domain();
@@ -220,11 +219,12 @@
             setFocusRange( chart, chart.defaultFocusRange );
           }
           else
+          {
             chart.update();
+          }
         }
         else
           chart.update();
-        console.log( "Refreshed chart in", (Date.now()-now) + " ms" );
       }
       
       chart.refreshData = updateWithDefaultFocusRange;

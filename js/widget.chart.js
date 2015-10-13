@@ -72,6 +72,37 @@ widget.ChartFactory = (function() {
     return dataSet;
   };
   
+    ChartFactory.prototype.attachDataManager = function attachDataManager( data, chart )
+  {
+    var dataSet = data;
+
+    if( typeof data == 'function' )
+    {
+      // dataSet is a COPY of the raw data
+      dataSet = data().slice( 0 );
+      var end = dataSet.length;
+
+      data.subscribe( function( oldData ) {
+        var newData = data();
+        if( newData.length > end )
+        {
+          var append = newData.slice( end );
+          end = newData.length;
+          for( var i=0; i<append.length; i++ )
+          {
+            dataSet.push( append[i] );
+          }
+        }
+        if( chart.refreshData )
+          chart.refreshData();
+        else
+          chart.update();
+      });
+    }
+    
+    return dataSet;
+  };
+  
   ChartFactory.prototype.createDataSource = function createDataSource( initalValues, changeListener )
   {
     var self = ko.observableArray( initalValues||[] );
