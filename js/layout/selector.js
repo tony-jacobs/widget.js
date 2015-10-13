@@ -72,7 +72,7 @@
         selector.empty();
         $.each( data.items, function( i, item ){
           if( $.type( item ) === "string" )
-            item = { key:item, name:item, displayName:item };
+            item = { key:item, name:item, displayName:widget.util.expandPath('_{'+item+'}') };
   
           var displayName = item.displayName || (item.key + ": " + item.name);
           var opt = $( '<option/>', { value: item.key, html: displayName } ).appendTo( selector );
