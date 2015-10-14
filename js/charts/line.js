@@ -163,6 +163,9 @@
       if( options.title )
         $( '<div/>', {html: options.title} ).addClass( 'chartTitle' ).prependTo( options.parent );
 
+      var defaultRangeApplied = false;
+      chart.defaultFocusRange = options.defaultFocusRange;
+
       var rangeChooser = null;
       if( options.ranges )
       {
@@ -173,7 +176,8 @@
           var currentRange = +$('select', rangeChooser).val();
           var dx = event.extent[1] - event.extent[0];
           var domain = chart.x2Axis.domain();
-          if( currentRange && (dx != currentRange) && (domain[1] != event.extent[1] ) )
+          
+          if( currentRange && (dx != currentRange) )
           {
             delete chart.defaultFocusRange;
             options.ranges.chartRange = options.ranges[0].key;
@@ -188,8 +192,6 @@
         .call( chart )
       ;
       
-      var defaultRangeApplied = false;
-      chart.defaultFocusRange = options.defaultFocusRange;
       function updateWithDefaultFocusRange() {
         if( chart.defaultFocusRange )
         {
