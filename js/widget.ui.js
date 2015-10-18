@@ -105,6 +105,7 @@ widget.ui = {
       }
     };
 
+    panel.on('closePopup', panel.actions.hide );
     contentHolder.append( popupFactory( panel, contentHolder ) );
 
     return panel.actions.show();
