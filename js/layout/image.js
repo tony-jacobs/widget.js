@@ -17,6 +17,16 @@
 
     var image = $('<img/>' ).addClass('unselectable').appendTo( view );
     
+    if( def.layout.defaultUrl )
+    {
+      if( !def.layout.url )
+        def.layout.url = def.layout.defaultUrl;
+        
+      image.error( function (){
+        $(this).unbind( "error" ).attr( "src", def.layout.defaultUrl );
+      });
+    }
+    
     image.update = function updateImage( event, context ) {
       if( context && context.stack )
       {
