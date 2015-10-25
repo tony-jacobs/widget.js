@@ -81,6 +81,13 @@ widget.ChartFactory = (function() {
       // dataSet is a COPY of the raw data
       dataSet = data().slice( 0 );
       var end = dataSet.length;
+      
+      data._reset = function resetDataSeries() {
+        while( dataSet.length > 0 ) {
+          dataSet.pop();
+        }
+        end = 0;
+      };
 
       data.subscribe( function( oldData ) {
         var newData = data();
