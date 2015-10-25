@@ -49,6 +49,10 @@
       pieChart.legendPosition( options.legendPosition===undefined ? 'top' : options.legendPosition );  
       pieChart.showLabels( options.showLabels===undefined ? true : options.showLabels );
       
+      
+      if( options.valueFormat )
+        pieChart.valueFormat( options.valueFormat );
+        
       if( options.colors )
         pieChart.color( options.colors );
 
