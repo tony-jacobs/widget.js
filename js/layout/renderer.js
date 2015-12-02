@@ -15,6 +15,15 @@
     if( !renderer )
     {
       key = widget.get( data, 'dynamicRenderer', 'Unknown Type' );
+      if( 'object'==$.type(key) )
+      {
+        var dr = widget.get( data, 'dynamicRendererKey', 'default' );
+        console.log( "raw", dr );
+        var dynamicKey = widget.util.expandPath( dr, def.data );
+        console.log( "expanded", dynamicKey, key );
+        key = key[ dynamicKey ];
+        console.log( "decoded", key );
+      }
       key = widget.util.expandPath( key, def.data );
       renderer = widget.util.get( 'renderers', key );
     }
