@@ -29,6 +29,17 @@
     }
   }
 
+  /**
+   * Displays the footer only if there is no content in the given holder.
+   */
+  function updateFooter( holder, footer )
+  {
+    if( footer.children().length )
+    {
+      footer.toggle( (holder.children().length === 0) );
+    }
+  }
+
   function createListView( def )
   {
     var parent = def.parent;
@@ -36,7 +47,7 @@
     var listOptions = def.options;
     
     var panel = $('<div/>' ).appendTo( parent );
-    var footer = $('<div/>').addClass( listOptions.footerStyleClass || 'footer' ).appendTo( parent );
+    var footer = $('<div/>').addClass( listOptions.footerStyleClass || 'footer' ).appendTo( parent ).toggle( false );
     $.each( ['max-width', 'margin-right'], function( i, key ) {
       if( listOptions[ key ] ) 
         panel.css( key, listOptions[key] );
@@ -80,12 +91,13 @@
           {
             layoutItem( change.value );
             resort = true;
+            updateFooter( holder, footer );
           }
           else if( change.status == 'deleted' )
           {
             $("."+change.value._vuid).remove();
             $( parent ).trigger( 'widget-update', def );
-            footer.toggle( data.length === 0 ); 
+            updateFooter( holder, footer );
           }
           else
             console.error( "Unknown array change:", change.index, change.status, change.value ); 
@@ -109,8 +121,8 @@
     footer.appendTo( parent );
     if( listOptions.footerLayout )
       widget.layout( footer, listOptions.footerLayout, {}, dataStack );
-    footer.toggle( data.length === 0 );
 
+    updateFooter( holder, footer );
     return panel;
   }
 
