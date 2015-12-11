@@ -1,5 +1,5 @@
 (function registerListLayout(){
-  
+
   var dispatch = widget.layout.register( 'list', createListView, {
     description: "Creates a list of widgets from a content array or from a data source"
   }, {
@@ -8,17 +8,17 @@
 
   function createItem( holder, item, listOptions, stack )
   {
-    var options = { 
-      listOptions: listOptions, 
+    var options = {
+      listOptions: listOptions,
       factory: listOptions.itemFactory
     };
-    
+
     var itemView = widget.layout( holder, item, options, stack );
     $(itemView).data( stack[0] );
-    
+
     return itemView;
   }
-  
+
   function sort( def, holder )
   {
     if( def.options.sortBy )
@@ -45,22 +45,22 @@
     var parent = def.parent;
     var listData = def.layout;
     var listOptions = def.options;
-    
+
     var panel = $('<div/>' ).appendTo( parent );
     var footer = $('<div/>').addClass( listOptions.footerStyleClass || 'footer' ).appendTo( parent ).toggle( false );
     $.each( ['max-width', 'margin-right'], function( i, key ) {
-      if( listOptions[ key ] ) 
+      if( listOptions[ key ] )
         panel.css( key, listOptions[key] );
     });
-    
+
     var holder = panel;
-    
+
     var data = listData.content || [];
     var dataStack = def.stack || [data];
-    
+
     if( def.data )
       dataStack.unshift( def.data );
-      
+
     var layoutItem = function layoutItem( item ) {
       var itemData;
       if( item.data )
@@ -70,10 +70,10 @@
 
       if( itemData )
         dataStack.unshift( itemData );
-        
-      if( !(def.options) || !(def.options.filter) || (def.options.filter(item)) )  
+
+      if( !(def.options) || !(def.options.filter) || (def.options.filter(item)) )
         createItem( holder, item, listOptions, dataStack );
-      
+
       if( itemData )
         dataStack.shift( itemData );
     };
@@ -84,7 +84,7 @@
       var resort = false;
       data.subscribe( function onListChanged( changes ) {
         for( var i=0; i<changes.length; i++ )
-        {    
+        {
           var change = changes[i];
 
           if( change.status == 'added' )
@@ -100,14 +100,14 @@
             updateFooter( holder, footer );
           }
           else
-            console.error( "Unknown array change:", change.index, change.status, change.value ); 
+            console.error( "Unknown array change:", change.index, change.status, change.value );
         }
         if( resort )
           sort( def, holder );
       }, undefined, 'arrayChange' );
       data = listData.content();
     }
-    
+
     if( listOptions.holderClass )
       holder = $('<div/>' ).addClass( listOptions.holderClass ).appendTo( panel );
 
