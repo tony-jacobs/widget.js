@@ -1,8 +1,8 @@
 (function registerCheckBoxLayout(){
-  
+
   widget.layout.register( 'checkBox', checkBoxView, {
     description: "TODO!"
-  }, 
+  },
   {
     styleClass: 'dataCheckBox'
   });
@@ -12,8 +12,9 @@
     var view = def.parent;
     var data = def.layout;
     var options = def.options;
-    
-    var label = data.name ? $('<div/>', {html: data.name} ) : $("<label><input type='checkbox'/>" + (data.label||'') +"</label>");
+
+    var labelText = widget.util.expandPath(data.label||'', def.stack[1]);
+    var label = data.name ? $('<div/>', {html: data.name} ) : $("<label><input type='checkbox'/>" + labelText +"</label>");
     var checkbox = $('input', label ) || label;
 
     if( data.excerpt )
@@ -33,14 +34,14 @@
         else
           widget.set( def.stack[1], data.dataSource.path, newVal );
       }
-      
+
       label.trigger( 'toggle', { oldVal: !newVal, newVal: newVal } );
     });
 
     var sourceData;
     if( data.value !== undefined )
-      sourceData = widget.util.expandPath( data.value, def.stack[0] );
-      
+      sourceData = widget.util.expandPath( data.value, def.stack[1] );
+
     if( sourceData )
     {
       label.toggleClass( 'selected', true );
@@ -51,10 +52,10 @@
     {
       widget.util.set( data.dataSource.storeType, data.dataSource.path, data );
     }
-    
+
     if( options.autoHide && sourceData === undefined )
       return view;
-      
+
     if( data.dataSource )
     {
       label.update = function updateCheckbox( event, context ) {
