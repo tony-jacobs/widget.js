@@ -512,3 +512,25 @@ button {
 .menuWidget {
   position: relative;
 }
+
+[tooltip]::before {
+  border-radius: 4px;
+  color: rgba( $selectForeground, 0.5 );
+  content: attr( tooltip );
+  max-width: 50%;
+  opacity: 0;
+  padding: 4px;
+  position: absolute;
+  transition: all 0.05s ease;
+}
+
+[tooltip]:hover::before {
+  background: rgba( $selectBackgroundHover, 0.9 );
+  margin-left: 0;
+  margin-top: 40px;
+  opacity: 1;
+}
+
+[tooltip]:not([tooltip-persistent])::before {
+  pointer-events: none;
+}

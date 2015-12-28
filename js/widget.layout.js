@@ -219,6 +219,12 @@ widget.layout = (function(){
         w.view.addClass( w.options._styleClass );
       }
 
+      if( w.options.tooltip )
+      {
+        w.options._tooltip = widget.util.expandPath( w.options.tooltip, w.data );
+        w.view.attr( 'tooltip', w.options._tooltip );
+      }
+
       w.view.on( 'widget-update', function onUpdate( event, context ) {
         if( $.isFunction( w.view.update ) )
           w.view.update( event, context );
