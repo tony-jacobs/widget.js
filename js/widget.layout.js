@@ -10,7 +10,7 @@ widget.assets = (function(){
 })();
 
 widget.layout = (function(){
-  
+
   var assets = widget.assets;
   var visionUID = 10000;
 
@@ -62,12 +62,12 @@ widget.layout = (function(){
   {
     switch( $.type( obj ) )
     {
-      case 'array': 
+      case 'array':
         return obj;
-        
-      case 'function': 
+
+      case 'function':
         return $.isArray( obj() ) ? obj :  asArray( obj() );
-        
+
       case 'object':
         var result = ko.observableArray();
         result.onKeyAdded = function( key ) {
@@ -76,12 +76,12 @@ widget.layout = (function(){
             value: obj[key]
           });
         };
-        
+
         for( var key in obj )
           result.onKeyAdded( key );
 
         return result;
-      
+
       default:
         return [ obj ];
     }
@@ -90,12 +90,12 @@ widget.layout = (function(){
   function loadDataSource( dataSource, baseContent, options )
   {
     var db = widget.util.getData( dataSource.type, window[dataSource.type]||{} );
-    
+
     var path = widget.util.expandPath( dataSource.path );
     var sourceData = widget.get( db, path, {} );
     if( sourceData.content && $.isArray( sourceData.content ) )
       sourceData = sourceData.content;
-      
+
     var data = asArray( sourceData||[] );
 
     if( options.sort )
@@ -115,16 +115,16 @@ widget.layout = (function(){
       }
     });
   }
-  
+
   function doPreload( preload )
   {
     var addStyle = function( cssData ) {
       $("head").append("<style>" + cssData + "</style>");
     };
-    
+
     if( ! $.isArray( preload ) )
       preload = [ preload ];
-      
+
     var promises = [];
     for( var j in preload )
       promises.push( $.ajax({ url: preload[j], success: addStyle }) );
@@ -132,9 +132,9 @@ widget.layout = (function(){
     return $.when.apply( this, promises );
   }
 
-  function dispatch( parent, layout, options, defaultHandler, stack ) 
+  function dispatch( parent, layout, options, defaultHandler, stack )
   {
-    // If we have a preload list, then create and return a promise that honors 
+    // If we have a preload list, then create and return a promise that honors
     // once all of the preloads are done.
     if( layout.preload )
     {
@@ -151,21 +151,21 @@ widget.layout = (function(){
       options: options || {},
       stack: []
     };
-    
-    // Make a shallow copy of the data stack, as it gets pushed and popped a 
+
+    // Make a shallow copy of the data stack, as it gets pushed and popped a
     // lot, and our downstream code may take a snapshot of things.
     stack = stack || widget.util.getStack();
     if( stack && stack.length )
     {
       for( var i=0; i<stack.length; i++ )
-        w.stack.push( stack[i] ); 
+        w.stack.push( stack[i] );
     }
     else
       w.stack.push( layout );
-    
+
     w.data = w.stack[0];
-    
-    function configureRenderer( w, options ) 
+
+    function configureRenderer( w, options )
     {
       var typeKey = w.layout.rendererKey || w.layout.type;
 
@@ -183,7 +183,7 @@ widget.layout = (function(){
         w.layout.rendererKey = typeKey;
     }
 
-    // Generate an options object by considering the layout's default values, 
+    // Generate an options object by considering the layout's default values,
     // any options on the data object, and the parameter options (last one wins)
     w.options = $.extend( {}, self.defaults[w.layout.rendererKey]||{}, w.options||{}, w.layout.options||{} );
     var factory = w.options.factory;
@@ -195,10 +195,10 @@ widget.layout = (function(){
     {
       w.layout.content = loadDataSource( w.layout.dataSource, w.layout.content, w.options );
     }
-    
+
     if( w.data )
       w.data._vuid = w.data._vuid||('vuid-'+(visionUID++));
-    
+
     lifecycle( 'dataReady', w );
     configureRenderer( w, w.options.listOptions );
 
@@ -228,9 +228,9 @@ widget.layout = (function(){
       w.view.on( 'widget-update', function onUpdate( event, context ) {
         if( $.isFunction( w.view.update ) )
           w.view.update( event, context );
-        
+
         lifecycle( 'update', w, context );
-        
+
         if( w.options.styleClass )
         {
           var oldStyle = w.options._styleClass;
@@ -242,14 +242,14 @@ widget.layout = (function(){
           }
         }
       } );
-      
+
       w.view.on( 'remove', function onRemoved() {
         lifecycle( 'cleanup', w );
       });
     }
-    
+
     lifecycle( 'layout', w );
-        
+
     if( w.view && w.options.events )
     {
       if( w.options.events.mouseenter || w.options.events.mouseleave )
@@ -258,10 +258,10 @@ widget.layout = (function(){
         w.view.on( 'mouseenter', function() { w.view.toggleClass( 'widget-rollover-on', true ); } );
         w.view.on( 'mouseleave', function() { w.view.toggleClass( 'widget-rollover-on', false ); } );
       }
-        
+
       if( w.options.events.click )
         w.view.addClass( 'widget-clickable' );
-      
+
       bindIf( 'mouseenter', w.view, w.options.events, w );
       bindIf( 'mouseleave', w.view, w.options.events, w );
       bindIf( 'mousemove', w.view, w.options.events, w );
@@ -276,13 +276,13 @@ widget.layout = (function(){
     }
 
     lifecycle( 'ready', w );
-    
+
     if( w.view )
       w.view.trigger( 'widget-update', w );
-    
+
     return w.view;
   }
-  
+
   function callEvent( events, key, context, event )
   {
     if( events && events[key] && $.isFunction( events[key]) )
@@ -290,13 +290,13 @@ widget.layout = (function(){
       return events[key]( context, event );
     }
   }
-  
+
   function bindIf( key, view, events, context )
   {
     if( events && events[key] )
       view.on( key, function( event ) { callEvent( events, key, context, event ); } );
   }
-  
+
   function lifecycle( eventKey, w, data )
   {
     var event = {
@@ -304,7 +304,7 @@ widget.layout = (function(){
     };
     if( data )
       event = $.extend( {}, data, event );
-      
+
     return callEvent( w.options.events, eventKey, w, event );
   }
 
@@ -344,27 +344,27 @@ widget.layout = (function(){
   var self = function layout( parent, data, options, stack ) {
     return dispatch( parent, data, self.getOptions( data.type, options ), self.registry.error, stack );
   };
-  
+
   self.registry = {};
   self.defaults = {};
   self.documentation = {};
   self.register = function register( key, implementation, docs, defaults ) {
     self.registry[ key ] = implementation;
     self.defaults[ key ] = defaults||{};
-    
+
     if( docs )
     {
       self.documentation[key] = ( $.type(docs)==='string' ) ? { description:docs } : docs;
     }
-    
+
     return dispatch;
   };
   self.createCooperativeFrame = createCooperativeFrame;
-  
+
   self.getOptions = function getOptions( type, values )
   {
     return $.extend( {}, self.defaults[type]||{}, values||{} );
   };
-  
+
   return self;
 })();
