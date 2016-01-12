@@ -1,5 +1,5 @@
 (function registerButtonLayout(){
-  
+
   widget.layout.register( 'button', createButtonView, {
     description: "TODO!"
   },
@@ -12,7 +12,7 @@
     var view = def.parent;
     var data = def.layout;
     var options = def.options;
-    
+
     var button = $('<button/>', {text: widget.util.expandPath( data.name, def.stack[0] )} ).appendTo( view );
 
     var actionContext = widget.util.get( 'actionManager', data.action );

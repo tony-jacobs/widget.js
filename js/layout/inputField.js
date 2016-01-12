@@ -1,5 +1,5 @@
 (function registerInputFieldLayout(){
-  
+
   widget.layout.register( 'inputField', createInputField, {
     description: "TODO!"
   }, {
@@ -12,15 +12,15 @@
     var view = def.parent;
     var data = def.layout;
     var options = def.options;
-    
+
     var typeKey = data.dataSource ? data.dataSource.type : undefined;
-    
+
     var fieldKey = data.dataSource ? data.dataSource.path : undefined;
     if( fieldKey )
       fieldKey = fieldKey.replace( /\./g, "_" );
-      
+
     var panel = $('<div/>' );
-    
+
     var field = $('<input>').attr( {
       id: fieldKey,
       name: fieldKey,
@@ -44,14 +44,14 @@
         widget.util.set( typeKey, data.dataSource.path, newVal ) ;
       else
         widget.set( def.stack[1], data.dataSource.path, newVal );
-        
+
       if( event.keyCode == 13 )
       {
         panel.trigger( 'enter' );
       }
       else
       {
-        if( oldVal != newVal )  
+        if( oldVal != newVal )
           panel.trigger( 'fieldChange', { oldVal: oldVal, newVal: newVal } );
       }
     });

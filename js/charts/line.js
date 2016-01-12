@@ -1,8 +1,8 @@
 (function lineChart(){
-  
+
   widget.ChartFactory.registerChart( 'line', createLineChart );
-  
-  
+
+
   var formatters = {
     date: function(d) {
       return d3.time.format('%b %d')(new Date(d));
@@ -12,14 +12,14 @@
       return d.toFixed(0);
     }
   };
-  
+
   function getFormatter( fmt ) {
     if( $.isFunction( fmt ) )
       return fmt;
     else
       return formatters[fmt] || formatters['default'];
   }
-  
+
   function getDataDomain( dataProjection ) {
     var domain = [Infinity,-Infinity];
     for( var key in dataProjection )
@@ -30,10 +30,10 @@
         // decompose a knockout value set
         if( $.isFunction( values ) )
           values = values();
-        
+
         if( values[0].x < domain[0] )
           domain[0] = values[0].x;
-          
+
         var last = values.length-1;
         if( values[ last ].x > domain[1] )
           domain[1] = values[last].x;
@@ -43,14 +43,14 @@
     return domain;
   }
 
-  function setFocusRange( chart, range ) 
+  function setFocusRange( chart, range )
   {
     var domain = getDataDomain( chart.dataProjection );
     if( range === 0 || (domain[1]-range < domain[0]) )
     {
       chart.brushExtent( [0,0] );
       chart.update();
-    }      
+    }
     else
     {
       chart.brushExtent( [ domain[1]-range, domain[1] ] );
@@ -62,34 +62,34 @@
   {
     var chooser = $( '<div/>' ).addClass( 'chartRangeChooser' );
     var cxt = {};
-    
+
     var layout = {
       type:'selector',
-      items:ranges, 
+      items:ranges,
       dataSource: { path:'chartRange' },
-      options:{ 
-        events:{ 
-          selectmenuchange: function(context, event) { 
+      options:{
+        events:{
+          selectmenuchange: function(context, event) {
             chart.defaultFocusRange = ranges.chartRange;
             setFocusRange( chart, ranges.chartRange );
           }
-        } 
-      } 
+        }
+      }
     };
-    
+
     if( label )
       layout.label = label;
-                    
+
     widget.layout( chooser, layout, undefined, [chart,ranges] );
-    
+
     return chooser;
   }
 
   function createLineChart( factory, options ) {
-    
+
     var chartId = factory.createChartNode( options, 'line', 'svg' );
     var domSelector = '#'+chartId;
-    
+
     options = $.extend( {
       width: 350,
       height: 350,
@@ -103,13 +103,13 @@
       xFormat: 'date',
       yFormat: 'default'
     }, options );
-  
+
     var height = $.isNumeric(options.height) ? options.height+'px' : options.height;
     var width = $.isNumeric(options.width) ? options.width+'px' : options.width;
 
     var chartPromise = $.Deferred();
     nv.addGraph( function() {
-      
+
       var chart = nv.models.lineChart()
         .id( 'line-chart' )
         .margin({
@@ -128,7 +128,7 @@
         .duration(0)
       ;
 
-      
+
       var dataProjection = [];
       var i=0;
       $.each( options.data, function( key, dataHolder ) {
@@ -143,7 +143,7 @@
           dataProjection.push( datum );
         }
       });
-      
+
       chart.dataProjection = dataProjection;
       chart.yTickFormat( getFormatter( options.yFormat ) );
 
@@ -156,8 +156,8 @@
 
       chart.tooltip.headerFormatter( xFormat );
       chart.interactiveLayer.tooltip.headerFormatter( xFormat );
-      chart.xAxis.tickFormat( getAxisFormatter( chart.xAxis ) );      
-      chart.x2Axis.tickFormat( getAxisFormatter( chart.x2Axis ) );      
+      chart.xAxis.tickFormat( getAxisFormatter( chart.xAxis ) );
+      chart.x2Axis.tickFormat( getAxisFormatter( chart.x2Axis ) );
 
 
       if( options.title )
@@ -171,12 +171,12 @@
       {
         rangeChooser = createRangeChooser( chart, options.ranges, options.focusRangeLabel );
         $( rangeChooser ).appendTo( options.parent );
-        
+
         chart.dispatch.on( 'brush', function brushListener( event ) {
           var currentRange = +$('select', rangeChooser).val();
           var dx = event.extent[1] - event.extent[0];
           var domain = chart.x2Axis.domain();
-          
+
           if( currentRange && (dx != currentRange) )
           {
             delete chart.defaultFocusRange;
@@ -185,28 +185,28 @@
           }
         });
       }
-      
+
       d3.select( domSelector )
         .style( {width:width, height:height} )
         .datum( dataProjection )
         .call( chart )
       ;
-      
+
       function updateWithDefaultFocusRange() {
         if( chart.defaultFocusRange )
         {
           var domain = chart.x2Axis.domain();
           var dx = (domain[1] - domain[0]);
-          
+
           if( defaultRangeApplied && dx < chart.defaultFocusRange )
           {
             // Chart lost data and now we're under the default range - reset.
             defaultRangeApplied = false;
             setFocusRange( chart, 0 );
-          }  
+          }
           else if( !defaultRangeApplied && dx > chart.defaultFocusRange )
           {
-            // Chart gained data and we're over the default range, so apply the 
+            // Chart gained data and we're over the default range, so apply the
             // default and update the range chooser
             defaultRangeApplied = true;
             setFocusRange( chart, chart.defaultFocusRange, options.ranges );
@@ -228,7 +228,7 @@
         else
           chart.update();
       }
-      
+
       chart.refreshData = updateWithDefaultFocusRange;
 
       updateWithDefaultFocusRange();
@@ -240,14 +240,14 @@
         var chartView = $(domSelector);
         if( $.isFunction( options.events.rollover ) )
         {
-          chartView.on( 'mousemove', function( event ){ 
-  
+          chartView.on( 'mousemove', function( event ){
+
             var oldData = data;
             if( $( '.nv-guideline', chartView ).length )
               data = chart.interactiveLayer.tooltip.data();
             else
               data = null;
-            
+
             // fire event if the index changed, or the value went to or from null.
             if( ( !data && oldData ) || (data && (!oldData || (oldData.index != data.index) ) ) )
               options.events.rollover( options, data );
@@ -255,23 +255,23 @@
         }
         if( $.isFunction( options.events.select ) )
         {
-          chartView.on( 'click', function( event ){ 
-  
+          chartView.on( 'click', function( event ){
+
             if( $( '.nv-guideline', chartView ).length )
               data = chart.interactiveLayer.tooltip.data();
             else
               data = null;
-            
+
             options.events.select( options, data );
           } );
         }
       }
-      
+
       factory.charts[ chartId ] = chart;
       chart.domSelector = domSelector;
       chartPromise.resolve( chart );
     });
-    
+
     return chartPromise;
   }
 })();
