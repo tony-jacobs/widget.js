@@ -57,7 +57,7 @@
         pieChart.color( options.colors );
 
       if( options.title )
-        $( '<div/>', {html: options.title} ).addClass( 'chartTitle' ).prependTo( options.parent );
+        $( '<div/>', {html: widget.util.expandPath( options.title )} ).addClass( 'chartTitle' ).prependTo( options.parent );
 
       if( options.legendLineHeight )
       {

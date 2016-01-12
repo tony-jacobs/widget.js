@@ -25,7 +25,7 @@
       id: fieldKey,
       name: fieldKey,
       type: data.fieldType || 'text',
-      placeholder: data.placeholder
+      placeholder: widget.util.expandPath( data.placeholder, def.data )
     }).addClass( 'inputField' );
 
     if( options.readonly )
