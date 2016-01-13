@@ -1,12 +1,5 @@
-// Bind an event 'destroyed' to the destruction of a DOM node
-(function($){
-  $.event.special.destroyed = {
-    remove: function(o) { if (o.handler) o.handler(); }
-  };
-})(jQuery);
 
-
-var widget = (function(){
+(function widgetJSClosure(){
 
   function get( obj, path, defaultValue )
   {
@@ -221,6 +214,8 @@ var widget = (function(){
     }
   };
 
-  return self;
-})();
+  window.widget = window.widget||{};
+  for( var key in self )
+    window.widget[key] = self[key];
 
+})();
