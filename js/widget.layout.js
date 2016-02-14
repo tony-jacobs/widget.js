@@ -285,9 +285,20 @@ widget.layout = (function(){
 
   function callEvent( events, key, context, event )
   {
-    if( events && events[key] && $.isFunction( events[key]) )
+    if( events && events[key] )
     {
-      return events[key]( context, event );
+      if( $.type( events[key] === "string" ) )
+      {
+        // jshint ignore:start
+        // tonyj:  eval() is a necessary evil when processing inline functions here
+        events[key] = eval( "(function anon(context,event){"+events[key]+"})" );
+        // jshint ignore:end
+      }
+
+      if( $.isFunction( events[key]) )
+      {
+        return events[key]( context, event );
+      }
     }
   }
 
@@ -364,6 +375,23 @@ widget.layout = (function(){
   self.getOptions = function getOptions( type, values )
   {
     return $.extend( {}, self.defaults[type]||{}, values||{} );
+  };
+
+  self.load = function load( parent, url ) {
+    return $.ajax({url:url}).then( function layoutAutoload( data ){
+      self.render( parent, data );
+    });
+  };
+
+  self.render = function render( parent, widgetDoc )
+  {
+    for( var i in widgetDoc.renderers )
+      widget.util.set( 'renderers', i, widgetDoc.renderers[i] );
+
+    return widget.layout( parent||'#widget', {
+      type: 'renderer',
+      dynamicRenderer: widgetDoc.mainRenderer||'main'
+    } );
   };
 
   return self;
