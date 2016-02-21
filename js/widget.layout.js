@@ -287,11 +287,11 @@ widget.layout = (function(){
   {
     if( events && events[key] )
     {
-      if( $.type( events[key] === "string" ) )
+      if( $.type( events[key] ) === "string" )
       {
         // jshint ignore:start
-        // tonyj:  eval() is a necessary evil when processing inline functions here
-        events[key] = eval( "(function anon(context,event){"+events[key]+"})" );
+        // tonyj:  eval (via Function constructor) is a necessary evil when processing inline functions here
+        events[key] = Function( 'context', 'event',  events[key] );
         // jshint ignore:end
       }
 
