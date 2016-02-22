@@ -4,28 +4,39 @@
     description: "Creates a dynamic renderer via indirection, allowing complex data structures"
   } );
 
-  function createRendererView( def )
+  function getRendererLayout( def )
   {
-    var view = def.parent;
-    var data = def.layout;
-    var options = def.options;
-
-    var renderer = widget.get( data, 'staticRenderer' );
-    var key;
+    var key = 'staticRenderer';
+    var renderer = widget.get( def.layout, key );
     if( !renderer )
     {
-      key = widget.get( data, 'dynamicRenderer', 'Unknown Type' );
+      key = widget.get( def.layout, 'dynamicRenderer', 'Unknown Type' );
       if( 'object'==$.type(key) )
       {
-        var dynamicKey = widget.util.expandPath( widget.get( data, 'dynamicRendererKey', 'default' ), def.data );
+        var dynamicKey = widget.util.expandPath( widget.get( def.layout, 'dynamicRendererKey', 'default' ), def.data );
         key = key[ dynamicKey ];
       }
       key = widget.util.expandPath( key, def.data );
       renderer = widget.util.get( 'renderers', key );
     }
 
-    var panel = $('<div/>' ).addClass( 'renderer' ).appendTo( view );
-    if( key )
+    return {
+      key: key,
+      layout: renderer
+    };
+  }
+
+  function renderPanel( def, renderer, key, panel )
+  {
+    def._currentRendererKey = key;
+
+    if( panel )
+      panel.empty().removeClass();
+    else
+      panel = $('<div/>' );
+
+    panel.addClass( 'renderer' );
+    if( key != 'staticRenderer' )
       panel.addClass( key );
 
     if( renderer && renderer.layout )
@@ -53,11 +64,26 @@
       panel.append( $('<div/>', {text: JSON.stringify(data) } ).addClass('data') );
     }
 
-    if( data.action )
-    {
-      panel.addClass( 'clickable' ).click( data.action );
-    }
 
+    return panel;
+  }
+
+  function createRendererView( def )
+  {
+    var oldKey = def._currentRendererKey;
+
+    var info = getRendererLayout( def );
+    var panel = renderPanel( def, info.layout, info.key );
+
+    panel.update = function updateRenderer( event, context ) {
+      var newInfo = getRendererLayout( def );
+      if( def._currentRendererKey != newInfo.key )
+      {
+        renderPanel( def, newInfo.layout, newInfo.key, panel );
+      }
+    };
+
+    panel.appendTo( def.parent );
     return panel;
   }
 
