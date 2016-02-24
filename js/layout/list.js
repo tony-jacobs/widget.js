@@ -32,12 +32,16 @@
   /**
    * Displays the footer only if there is no content in the given holder.
    */
-  function updateFooter( holder, footer )
+  function updateFooter( def, holder, footer )
   {
-    if( footer.children().length )
+    var footerMode = widget.get( def, 'options.footerMode', 'emptyContent' );
+    if( footerMode == 'emptyContent' )
     {
-      footer.toggle( (holder.children().length === 0) );
+      if( footer.children().length )
+        footer.toggle( (holder.children().length === 0) );
     }
+    else
+      footer.toggle( true );
   }
 
   function createListView( def )
@@ -91,13 +95,13 @@
           {
             layoutItem( change.value );
             resort = true;
-            updateFooter( holder, footer );
+            updateFooter( def, holder, footer );
           }
           else if( change.status == 'deleted' )
           {
             $("."+change.value._vuid).remove();
             $( parent ).trigger( 'widget-update', def );
-            updateFooter( holder, footer );
+            updateFooter( def, holder, footer );
           }
           else
             console.error( "Unknown array change:", change.index, change.status, change.value );
@@ -122,7 +126,7 @@
     if( listOptions.footerLayout )
       widget.layout( footer, listOptions.footerLayout, {}, dataStack );
 
-    updateFooter( holder, footer );
+    updateFooter( def, holder, footer );
     return panel;
   }
 
