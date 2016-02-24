@@ -87,9 +87,9 @@ widget.layout = (function(){
     }
   }
 
-  function loadDataSource( dataSource, baseContent, options )
+  function loadDataSource( dataSource, baseContent, options, def )
   {
-    var db = widget.util.getData( dataSource.type, window[dataSource.type]||{} );
+    var db = dataSource.type ? widget.util.getData( dataSource.type, window[dataSource.type]||{} ) : (def.data||{});
 
     var path = widget.util.expandPath( dataSource.path );
     var sourceData = widget.get( db, path, {} );
@@ -193,7 +193,7 @@ widget.layout = (function(){
 
     if( w.layout.hasOwnProperty( 'dataSource' ) )
     {
-      w.layout.content = loadDataSource( w.layout.dataSource, w.layout.content, w.options );
+      w.layout.content = loadDataSource( w.layout.dataSource, w.layout.content, w.options, w );
     }
 
     if( w.data )

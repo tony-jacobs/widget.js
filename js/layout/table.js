@@ -88,38 +88,39 @@
         rowItem.name = col.name;
       else
         rowItem.name = 'Column ' + (i+1);
-      
+
       var colClass = 'column';
       if( col.options && col.options.styleClass )
         colClass = colClass + ' ' + col.options.styleClass;
       rowItem.options.styleClass = colClass;
-      
+
       renderer.layout.content.push( rowItem );
     }
-    
+
     return contentLayout;
   }
-  
-  function createTableView( def ) 
+
+  function createTableView( def )
   {
     var headerLayout = createHeaderLayout( def.layout.columns, def.options );
     var contentLayout = createContentLayout( def.layout.columns, def.layout.dataSource, def.layout.contentOptions );
-    
+
     var holder = $('<div/>').addClass( def.options.styleClass );
 
-    widget.layout( holder, headerLayout );
-    
+    var contextStack = [ def.stack[1]||def.data ];
+    widget.layout( holder, headerLayout, undefined, contextStack );
+
     def.table = {
       header: headerLayout,
       content: contentLayout
     };
-    
+
     contentLayout.options.events = {
       ready: function onListReady( context, event ) {
         def.table.data = context.layout.content;
       }
     };
-    widget.layout( holder, contentLayout );
+    widget.layout( holder, contentLayout, undefined, contextStack );
 
     return holder.appendTo( def.parent );
   }
