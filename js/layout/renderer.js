@@ -61,7 +61,7 @@
     else
     {
       panel.append( $('<div/>', {text: key } ).addClass('title') );
-      panel.append( $('<div/>', {text: JSON.stringify(data) } ).addClass('data') );
+      panel.append( $('<div/>', {text: JSON.stringify(def.data||{}) } ).addClass('data') );
     }
 
 
