@@ -1,5 +1,5 @@
 (function registerTableLayout(){
-    
+
   widget.layout.register( 'table', createTableView, {
     description: "Creates a table composed of a header and a list of viewers"
   },{
@@ -15,7 +15,7 @@
         styleClass: options.headerStyleClass ||'headerRow'
       })
     };
-    
+
     var i;
     for( i=0; i<columns.length; i++ )
     {
@@ -24,24 +24,24 @@
         type: 'label',
         options: $.extend( {}, col.options )
       };
-      
+
       if( col.name !== undefined )
         headerItem.name = col.name;
       else
         headerItem.name = 'Column ' + (i+1);
-      
+
       var colClass = 'column';
       if( col.options && col.options.styleClass )
         colClass = colClass + ' ' + col.options.styleClass;
       headerItem.options.styleClass = colClass;
-      
+
       headerLayout.content.push( headerItem );
     }
     delete headerLayout.options.events;
-    
+
     return headerLayout;
   }
-  
+
   function createContentLayout( columns, dataSource, options )
   {
     options = options||{};
@@ -55,12 +55,12 @@
         content: []
       }
     };
-      
+
     var contentOptions = $.extend( {}, options, {
       styleClass: options.contentStyleClass ||'tableContent',
       renderer: renderer
     });
-    
+
     renderer.options.events = options.events;
     delete contentOptions.events;
 
@@ -78,7 +78,7 @@
         type: col.type || 'label',
         options: $.extend( {}, col.options )
       });
-      
+
       if( col.data !== undefined )
       {
         rowItem.name = col.data;
