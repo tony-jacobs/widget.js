@@ -78,17 +78,6 @@
   var self = {
     get: get,
     set: set,
-    showPopup: function showPopup( popupFactory, parent, options )
-    {
-      console.error( "widget.showPopup is deprecated.  Use widget.ui.showPopup() instead" );
-      return widget.ui.showPopup( popupFactory, parent, options );
-    },
-
-    generateTabs: function generateTabs( selector, options )
-    {
-      console.error( "widget.generateTabs is deprecated.  Use widget.ui.generateTabs() instead" );
-      return widget.ui.generateTabs( selector, options );
-    },
 
     getStorage: function getStorage( preferLocal )
     {
