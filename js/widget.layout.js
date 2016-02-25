@@ -385,8 +385,11 @@ widget.layout = (function(){
 
   self.render = function render( parent, widgetDoc, rendererKey )
   {
-    for( var i in widgetDoc.renderers )
-      widget.util.set( 'renderers', i, widgetDoc.renderers[i] );
+    if( widgetDoc )
+    {
+      for( var i in widgetDoc.renderers )
+        widget.util.set( 'renderers', i, widgetDoc.renderers[i] );
+    }
 
     return widget.layout( parent||'#widget', {
       type: 'renderer',
