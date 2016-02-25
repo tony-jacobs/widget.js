@@ -1,15 +1,15 @@
 
 widget.ui = {
   addAnchorSupport: function( body, options ) {
-    
-    // todo:  This code is buggy - it seems to find the stuff right, but 
+
+    // todo:  This code is buggy - it seems to find the stuff right, but
     //        scrolling doesn't always work.
-    
+
     options = $.extend( {}, options||{}, {
       scrollAnimationTime: 400,
       linkWindowTitle: 'widgetLinkViewer'
     });
-    
+
     $( 'a', body ).each( function( i, anchor ){
       anchor = $(anchor);
       var href = anchor.attr( 'href' );
@@ -35,7 +35,7 @@ widget.ui = {
       }
     });
   },
-  
+
   createUrlViewAction: function createUrlViewAction( data, parent ) {
     return function urlViewAction() {
       showIframePopup( parent || $('body'), data.url );
@@ -46,14 +46,14 @@ widget.ui = {
     var action = function rendererPopupAction() {
       widget.ui.showRendererPopup( renderer, data, parent );
     };
-    
+
     return action;
   },
-  
+
   showRendererPopup: function showRendererPopup( renderer, data, parent )
   {
     var holder = $('<div/>');
-    
+
     var layout = {
       type: 'renderer'
     };
@@ -63,11 +63,11 @@ widget.ui = {
       layout.staticRenderer = renderer;
 
     var options = {};
-    
+
     widget.layout( holder, layout, options, [ data ] );
     return showContentPopup( parent || $('body'), holder );
   },
-  
+
   showPopup: function showPopup( popupFactory, parent, options )
   {
     parent = $(parent);
@@ -110,7 +110,7 @@ widget.ui = {
 
     return panel.actions.show();
   },
-  
+
   generateTabs: function generateTabs( selector, options )
   {
     options = $.extend( {
@@ -317,8 +317,8 @@ function createScreen( options )
   });
 
   var createTabAction = function createTabAction( tabName ) {
-    return function() { 
-      tabManager.selectTab( tabName ); 
+    return function() {
+      tabManager.selectTab( tabName );
     };
   };
 
@@ -345,7 +345,7 @@ function createScreen( options )
 
     $.each( keys, function( i, match ){
       var item = Search.data[ match.ref ];
-  
+
       var searchTypeFilter = options.searchTypeFilter || []; //['news','alert',etc..];
       if( searchTypeFilter && searchTypeFilter.length )
       {
@@ -354,7 +354,7 @@ function createScreen( options )
       }
       else
         result.push( item );
-  
+
       if( result.length >= 20 )
       {
         clipped = true;
