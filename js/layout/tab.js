@@ -1,5 +1,5 @@
 (function registerTabLayout(){
-  
+
   var dispatch = widget.layout.register( 'tab', defaultTabView, {
     description: "TODO!"
   } );
@@ -11,11 +11,11 @@
 
 
   function createTab( parent, options, dataReadyCallback ) {
-    
+
     if( options.tabHeader )
     {
       var labelHolder = $('<div/>' ).addClass( 'panelLabel unselectable' ).addClass( options.name +"Header" );
-  
+
       var titleBlock = $('<span/>').addClass( 'tabTitle' );
       if( "object" == $.type( options.headerLabel ) )
       {
@@ -26,18 +26,18 @@
         var icon = options.icon_on || options.icon;
         if( icon )
           titleBlock.append( $( '<img/>', { src: icon } ).addClass('icon') );
-        
+
         var name = options.label || options.name;
         if( name )
           titleBlock.append( $( '<div/>', { text: name } ) );
       }
-      
+
       labelHolder.append( titleBlock );
-      
+
       labelHolder.hide();
       $( options.tabHeader ).append( labelHolder );
     }
-    
+
     var panel = $('<div/>').addClass( 'tabContentHolder' );
 
     var contentPane = $( '<div/>' ).addClass( 'contentPane' ).appendTo( panel );
@@ -56,7 +56,7 @@
     var parent = def.parent;
     var tabData = def.layout;
     var options = def.options;
-    
+
     var tabView = createTab( parent, tabData, function( contentPane, data, options ) {
       contentPane.empty();
 

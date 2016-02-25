@@ -7,7 +7,7 @@ widget.util = (function(){
     keyPrefix: 'widget.js'
   };
 
-  var watchers = {};   
+  var watchers = {};
   var progressNow = 0;
 
   return {
@@ -20,7 +20,7 @@ widget.util = (function(){
     getStack: function getStack() {
       return db.stack;
     },
-    
+
     getData: function getData( key, defaultValue ) {
       if( !db[key] )
         db[key] = defaultValue || {};
@@ -90,14 +90,14 @@ widget.util = (function(){
         {
           msg += " (" + pct + "%)";
         }
-    
+
         //$('.statusFeedbackPane').empty().text( msg );
         console.log( "STATUS " + msg );
       }
       else if( force )
         console.log( "STATUS " + msg );
     },
-    
+
     keyPaths: function keyPaths( obj, prefix )
     {
       if( prefix )
@@ -114,7 +114,7 @@ widget.util = (function(){
           case 'object':
             Array.prototype.push.apply( paths, keyPaths( obj[k], (prefix+k) ) );
             break;
-            
+
           default:
             paths.push( prefix+k );
         }
@@ -123,4 +123,3 @@ widget.util = (function(){
     }
   };
 })();
-
