@@ -12,13 +12,17 @@ widget.util.set( 'renderers', 'childRenderer', {
 });
 
   var mainNav = {
-    selector: '#tabNav',
-    defaultSelection:0,
-    tabClass:'widgetTabPanel',
-    labelSelector:['#appIconMenu','#appMobileMenu'],
-    labelClass:'iconMenuLabel',
-    selectedClass:'tabSelected',
-    tabData: [
+
+    type: 'tabGroup',
+    options: {
+      defaultSelection: 0,
+      tabClass: 'widgetTabPanel',
+      labelSelector:['#appIconMenu','#appMobileMenu'],
+      labelClass:'iconMenuLabel',
+      selectedClass:'tabSelected',
+      tabPath: 'main'
+    },
+    content: [
       { name:'Demo', label:'Demo', type:'Tab', layout:{
         type: "list",
         hide: true,
@@ -892,7 +896,7 @@ widget.util.set( 'renderers', 'childRenderer', {
   var launch = function launch() {
     startDataManager(
       function onLoad( data, isChanged ) {
-        createScreen( mainNav );
+        widget.layout( '#tabNav', mainNav );
       },
       function onUpdate( data, changeSet ) {
         if( changeSet )
