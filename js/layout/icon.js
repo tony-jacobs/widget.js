@@ -1,5 +1,5 @@
 (function registerIconLayout(){
-  
+
   widget.layout.register( 'icon', createIconView, {
     description: "Generates an icon.",
     data: {
@@ -22,7 +22,7 @@
     var view = def.parent;
     var data = def.layout;
     var options = def.options;
-    
+
     var icon = $('<div/>' ).addClass('unselectable').appendTo( view );
 
     var iconUrl = widget.util.expandPath( data.iconUrl );
@@ -36,17 +36,8 @@
     if( data.linkUrl )
     {
       var linkUrl = widget.util.expandPath( widget.util.expandPath( data.linkUrl ) );
-      if( options.mode=='link' )
-        action = createUrlAction( linkUrl );
-      else if( options.mode=='cooperativeFrame' )
-      {
-        var label = $( '<div/>' ).addClass( 'toolTitle' );
-        $('<img/>', {src: iconUrl} ).addClass( options.iconTitleStyleClass ).appendTo( label );
-        $('<div/>', {html: displayName} ).addClass( options.labelTitleStyleClass ).appendTo( label );
+      action = createUrlAction( linkUrl );
 
-        var parent = options.parentSelector ? $(options.parentSelector) : view.parent();
-        action = widget.layout.createCooperativeFrame( parent, linkUrl, label );
-      }
       if( action && options.trackingKey )
       {
         var oldAction = action;

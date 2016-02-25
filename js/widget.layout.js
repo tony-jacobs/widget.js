@@ -20,44 +20,6 @@ widget.layout = (function(){
     };
   }
 
-  function createCooperativeFrame( parent, url, label ) {
-    return function showCooperativeFrame() {
-      var animationTime = 250;
-
-      var holder = $( '<div/>' ).addClass( 'cooperativeFrameHolder' );
-      var iframe = $( '<iframe/>', {
-        scrolling:true,
-        marginheight:0,
-        marginwidth:0,
-        frameBorder: 0,
-        width: '100%',
-        height: '100%',
-        src: url
-      } ).addClass( 'cooperativeFrame' ).appendTo( holder );
-
-      var labelHolder = $( '.panelLabel' ).filter( ':visible' );
-      label = label || $( '<div/>', { text: 'X'} ).addClass( 'button' );
-
-      labelHolder.addClass( 'clickable' ).on( 'click', function() {
-        holder.remove();
-        label.hide( 'slide', {direction:'up'}, animationTime, function() {
-          label.remove();
-          $('#appHeader').toggleClass( 'sublabelActive', false );
-        });
-        parent.slideDown( animationTime );
-      });
-
-      labelHolder.append( label.hide() );
-      label.show( 'slide', {direction:'up'}, animationTime );
-      $('#appHeader').toggleClass( 'sublabelActive', true );
-
-      parent.slideUp( animationTime, function() {
-        holder.appendTo( parent.parent() );
-      } );
-
-    };
-  }
-
   function asArray( obj )
   {
     switch( $.type( obj ) )
@@ -370,7 +332,6 @@ widget.layout = (function(){
 
     return dispatch;
   };
-  self.createCooperativeFrame = createCooperativeFrame;
 
   self.getOptions = function getOptions( type, values )
   {
