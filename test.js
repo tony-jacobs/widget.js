@@ -63,13 +63,13 @@ widget.util.set( 'renderers', 'childRenderer', {
             options: {
               defaultRenderer: 'itemGridCell',
               events: {
-                update: function( context, event ) { 
+                update: function( context, event ) {
                   $( context.view ).toggle( widget.util.get( 'data', 'empty' )().length > 0 );
                 }
               }
             }
           },
-          
+
           {
             type: "namedPanel",
             name: "Grid Layout",
@@ -84,7 +84,7 @@ widget.util.set( 'renderers', 'childRenderer', {
               defaultRenderer: 'itemGridCell'
             }
           },
-          
+
           {
             type: "namedPanel",
             name: "Table Layout",
@@ -100,23 +100,23 @@ widget.util.set( 'renderers', 'childRenderer', {
               defaultRenderer: 'tableRowRenderer'
             }
           },
-          
+
           {
             type: 'tabGroup',
             content: [
-              { 
-                type:'Tab', 
-                name: 'all', 
-                label:'Selectors', 
-                layout: { 
-                  type:'list', 
+              {
+                type:'Tab',
+                name: 'all',
+                label:'Selectors',
+                layout: {
+                  type:'list',
                   content: [
                     {type:'label', name:'Selector test' },
-                    {type:'selector', name:'Selector', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select1'}, options:{ events:{ 
+                    {type:'selector', name:'Selector', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select1'}, options:{ events:{
                       load: function(){ widget.util.set('test','select1','three'); },
                       fieldChange: function(context, event) { console.log( "change", context, event ); }
                     } } },
-                    {type:'combobox', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select2'}, options:{ events:{ 
+                    {type:'combobox', items:['one', 'two', 'three'], dataSource:{ type:'test',path:'select2'}, options:{ events:{
                       load: function(){ widget.util.set('test','select2','three'); },
                       fieldChange: function(context, event) { console.error( "change", context, event ); }
                     } } },
@@ -126,8 +126,8 @@ widget.util.set( 'renderers', 'childRenderer', {
                     {type:'combobox', label: 'Editable with label:', placeholder:'myPlaceholder', items:['one', 'two', 'three'], options:{ events:{
                       fieldChange: function(context, event) { console.log( "change", context, event ); }
                     } } },
-                  ] 
-                } 
+                  ]
+                }
               },
               { type:'Tab', name: 'a', label:'Renderer', layout: { type:'renderer', dynamicRenderer:'simpleRenderer' } },
               { type:'Tab', name: 'b', label:'Sliders', layout: { type:'list', content: [
@@ -146,12 +146,12 @@ widget.util.set( 'renderers', 'childRenderer', {
                   minValue: 0,
                   maxValue: 1,
                   stepSize: 0.05,
-                  readout:true, 
+                  readout:true,
                   events: {
                     fieldChange: function( context, event ) {
                       console.log( "Slider3 delta::", widget.util.get( 'test', 'slider3' ) );
                     }
-                  } 
+                  }
                 } }
               ] } },
               { type:'Tab', name: 'c', label:'Section C', layout: { type:'label', name:'content for C' } },
@@ -220,10 +220,10 @@ widget.util.set( 'renderers', 'childRenderer', {
         {
           "type":"list",
           "content":[
-          
+
             { type:'renderer', dynamicRenderer:'parentRenderer' },
             { type:'list', dataSource: { type:'nest', path:'test' }, options:{ defaultRenderer:'childRenderer' } },
-  
+
             {
               type:'list',
               content:[
@@ -343,20 +343,20 @@ widget.util.set( 'renderers', 'childRenderer', {
                       name:'Save',
                       action:'saveNameEditor'
                     }
-                  ]              
+                  ]
                 }
               ]
             }
           ]
         }
       },
-      { name:'ChartDemo', label:'Chart Demo', type:'Tab', layout: 
+      { name:'ChartDemo', label:'Chart Demo', type:'Tab', layout:
         {
           type:"list",
           options: {
             events: {
               dataReady: function onDataReady() {
-                
+
                 var series = {
                   testList: {
                     type:"list",
@@ -368,7 +368,7 @@ widget.util.set( 'renderers', 'childRenderer', {
                     ]
                   }
                 };
-                
+
                 function createUpdater( seriesKey )
                 {
                   console.log( seriesKey );
@@ -379,28 +379,28 @@ widget.util.set( 'renderers', 'childRenderer', {
                     });
                   };
                 }
-                
+
                 var now = Date.now();
                 for( var i in series.testList.content )
                 {
                   var o = series.testList.content[i];
                   var s = widget.chartFactory.createDataSource( [] );
-                  
+
                   for( var j=50; j>=0; j-- )
                   {
                     s.push( {
-                      x: now-(j*1000), 
+                      x: now-(j*1000),
                       y: Math.floor( Math.random() * 100 )
                     });
                   }
-                  
+
                   var key = o.dataSeries;
                   widget.util.set( 'data', key, s );
                   var updater = createUpdater( key );
                   var timeout = 500 + Math.random()*750;
                   //o._interval = setInterval( updater, timeout );
                 }
-                
+
                 widget.util.setData( 'demo', series );
               }
             }
@@ -478,9 +478,9 @@ widget.util.set( 'renderers', 'childRenderer', {
                       events: {
                         rollover: function onRollover( options, series ) {
                           var rollover = [];
-                          
+
                           for( var i in series )
-                            rollover.push( series[i] );            
+                            rollover.push( series[i] );
                           console.log( "rollover", options, series, JSON.stringify( rollover ) );
                         }
                       }
@@ -493,7 +493,7 @@ widget.util.set( 'renderers', 'childRenderer', {
           ]
         }
       },
-      { 
+      {
         name:'Preload', label:'Preload', type:'Tab', layout: {
           type:"list",
           preload: [
@@ -504,20 +504,20 @@ widget.util.set( 'renderers', 'childRenderer', {
           ]
         }
       },
-      { 
+      {
         name:'Chat', label:'Chat', type:'Tab', layout: {
           type:"list",
           content:[
             { type:'label', name:'chat' },
-            { 
-              type:'list', 
-              dataSource: { type:'chat', path:'messages' }, 
-              options:{ 
+            {
+              type:'list',
+              dataSource: { type:'chat', path:'messages' },
+              options:{
                 defaultRenderer:'chatMessage',
                 events: {
                   load: function onLoad( context, event ) {
-                    var data = { 
-                      "foo":"bar", 
+                    var data = {
+                      "foo":"bar",
                       "baz":"fun"
                     };
 
@@ -530,11 +530,11 @@ widget.util.set( 'renderers', 'childRenderer', {
                 }
               }
             },
-            { 
-              type:'list', 
+            {
+              type:'list',
               content: [
                 {
-                  type:'inputField', 
+                  type:'inputField',
                   dataSource: { type:'chat', path:'post'},
                   options: {
                     events: {
@@ -550,9 +550,9 @@ widget.util.set( 'renderers', 'childRenderer', {
                     }
                   }
                 },
-                { 
-                  type:'label', 
-                  name:'postMessage', 
+                {
+                  type:'label',
+                  name:'postMessage',
                   options: {
                     styleClass: 'postButton',
                     events: {
@@ -565,7 +565,7 @@ widget.util.set( 'renderers', 'childRenderer', {
                           f( key );
                       }
                     }
-                  } 
+                  }
                 },
               ]
             }
@@ -573,8 +573,9 @@ widget.util.set( 'renderers', 'childRenderer', {
         }
       }
     ]
+
   };
-  
+
   widget.util.set( 'renderers', 'chatMessage', {
     type: "renderer",
     options: {
@@ -591,12 +592,12 @@ widget.util.set( 'renderers', 'childRenderer', {
   widget.util.setData( 'actionManager', {
     sampleAction: {
       enabled: true,
-      action: function() { 
+      action: function() {
         console.log( "Do something here" );
       }
     }
   });
-  
+
   widget.util.set( 'renderers', 'tableRowRenderer', {
       type: "renderer",
       options: {
@@ -673,11 +674,11 @@ widget.util.set( 'renderers', 'childRenderer', {
               "formatter": "percent"
             }
           }
-          
+
         ]
       }
     });
-    
+
     widget.util.set( 'renderers', 'demoItemCard', {
       type: "renderer",
       options: {
@@ -729,7 +730,7 @@ widget.util.set( 'renderers', 'childRenderer', {
         ]
       }
     });
-    
+
     widget.util.set( 'renderers', 'itemCard', {
       type: "renderer",
       options: {
@@ -781,7 +782,7 @@ widget.util.set( 'renderers', 'childRenderer', {
         ]
       }
     });
-    
+
     widget.util.set( 'renderers', 'itemGridCell', {
       type: "renderer",
       options: {
@@ -816,12 +817,12 @@ widget.util.set( 'renderers', 'childRenderer', {
         ]
       }
     });
-    
+
     widget.util.set( 'renderers', 'simpleRenderer', {
       type: 'renderer',
       layout: { type:'label', name:'Hello world' }
     });
-    
+
     widget.util.set( 'renderers', 'popupRenderer', {
       type: "renderer",
       layout: {
@@ -838,8 +839,8 @@ widget.util.set( 'renderers', 'childRenderer', {
                 }
               }
             ],
-            options: { 
-              styleClass: 'popupHeader' 
+            options: {
+              styleClass: 'popupHeader'
             }
           },
           {
@@ -857,7 +858,7 @@ widget.util.set( 'renderers', 'childRenderer', {
                 "options": {
                   "styleClass": "timestamp"
                 }
-              },  
+              },
               {
                 "type": "chart",
                 "chartType": "interactiveSparkline",
@@ -873,8 +874,8 @@ widget.util.set( 'renderers', 'childRenderer', {
                 }
               }
             ],
-            options: { 
-              styleClass: 'popupBody' 
+            options: {
+              styleClass: 'popupBody'
             }
           },
 
@@ -913,19 +914,19 @@ widget.util.set( 'renderers', 'childRenderer', {
       vvv: 'Vvv'
     }
   });
-  
+
   launch();
-  
+
   function test( str ) {
     var c = {
       test: "TEST",
       foo: 'vvv'
     };
-    
+
     var after = widget.parser.expandPath( str, c );
     console.log( "'" + str + "' --> '" + after + "'" );
   }
-  
+
   if( unitTest )
   {
     $.each( [
@@ -1012,7 +1013,7 @@ function startDataManager( onReady, onUpdate ) {
       ]
     }
   };
-  
+
   $.each( data, function( key, value ) {
     $.each( value.content, function( key, value ) {
       value.id = keyFactory( value );
@@ -1020,21 +1021,21 @@ function startDataManager( onReady, onUpdate ) {
       Search.appendRecord( value.id, value );
     });
   });
-  
+
   data.charts = generateSampleData();
   data.koList = ko.observableArray([
     { title: "Observable 1", lastModified: Date.now() },
     { title: "Observable 2", lastModified: Date.now() },
     { title: "Observable 3", lastModified: Date.now() }
   ]);
-  
+
   data.empty = ko.observableArray();
-  
+
   widget.util.setData( 'entity', { name:'test', led1:true, led2:undefined, led4:false, buzz:'Short', buzz2: undefined } );
   widget.util.set( 'count', 'entityCounts', [
     {off:0, on:undefined, total:1}
   ]);
-  
+
   // Tests the list and table sort function
   function addRandomValue() {
     widget.util.get( 'random', 'numbers' ).push( { value: Math.random() } );
@@ -1051,20 +1052,20 @@ function startDataManager( onReady, onUpdate ) {
   onReady( widget.util.setData( 'data', data ), true );
 }
 
-function generateSampleData() 
+function generateSampleData()
 {
   function sine() {
     var sin = [];
     var now =+new Date();
     for (var i = 0; i < 10; i++) {
       sin.push({
-        x: now - (10-i) * 1000, 
+        x: now - (10-i) * 1000,
         y: 50+100*Math.sin(i)
       });
     }
     return sin;
   }
-  
+
   function createUpdater( seriesKey )
   {
     return function dataSeriesUpdater() {
@@ -1088,23 +1089,20 @@ function generateSampleData()
   var len = vals.length;
   vals.forEach( function( val, index ) {
     data.series2.push( {
-      x: now-(len-index)*1000, 
+      x: now-(len-index)*1000,
       y: val
     });
     data.series3.push( {
-      x: now-(len-index)*1000, 
+      x: now-(len-index)*1000,
       y: val
     });
   });
-  
+
   // Object.keys( data ).forEach( function( seriesKey ) {
   //   var updater = createUpdater( seriesKey );
   //   var timeout = 500 + Math.random()*750;
   //   setInterval( updater, timeout );
-  // });  
+  // });
 
   return data;
 }
-
-
-
