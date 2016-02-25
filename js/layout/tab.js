@@ -43,11 +43,10 @@
     var contentPane = $( '<div/>' ).addClass( 'contentPane' ).appendTo( panel );
     contentPane.append( $('<div/>', { text: "Loading..."}) );
 
-    widget.util.loadData( options, function( data ) {
-      panel.data( data );
-      if( $.isFunction( dataReadyCallback ) )
-        dataReadyCallback( contentPane, data );
-    } );
+    var data = options.layout || {};
+    panel.data( data );
+    if( $.isFunction( dataReadyCallback ) )
+      dataReadyCallback( contentPane, data );
 
     return panel;
   }

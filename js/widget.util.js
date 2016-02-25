@@ -42,61 +42,6 @@ widget.util = (function(){
       widget.util.notifyWatchers( key, path, newValue );
     },
 
-    loadData: function loadData( options, callback ) {
-
-      var args = {
-        page: options.name
-      };
-      
-      options.layoutDataSource = options.layoutDataSource || ( options.layout ? 'options.layout' : config.mode );
-
-      if( widget.get( options, 'args.lastMod' ) )
-      {
-        args.lastMod = widget.get( options, 'args.lastMod' );
-      }
-
-      var persistenceKey = ( options.name == 'data' ) ? config.keyprefix+'.dataArgs' : null;
-
-
-      var dataLoaderRegistry = {
-        'options.layout': function optionsDataLoader( cacheArgs ) {
-          if( $.isFunction( callback ) )
-          {
-            callback( options.layout );
-          }
-        },
-        ajax: function ajaxDataLoader( cacheArgs ) {
-    
-          args = $.extend( args, (cacheArgs||{}) );
-  
-          var ajaxOpts = {
-            url: config.endpoint,
-            data: args,
-            dataType: 'jsonp',
-            success: function( response ) {
-              if( persistenceKey && widget.util.useDataPersistence )
-              {
-                if( persistenceKey && response.args )
-                  widget.getStorage().set( persistenceKey, response.args );
-              }
-              options.args = widget.get( response, 'args', options.args );
-  
-              if( $.isFunction( callback ) )
-                callback( response );
-            }
-          };
-          $.ajax( ajaxOpts );
-        }
-      };
-
-      var dataLoader = dataLoaderRegistry[ options.layoutDataSource ];
-
-      if( persistenceKey )
-        widget.getStorage().get( persistenceKey, dataLoader );
-      else
-        dataLoader( null );
-    },
-
     watch: function watch( key, path, observer )
     {
       var p = key+'.'+path;
