@@ -9,7 +9,7 @@
   {
     var view = def.parent;
     var data = def.layout;
-    var options = def.options;
+    var options = def.options || {};
 
     var labelHolderClass = options.labelHolder || 'labels';
     var tabOptions = $.extend( {}, options, {
@@ -22,9 +22,10 @@
       tabGroup = $('<div/>').addClass( labelHolderClass ).appendTo( view );
 
     var tabNav = widget.ui.generateTabs( view, tabOptions );
-    var tabManager = tabNav.data('tabManager');
-
-
+    def.tabManager = tabNav.data('tabManager');
+    if( options.tabPath )
+      widget.ui.setTabManager( def.tabManager, options.tabPath );
+      
     var dataStack = def.stack || [data];
     if( def.data )
       dataStack.unshift( def.data );

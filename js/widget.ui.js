@@ -156,7 +156,7 @@ widget.ui = {
         return tab;
       },
       currentTabName: function() {
-        var tab = $( '.'+options.tabClass+"."+options.selectedClass, view );
+        var tab = view.find( '> .'+options.tabClass+"."+options.selectedClass );
         return tab ? tab.data( 'name' ) : null;
       },
       performSelection: function( tab ) {
@@ -474,4 +474,51 @@ console.log( "Search result:", result );
 
 }
 
+(function tabMixinClosure(){
+  var tabManagers = {};
 
+  widget.ui.setTabManager = function setTabManager( manager, path ) {
+    if( !path )
+      path = 'main';
+    else if( !path.startsWith('main') )
+      path = 'main.'+path;
+
+    tabManagers[ path ] = manager;
+  };
+
+  widget.ui.selectTab = function selectTab( path ) {
+    var leaf;
+    var elements = path.split('.');
+    if( elements[0] != 'main' )
+      elements.unshift('main');
+
+    var mgrKey = '';
+    for( var i=0; i<(elements.length-1); i++ )
+    {
+      mgrKey = mgrKey + elements[i];
+      if( tabManagers[ mgrKey ] )
+      {
+        leaf = tabManagers[ mgrKey ].selectTab( elements[i+1] );
+        mgrKey += '.';
+      }
+      else
+      {
+        throw "Tab group '" + mgrKey + "' not found";
+      }
+    }
+    return leaf;
+  };
+
+  widget.ui.getTabPath = function getTabPath( prefix ) {
+    if( !prefix )
+    {
+      return widget.ui.getTabPath( 'main' );
+    }
+    else if( tabManagers[ prefix ] )
+    {
+      var name = tabManagers[ prefix ].currentTabName();
+      return name ? widget.ui.getTabPath( prefix+'.'+name ) : prefix;
+    }
+    return prefix;
+  };
+})();
