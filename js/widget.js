@@ -76,8 +76,13 @@
   }
 
   var self = {
+    eventBus: $('<div/>'),
     get: get,
     set: set,
+
+    fire: function( key, event ) {
+      self.eventBus.trigger( key, event||{} );
+    },
 
     getStorage: function getStorage( preferLocal )
     {

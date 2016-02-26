@@ -120,6 +120,22 @@ widget.util = (function(){
         }
       }
       return paths;
+    },
+
+    decodeUrlArguments: function decodeUrlArguments( argList )
+    {
+      argList = argList || window.location.search.substr( 1 ).split( '&' );
+      var result = {};
+      if( argList )
+      {
+        for( var i = 0; i < argList.length; ++i )
+        {
+          var kv = argList[ i ].split( '=', 2 );
+          if( kv[0] )
+            result[ kv[0] ] = (kv.length == 1) ? "" : decodeURIComponent( kv[1].replace( /\+/g, " " ) );
+        }
+      }
+      return result;
     }
   };
 })();

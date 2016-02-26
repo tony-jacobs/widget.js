@@ -131,6 +131,7 @@ widget.ui = {
 
     var tabManager = {
       type: 'tabManager',
+      eventBus: $('<div/>'),
       options: options,
       nextTab: function() {
         var next = $( '.'+options.selectedClass, view ).next( '.'+options.tabClass );
@@ -140,10 +141,10 @@ widget.ui = {
         var prev = $( '.'+options.selectedClass, view ).prev( '.'+options.tabClass );
         return tabManager.performSelection( prev );
       },
-      selectTab: function( tabName ) {
+      selectTab: function( tabName, suppressEvents ) {
         var tab = tabManager.getTab(tabName);
         if( tab && (tabName != tabManager.currentTabName() ) ) {
-          tabManager.performSelection( tab, null );
+          tabManager.performSelection( tab, suppressEvents );
         }
       },
       getTab: function( tabName ) {
@@ -155,12 +156,16 @@ widget.ui = {
         } );
         return tab;
       },
+      currentTab: function() {
+        return view.find( '> .'+options.tabClass+"."+options.selectedClass );
+      },
       currentTabName: function() {
-        var tab = view.find( '> .'+options.tabClass+"."+options.selectedClass );
+        var tab = tabManager.currentTab();
         return tab ? tab.data( 'name' ) : null;
       },
-      performSelection: function( tab ) {
-        if( tab && tab.length )
+      performSelection: function( tab, suppressEvents ) {
+
+        if( tab && tab.length && (tabManager.currentTabName() != tab.data('name')) )
         {
           view.children( '.'+options.tabClass ).each( function() { $(this).removeClass( options.selectedClass ).css( {display:'none'} ); } );
           tab.addClass( options.selectedClass ).css( {display:'inline-block'} );
@@ -191,6 +196,9 @@ widget.ui = {
 
           if( $.isFunction( tabManager.onTabChanged ) )
             tabManager.onTabChanged( tab.data( 'name'), tab, tabManager );
+
+          if( !suppressEvents )
+            tabManager.eventBus.trigger( 'tabChanged', tab );
 
           return tab;
         }
@@ -305,6 +313,14 @@ function showContentPopup( parent, content ) {
 
 (function tabMixinClosure(){
   var tabManagers = {};
+  var historyListener = null;
+  var urlKey = 'tab';
+
+
+  widget.eventBus.on( 'ready', function( context, event ){
+    if( event.tabManager )
+      urlKey = event.tabManager.urlKey;
+  });
 
   widget.ui.setTabManager = function setTabManager( manager, path ) {
     if( !path )
@@ -313,11 +329,26 @@ function showContentPopup( parent, content ) {
       path = 'main.'+path;
 
     tabManagers[ path ] = manager;
+
+    if( !historyListener )
+    {
+      historyListener = function( event, context ) {
+        if( context[ urlKey ] )
+          widget.ui.selectTab( context[ urlKey ], true );
+        else
+          console.log( "IGNORE history event", context );
+      };
+      widget.eventBus.on( 'history', historyListener );
+    }
+
+    manager.eventBus.on( 'tabChanged', function() {
+      widget.history.pushHistory( urlKey, widget.ui.getTabPath() );
+    });
   };
 
-  widget.ui.selectTab = function selectTab( path ) {
+  widget.ui.selectTab = function selectTab( path, silenceEvents ) {
     var leaf;
-    var elements = path.split('.');
+    var elements = path ? path.split('.') : [];
     if( elements[0] != 'main' )
       elements.unshift('main');
 
@@ -327,7 +358,7 @@ function showContentPopup( parent, content ) {
       mgrKey = mgrKey + elements[i];
       if( tabManagers[ mgrKey ] )
       {
-        leaf = tabManagers[ mgrKey ].selectTab( elements[i+1] );
+        leaf = tabManagers[ mgrKey ].selectTab( elements[i+1], silenceEvents );
         mgrKey += '.';
       }
       else
