@@ -24,7 +24,6 @@ module.exports = function(grunt) {
           'js/global.js',
           'js/widget.js',
           'js/widget.tracking.js',
-          'js/widget.search.js',
           'js/widget.layout.js',
           'js/widget.parser.js',
           'js/widget.ui.js',
