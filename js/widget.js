@@ -81,7 +81,9 @@
     set: set,
 
     fire: function( key, event ) {
+      self.eventBus.trigger( key+'.start', event||{} );
       self.eventBus.trigger( key, event||{} );
+      self.eventBus.trigger( key+'.complete', event||{} );
     },
 
     getStorage: function getStorage( preferLocal )

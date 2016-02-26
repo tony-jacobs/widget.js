@@ -317,7 +317,7 @@ function showContentPopup( parent, content ) {
   var urlKey = 'tab';
 
 
-  widget.eventBus.on( 'ready', function( context, event ){
+  widget.eventBus.on( 'ready.start', function( context, event ){
     if( event.tabManager )
       urlKey = event.tabManager.urlKey;
   });

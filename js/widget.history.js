@@ -29,10 +29,12 @@
     {
       widget.history.enabled = event.history.enabled;
       widget.history.defaultState = event.history.defaultState || {};
-
-      if( widget.history.enabled )
-        widget.history.processHistoryEvent();
     }
+  });
+
+  widget.eventBus.on( 'ready.complete', function( context, event ){
+    if( widget.history.enabled )
+      widget.history.processHistoryEvent();
   });
 
   window.addEventListener( 'popstate', function( event ) {
