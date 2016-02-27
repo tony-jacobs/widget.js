@@ -54,6 +54,7 @@ module.exports = function(grunt) {
           'js/layout/iframe.js',
           'js/layout/image.js',
           'js/layout/inputField.js',
+          'js/layout/item.js',
           'js/layout/label.js',
           'js/layout/list.js',
           'js/layout/menu.js',
