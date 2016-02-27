@@ -534,3 +534,26 @@ button {
 [tooltip]:not([tooltip-persistent])::before {
   pointer-events: none;
 }
+
+
+.sortAscending:after {
+  content: '\f0dd';
+}
+
+.sortDescending:after {
+  content: '\f0de';
+}
+
+.sortAscending:after,
+.sortDescending:after {
+  font-family: FontAwesome;
+  float:right;
+  display: inline-block;
+  width: 0;
+  margin-right: 4px;
+}
+
+.sortAscending:after:hover,
+.sortDescending:after:hover {
+  text-decoration: inherit;
+}

@@ -127,6 +127,10 @@
       widget.layout( footer, listOptions.footerLayout, {}, dataStack );
 
     updateFooter( def, holder, footer );
+
+    panel.update = function( event, context ) {
+      sort( def, holder );
+    };
     return panel;
   }
 

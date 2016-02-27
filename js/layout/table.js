@@ -6,7 +6,24 @@
     styleClass: 'tableWidget'
   } );
 
-  function createHeaderLayout( columns, options )
+  function createColumnSortHandler( col, def )
+  {
+    return function colHeaderClick( context, event ) {
+      if( def._sortColumn != col )
+      {
+        $( '.sortAscending', def.headerView ).toggleClass( 'sortAscending', false );
+        $( '.sortDescending', def.headerView ).toggleClass( 'sortDescending', false );
+        def._sortColumn = col;
+      }
+
+      col.options.sortDirection = (col.options.sortDirection == 'asc') ? 'desc' : 'asc';
+      context.view.toggleClass( 'sortAscending', (col.options.sortDirection=='asc') );
+      context.view.toggleClass( 'sortDescending', (col.options.sortDirection=='desc') );
+      def.contentView.trigger( 'widget-update' );
+    };
+  }
+
+  function createHeaderLayout( columns, options, def )
   {
     var headerLayout = {
       type: 'list',
@@ -25,6 +42,12 @@
         options: $.extend( {}, col.options )
       };
 
+      if( headerItem.options.sortable )
+      {
+        headerItem.options.events = headerItem.options.events || {};
+        headerItem.options.events.click = createColumnSortHandler( col, def );
+      }
+
       if( col.name !== undefined )
         headerItem.name = col.name;
       else
@@ -42,7 +65,23 @@
     return headerLayout;
   }
 
-  function createContentLayout( columns, dataSource, options )
+  function createColumnSortFunction( def )
+  {
+    return function columnSort( dataA, dataB ) {
+
+      if( def._sortColumn )
+      {
+        var col = def._sortColumn;
+        var a = ""+widget.util.expandPath( col.data, dataA );
+        var b = ""+widget.util.expandPath( col.data, dataB );
+
+        return widget.get( col, 'options.sortDirection', 'asc' ) =='desc' ? b.localeCompare( a ) : a.localeCompare( b );
+      }
+      return 0;
+    };
+  }
+
+  function createContentLayout( columns, dataSource, options, def )
   {
     options = options||{};
     var renderer = {
@@ -60,6 +99,13 @@
       styleClass: options.contentStyleClass ||'tableContent',
       renderer: renderer
     });
+
+    if( !contentOptions.sortBy )
+    {
+      var sortFunction = createColumnSortFunction( def );
+      if( sortFunction )
+        contentOptions.sortBy = sortFunction;
+    }
 
     renderer.options.events = options.events;
     delete contentOptions.events;
@@ -102,13 +148,13 @@
 
   function createTableView( def )
   {
-    var headerLayout = createHeaderLayout( def.layout.columns, def.options );
-    var contentLayout = createContentLayout( def.layout.columns, def.layout.dataSource, def.layout.contentOptions );
+    var headerLayout = createHeaderLayout( def.layout.columns, def.options, def );
+    var contentLayout = createContentLayout( def.layout.columns, def.layout.dataSource, def.layout.contentOptions, def );
 
     var holder = $('<div/>').addClass( def.options.styleClass );
 
     var contextStack = [ def.stack[1]||def.data ];
-    widget.layout( holder, headerLayout, undefined, contextStack );
+    def.headerView = widget.layout( holder, headerLayout, undefined, contextStack );
 
     def.table = {
       header: headerLayout,
@@ -120,7 +166,7 @@
         def.table.data = context.layout.content;
       }
     };
-    widget.layout( holder, contentLayout, undefined, contextStack );
+    def.contentView = widget.layout( holder, contentLayout, undefined, contextStack );
 
     return holder.appendTo( def.parent );
   }
