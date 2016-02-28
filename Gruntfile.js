@@ -1,3 +1,60 @@
+var _ = require('underscore');
+var src = {};
+src.util = [
+  'js/global.js',
+  'js/widget.js',
+  'js/widget.parser.js',
+  'js/widget.util.js',
+  'js/widget.format.js',
+  'js/parser/stack.js',
+  'js/parser/inlineFunction.js',
+  'js/parser/localize.js'
+];
+
+src.core = _.flatten( [
+  src.util,
+  'js/widget.tracking.js',
+  'js/widget.history.js',
+  'js/widget.layout.js',
+  'js/widget.ui.js',
+  'js/layout/button.js',
+  'js/layout/checkBox.js',
+  'js/layout/comboBox.js',
+  'js/layout/content.js',
+  'js/layout/error.js',
+  'js/layout/icon.js',
+  'js/layout/iframe.js',
+  'js/layout/image.js',
+  'js/layout/inputField.js',
+  'js/layout/item.js',
+  'js/layout/label.js',
+  'js/layout/list.js',
+  'js/layout/menu.js',
+  'js/layout/namedPanel.js',
+  'js/layout/renderer.js',
+  'js/layout/selector.js',
+  'js/layout/slider.js',
+  'js/layout/tab.js',
+  'js/layout/tabGroup.js',
+  'js/layout/table.js'
+]);
+
+src.all = _.flatten( [
+  src.core,
+  'js/widget.chart.js',
+  'js/charts/bar.js',
+  'js/charts/donut.js',
+  'js/charts/gauge.js',
+  'js/charts/horizontalBar.js',
+  'js/charts/interactiveSparkline.js',
+  'js/charts/line.js',
+  'js/charts/pie.js',
+  'js/charts/progressGauge.js',
+  'js/charts/readout.js',
+  'js/charts/sparkline.js',
+  'js/layout/chart.js'
+]);
+
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -7,65 +64,15 @@ module.exports = function(grunt) {
         separator: ';'
       },
       util: {
-        src: [
-          'js/global.js',
-          'js/widget.js',
-          'js/widget.parser.js',
-          'js/widget.util.js',
-          'js/widget.format.js',
-          'js/parser/stack.js',
-          'js/parser/inlineFunction.js',
-          'js/parser/localize.js',
-        ],
+        src: src.util,
         dest: 'dist/<%= pkg.name %>-util.js'
       },
+      core: {
+        src: src.core,
+        dest: 'dist/<%= pkg.name %>-core.js'
+      },
       dist: {
-        src: [
-          'js/global.js',
-          'js/widget.js',
-          'js/widget.tracking.js',
-          'js/widget.history.js',
-          'js/widget.layout.js',
-          'js/widget.parser.js',
-          'js/widget.ui.js',
-          'js/widget.util.js',
-          'js/widget.chart.js',
-          'js/widget.format.js',
-          'js/parser/stack.js',
-          'js/parser/inlineFunction.js',
-          'js/parser/localize.js',
-          'js/charts/bar.js',
-          'js/charts/donut.js',
-          'js/charts/gauge.js',
-          'js/charts/horizontalBar.js',
-          'js/charts/interactiveSparkline.js',
-          'js/charts/line.js',
-          'js/charts/pie.js',
-          'js/charts/progressGauge.js',
-          'js/charts/readout.js',
-          'js/charts/sparkline.js',
-          'js/layout/button.js',
-          'js/layout/chart.js',
-          'js/layout/checkBox.js',
-          'js/layout/comboBox.js',
-          'js/layout/content.js',
-          'js/layout/error.js',
-          'js/layout/icon.js',
-          'js/layout/iframe.js',
-          'js/layout/image.js',
-          'js/layout/inputField.js',
-          'js/layout/item.js',
-          'js/layout/label.js',
-          'js/layout/list.js',
-          'js/layout/menu.js',
-          'js/layout/namedPanel.js',
-          'js/layout/renderer.js',
-          'js/layout/selector.js',
-          'js/layout/slider.js',
-          'js/layout/tab.js',
-          'js/layout/tabGroup.js',
-          'js/layout/table.js'
-        ],
+        src: src.all,
         dest: 'dist/<%= pkg.name %>.js'
       },
       all: {
@@ -131,6 +138,7 @@ module.exports = function(grunt) {
       dist: {
         files: {
           'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>'],
+          'dist/<%= pkg.name %>-core.min.js': ['<%= concat.core.dest %>'],
           'dist/<%= pkg.name %>-util.min.js': ['<%= concat.util.dest %>']
         }
       }
