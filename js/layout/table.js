@@ -81,6 +81,36 @@
     };
   }
 
+  function createContentCell( col )
+  {
+    var rowItem;
+    if( $.type( col.data ) == 'object' )
+    {
+      rowItem = $.extend( {}, col.data );
+    }
+    else
+    {
+      rowItem = $.extend( {}, col, {
+        type: col.type || 'label'
+      });
+
+      if( col.data !== undefined )
+      {
+        rowItem.name = col.data;
+        delete rowItem.data;
+      }
+      else if( col.name !== undefined )
+        rowItem.name = col.name;
+      else
+        rowItem.name = '';
+    }
+
+    rowItem.options = $.extend( {}, rowItem.options, col.options );  // clone options for mutation
+    rowItem.options.styleClass = 'column ' + rowItem.options.styleClass;
+
+    return rowItem;
+  }
+
   function createContentLayout( columns, dataSource, options, def )
   {
     options = options||{};
@@ -116,31 +146,9 @@
       options: contentOptions
     };
 
-    var i;
-    for( i=0; i<columns.length; i++ )
+    for( var i=0; i<columns.length; i++ )
     {
-      var col = columns[i];
-      var rowItem = $.extend( {}, col, {
-        type: col.type || 'label',
-        options: $.extend( {}, col.options )
-      });
-
-      if( col.data !== undefined )
-      {
-        rowItem.name = col.data;
-        delete rowItem.data;
-      }
-      else if( col.name !== undefined )
-        rowItem.name = col.name;
-      else
-        rowItem.name = 'Column ' + (i+1);
-
-      var colClass = 'column';
-      if( col.options && col.options.styleClass )
-        colClass = colClass + ' ' + col.options.styleClass;
-      rowItem.options.styleClass = colClass;
-
-      renderer.layout.content.push( rowItem );
+      renderer.layout.content.push( createContentCell( columns[i]) );
     }
 
     return contentLayout;
