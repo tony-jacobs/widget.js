@@ -51,7 +51,16 @@ widget.layout = (function(){
 
   function loadDataSource( dataSource, baseContent, options, def )
   {
-    var db = dataSource.type ? widget.util.getData( dataSource.type, window[dataSource.type]||{} ) : (def.data||{});
+    var db;
+    if( dataSource.type )
+      db = widget.util.getData( dataSource.type, window[dataSource.type]||{} );
+    else
+    {
+      if( def.stack && def.stack.length > 1 )
+        db = def.stack[1];
+      else
+        db = def.data||{};
+    }
 
     var path = widget.util.expandPath( dataSource.path );
     var sourceData = widget.get( db, path, {} );
