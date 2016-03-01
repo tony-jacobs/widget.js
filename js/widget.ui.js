@@ -156,6 +156,15 @@ widget.ui = {
         } );
         return tab;
       },
+      getTabWidget: function( tabView ) {
+        tabView = $( tabView || tabManager.currentTab() )[0];
+        for( var i in options.tabData||[] )
+        {
+          var tab = options.tabData[i];
+          if( tab.view[0] == tabView )
+            return tab;
+        }
+      },
       currentTab: function() {
         return view.find( '> .'+options.tabClass+"."+options.selectedClass );
       },
@@ -273,6 +282,7 @@ widget.ui = {
           tab.addClass( options.selectedClass );
           window.setTimeout( function deferredSelectionEvent() {
             tab.children().trigger( 'tabselected' );
+            tabManager.eventBus.trigger( 'defaultTabSelected', tab );
           }, 0 );
         }
 

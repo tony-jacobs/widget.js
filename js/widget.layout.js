@@ -321,6 +321,7 @@ widget.layout = (function(){
   self.registry = {};
   self.defaults = {};
   self.documentation = {};
+  self.callEvent = callEvent;
   self.register = function register( key, implementation, docs, defaults ) {
     self.registry[ key ] = implementation;
     self.defaults[ key ] = defaults||{};

@@ -48,6 +48,17 @@
     if( $.isFunction( dataReadyCallback ) )
       dataReadyCallback( contentPane, data );
 
+    if( options.tabManager )
+    {
+      var tabListener = function( event, view ) {
+        if( view == parent[0] )
+          widget.layout.callEvent( options.events, 'tabselected', options, event );
+      };
+
+      options.tabManager.eventBus.on( 'defaultTabSelected', tabListener );
+      options.tabManager.eventBus.on( 'tabChanged', tabListener );
+    }
+
     return panel;
   }
 

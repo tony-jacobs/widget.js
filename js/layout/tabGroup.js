@@ -25,12 +25,13 @@
     def.tabManager = tabNav.data('tabManager');
     if( options.tabPath )
       widget.ui.setTabManager( def.tabManager, options.tabPath );
-      
+
     var dataStack = def.stack || [data];
     if( def.data )
       dataStack.unshift( def.data );
 
     $.each( data.content, function( i, item ) {
+      item.tabManager = def.tabManager;
 
       var itemData;
       if( item.data )
@@ -44,6 +45,13 @@
       if( itemData )
         dataStack.shift( itemData );
     } );
+
+    // Forward tab events into tradition widget event hierarchy
+    var tabListener = function( event, view ) {
+      widget.layout.callEvent( options.events, 'tabselected', def, event );
+    };
+    def.tabManager.eventBus.on( 'defaultTabSelected', tabListener );
+    def.tabManager.eventBus.on( 'tabChanged', tabListener );
 
     return tabGroup;
   }
