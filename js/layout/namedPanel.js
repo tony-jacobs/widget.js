@@ -1,5 +1,5 @@
 (function registerNamedPanelLayout(){
-  
+
   var dispatch = widget.layout.register( 'namedPanel', createNamedPanelView, {
     description: "TODO!"
   }, {
@@ -11,12 +11,10 @@
     var parent = def.parent;
     var panelData = def.layout;
     var options = def.options;
-    
-    var panel = $('<div/>' );
-    var name = widget.util.expandPath( panelData.name, def.stack[0] );
-    var panelTitle = $('<div/>', {html: name } ).addClass( 'unselectable ' + (options.titleClass||'panelTitle'));
-    panel.append( panelTitle );
 
+    var panel = $('<div/>' );
+    var panelTitle = $('<div/>' ).addClass( 'unselectable ' + (options.titleClass||'panelTitle'));
+    panel.append( panelTitle );
 
     if( panelData.actionBar )
     {
@@ -46,6 +44,16 @@
     content.addClass( 'panelContent' );
 
     parent.append( panel );
+
+    panel.update = function updatePanel( event, context ) {
+      if( context && context.stack )
+      {
+        def.stack = context.stack;
+      }
+
+      panelTitle.html( widget.util.expandPath( panelData.name, def.stack[0] ) );
+    };
+
     return panel;
   }
 
