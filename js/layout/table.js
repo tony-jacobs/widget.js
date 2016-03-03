@@ -105,8 +105,9 @@
         rowItem.name = '';
     }
 
+    var styleClass = 'column ' + (rowItem.options.styleClass||'');
     rowItem.options = $.extend( {}, rowItem.options, col.options );  // clone options for mutation
-    rowItem.options.styleClass = 'column ' + rowItem.options.styleClass;
+    rowItem.options.styleClass = styleClass + ' ' + (col.options.styleClass||'');
 
     return rowItem;
   }
