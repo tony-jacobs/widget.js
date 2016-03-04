@@ -111,7 +111,7 @@ widget.ui = {
     return panel.actions.show();
   },
 
-  generateTabs: function generateTabs( selector, options )
+  generateTabs: function generateTabs( selector, options, stack )
   {
     options = $.extend( {
       defaultSelection: 0,
@@ -227,7 +227,7 @@ widget.ui = {
 
         if( "object" == $.type( o.label ) )
         {
-          widget.layout( tabLabel, o.label );
+          widget.layout( tabLabel, o.label, undefined, stack );
         }
         else
         {

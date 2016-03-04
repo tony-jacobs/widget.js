@@ -21,14 +21,14 @@
     if( !tabGroup || !tabGroup.length )
       tabGroup = $('<div/>').addClass( labelHolderClass ).appendTo( view );
 
-    var tabNav = widget.ui.generateTabs( view, tabOptions );
-    def.tabManager = tabNav.data('tabManager');
-    if( options.tabPath )
-      widget.ui.setTabManager( def.tabManager, options.tabPath );
-
     var dataStack = def.stack || [data];
     if( def.data )
       dataStack.unshift( def.data );
+
+    var tabNav = widget.ui.generateTabs( view, tabOptions, dataStack );
+    def.tabManager = tabNav.data('tabManager');
+    if( options.tabPath )
+      widget.ui.setTabManager( def.tabManager, options.tabPath );
 
     $.each( data.content, function( i, item ) {
       item.tabManager = def.tabManager;

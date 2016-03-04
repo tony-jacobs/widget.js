@@ -10,24 +10,24 @@
 
 
 
-  function createTab( parent, options, dataReadyCallback ) {
-
-    if( options.tabHeader )
+  function createTab( def, dataReadyCallback )
+  {
+    if( def.layout.tabHeader )
     {
-      var labelHolder = $('<div/>' ).addClass( 'panelLabel unselectable' ).addClass( options.name +"Header" );
+      var labelHolder = $('<div/>' ).addClass( 'panelLabel unselectable' ).addClass( def.layout.name +"Header" );
 
       var titleBlock = $('<span/>').addClass( 'tabTitle' );
-      if( "object" == $.type( options.headerLabel ) )
+      if( "object" == $.type( def.layout.headerLabel ) )
       {
-        widget.layout( titleBlock, options.headerLabel );
+        widget.layout( titleBlock, def.layout.headerLabel );
       }
       else
       {
-        var icon = options.icon_on || options.icon;
+        var icon = def.layout.icon_on || def.layout.icon;
         if( icon )
           titleBlock.append( $( '<img/>', { src: icon } ).addClass('icon') );
 
-        var name = options.label || options.name;
+        var name = def.layout.label || def.layout.name;
         if( name )
           titleBlock.append( $( '<div/>', { text: name } ) );
       }
@@ -35,7 +35,7 @@
       labelHolder.append( titleBlock );
 
       labelHolder.hide();
-      $( options.tabHeader ).append( labelHolder );
+      $( def.layout.tabHeader ).append( labelHolder );
     }
 
     var panel = $('<div/>').addClass( 'tabContentHolder' );
@@ -43,20 +43,20 @@
     var contentPane = $( '<div/>' ).addClass( 'contentPane' ).appendTo( panel );
     contentPane.append( $('<div/>', { text: "Loading..."}) );
 
-    var data = options.layout || {};
+    var data = def.layout.layout || {};
     panel.data( data );
     if( $.isFunction( dataReadyCallback ) )
       dataReadyCallback( contentPane, data );
 
-    if( options.tabManager )
+    if( def.layout.tabManager )
     {
       var tabListener = function( event, view ) {
-        if( view == parent[0] )
-          widget.layout.callEvent( options.events, 'tabselected', options, event );
+        if( view == def.parent[0] )
+          widget.layout.callEvent( def.layout.events, 'tabselected', def.layout, event );
       };
 
-      options.tabManager.eventBus.on( 'defaultTabSelected', tabListener );
-      options.tabManager.eventBus.on( 'tabChanged', tabListener );
+      def.layout.tabManager.eventBus.on( 'defaultTabSelected', tabListener );
+      def.layout.tabManager.eventBus.on( 'tabChanged', tabListener );
     }
 
     return panel;
@@ -64,18 +64,23 @@
 
   function defaultTabView( def )
   {
-    var parent = def.parent;
-    var tabData = def.layout;
-    var options = def.options;
-
-    var tabView = createTab( parent, tabData, function( contentPane, data, options ) {
+    var tabView = createTab( def, function( contentPane, data, options ) {
       contentPane.empty();
 
-      return dispatch( contentPane, data, options, function( view, data, options ) {
+      var stack = def.stack || (def.data?[def.data]:[]);
+      if( data.data )
+        stack.push( data.data );
+
+      var view = dispatch( contentPane, data, options, function( view, data, options ) {
         return view.append( $('<pre/>', { text: JSON.stringify( data ) } ) );
-      });
+      }, stack);
+
+      if( data.data )
+        stack.pop();
+
+      return view;
     });
-    parent.append( tabView );
+    def.parent.append( tabView );
     return tabView;
   }
 
