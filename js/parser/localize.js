@@ -5,7 +5,7 @@
   widget.parser.register( 'localize', {
     prefix: '_',
     doc: {
-      name: "={<i>localizable string</i>}"
+      name: "_{<i>localizable string</i>}"
     },
     recursive: true,
     processor: processLocalizableString
