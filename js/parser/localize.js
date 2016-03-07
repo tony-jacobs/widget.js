@@ -15,12 +15,34 @@
     lang = newLocale;
   };
 
+  function getLocalized( db, path, token )
+  {
+    for( var i in path )
+    {
+      var str = widget.get( db, path[i]+'.'+token );
+      if( (str !== undefined) && (str !== null) )
+        return str;
+    }
+    return token;
+  }
+
   function processLocalizableString( token, context )
   {
+    var i;
     var db = widget.util.getData( 'localization' );
-    var localized = widget.get( db, lang+'.'+token ) || widget.get( db, 'common.'+token, token );
 
-    return widget.util.expandPath( localized, context );
+    var codes = lang.split('-');
+    var searchPath = ['common'];
+
+    var tmp = codes[0];
+    searchPath.unshift( tmp );
+    for( i=1; i<codes.length; i++ )
+    {
+      tmp = tmp +'.' + codes[i];
+      searchPath.unshift( tmp );
+    }
+
+    return widget.util.expandPath( getLocalized( db, searchPath, token ), context );
   }
 
 })();

@@ -1,8 +1,13 @@
+0.7.2 (unreleased)
+--
+* Internationalization now supports both language and locale (using the format 'en-us')
+
 
 0.7.1 (2016.03.07)
 --
 * Tab event and data routing
 * Table style bug fixes
+
 
 0.7.0 (2016.02.28)
 --
@@ -18,17 +23,20 @@
 * Browser history support
 * 'ready' event
 
+
 0.6.1 (2016.02.25)
 --
 * Tab Manager
 * Improve data sources for table and list widgets
 * String event handlers
 
+
 0.6.0 (2016.01.13)
 --
 * Localizations other than 'en'
 * New approach to injecting widget.js into environment
 * Global layout any options.tooltip
+
 
 0.5.x (2015.10.14)
 --
