@@ -46,7 +46,7 @@
         dataStack.shift( itemData );
     } );
 
-    // Forward tab events into tradition widget event hierarchy
+    // Forward tab events into traditional widget event hierarchy
     var tabListener = function( event, view ) {
       widget.layout.callEvent( options.events, 'tabselected', def, event );
     };

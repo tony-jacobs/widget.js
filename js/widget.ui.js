@@ -172,13 +172,60 @@ widget.ui = {
         var tab = tabManager.currentTab();
         return tab ? tab.data( 'name' ) : null;
       },
+      _fireSelection: function( tab, suppressEvents ) {
+        tab.children().trigger( 'tabselected' );
+
+        if( $.isFunction( tabManager.onTabChanged ) )
+          tabManager.onTabChanged( tab.data( 'name'), tab, tabManager );
+
+        if( !suppressEvents )
+          tabManager.eventBus.trigger( 'tabChanged', tab );
+      },
       performSelection: function( tab, suppressEvents ) {
 
         if( tab && tab.length && (tabManager.currentTabName() != tab.data('name')) )
         {
-          view.children( '.'+options.tabClass ).each( function() { $(this).removeClass( options.selectedClass ).css( {display:'none'} ); } );
-          tab.addClass( options.selectedClass ).css( {display:'inline-block'} );
-          tab.children().trigger( 'tabselected' );
+          var tabData = tab.data();
+          var oldIndex = -1;
+          var newIndex = tabData.tabIndex;
+
+          view.children( '.'+options.tabClass ).each( function() {
+            var $this = $(this);
+            if( $this.hasClass( options.selectedClass ) )
+            {
+
+              oldIndex = $this.data().tabIndex;
+              var animationClass = (oldIndex<newIndex) ? options.animationHideNext : options.animationHidePrev;
+              if( !suppressEvents && animationClass )
+              {
+                $this.removeClass( options.selectedClass );
+                widget.ui.animate( $this, animationClass, function(){
+                  $this.hide();
+                } );
+              }
+              else
+              {
+                $this.removeClass( options.selectedClass ).css( {display:'none'} );
+              }
+            }
+          } );
+
+          var animationClass = (oldIndex>newIndex) ? options.animationShowNext : options.animationShowPrev;
+          if( !suppressEvents && animationClass )
+          {
+            widget.ui.animate( tab, animationClass, function(){
+              tab.addClass( options.selectedClass );
+              setTimeout( function(){
+                tabManager._fireSelection( tab, suppressEvents );
+              }, 10 );
+            } );
+            tab.css( {display:'inline-block'} );
+          }
+          else
+          {
+            tab.addClass( options.selectedClass ).css( {display:'inline-block'} );
+            tabManager._fireSelection( tab, suppressEvents );
+          }
 
           tabLabel = tab.data( 'tabLabelView' );
           $.each( options.labelSelector, function( i, labelSelector ) {
@@ -202,12 +249,6 @@ widget.ui = {
               $( '.iconHolder', view ).attr( 'src', view.data( iconKey ) || view.data('icon') );
             } );
           });
-
-          if( $.isFunction( tabManager.onTabChanged ) )
-            tabManager.onTabChanged( tab.data( 'name'), tab, tabManager );
-
-          if( !suppressEvents )
-            tabManager.eventBus.trigger( 'tabChanged', tab );
 
           return tab;
         }
@@ -263,6 +304,7 @@ widget.ui = {
     $.each( tabData, function( i, o ) {
       var tab = o.view;
       var dataType = o.type;
+      o.tabIndex = i;
 
       if( !tab ) {
         tab = $('<div/>').appendTo( view );
@@ -320,6 +362,39 @@ function showContentPopup( parent, content ) {
     contentHolder.addClass( 'contentPopup' ).append( $( content ).css("display","block") );
   }, parent );
 }
+
+(function animationMixinClosure(){
+
+  var animationEventKey = (function whichAnimationEvent(){
+    var t, el = document.createElement("fakeelement");
+
+    var animations = {
+      "animation"      : "animationend",
+      "OAnimation"     : "oAnimationEnd",
+      "MozAnimation"   : "animationend",
+      "WebkitAnimation": "webkitAnimationEnd"
+    };
+
+    for (t in animations){
+      if (el.style[t] !== undefined){
+        return animations[t];
+      }
+    }
+  })();
+
+  widget.ui.animate = function animate( parent, animationClass, callback ) {
+
+    var $parent = $( parent );
+    $parent.one( animationEventKey, function onAnimationEnd(event) {
+      $parent.toggleClass( animationClass, false );
+
+      if( $.isFunction( callback ) )
+        callback( parent, animationClass );
+
+    });
+    $parent.toggleClass( animationClass, true );
+  };
+})();
 
 (function tabMixinClosure(){
   var tabManagers = {};

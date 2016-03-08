@@ -1,6 +1,7 @@
 0.7.2 (unreleased)
 --
 * Internationalization now supports both language and locale (using the format 'en-us')
+* EXPERIMENTAL - tabs now support animation (use options animationHideNext, animationHidePrev, animationShowNext, animationShowPrev to specify the CSS animation class)
 
 
 0.7.1 (2016.03.07)

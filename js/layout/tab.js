@@ -81,7 +81,7 @@
       return view;
     });
     def.parent.append( tabView );
-    return tabView;
+    return def.parent;
   }
 
 })();
