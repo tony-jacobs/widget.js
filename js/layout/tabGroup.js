@@ -49,6 +49,13 @@
     // Forward tab events into traditional widget event hierarchy
     var tabListener = function( event, view ) {
       widget.layout.callEvent( options.events, 'tabselected', def, event );
+      var tabEvent = {
+        tabPath: widget.ui.getTabPath(),
+        event: event,
+        view: view
+      };
+
+      widget.eventBus.trigger( 'tabChanged', tabEvent );
     };
     def.tabManager.eventBus.on( 'defaultTabSelected', tabListener );
     def.tabManager.eventBus.on( 'tabChanged', tabListener );
