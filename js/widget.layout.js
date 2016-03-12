@@ -243,6 +243,7 @@ widget.layout = (function(){
       bindIf( 'enter', w.view, w.options.events, w );
       bindIf( 'selectmenuchange', w.view, w.options.events, w );
       bindIf( 'tabselected', w.view, w.options.events, w );
+      bindIf( 'tabchange', w.view, w.options.events, w );
       bindIf( 'cleanup', w.view, w.options.events, w );
     }
 

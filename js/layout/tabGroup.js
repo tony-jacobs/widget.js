@@ -46,7 +46,13 @@
         dataStack.shift( itemData );
     } );
 
-    // Forward tab events into traditional widget event hierarchy
+    // Fire events at the leading edge of the change transition
+    def.tabManager.eventBus.on( 'tabWillChange', function( event, context ) {
+      widget.layout.callEvent( options.events, 'tabchange', def, context );
+    } );
+
+
+    // Fires events at the trailing edge of change transition
     var tabListener = function( event, view ) {
       widget.layout.callEvent( options.events, 'tabselected', def, event );
       var tabEvent = {

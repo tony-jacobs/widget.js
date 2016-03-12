@@ -182,7 +182,6 @@ widget.ui = {
           tabManager.eventBus.trigger( 'tabChanged', tab );
       },
       performSelection: function( tab, suppressEvents ) {
-
         if( tab && tab.length && (tabManager.currentTabName() != tab.data('name')) )
         {
           var tabData = tab.data();
@@ -193,8 +192,18 @@ widget.ui = {
             var $this = $(this);
             if( $this.hasClass( options.selectedClass ) )
             {
+              var oldTab = $this.data();
+              oldIndex = oldTab.tabIndex;
 
-              oldIndex = $this.data().tabIndex;
+              if( !suppressEvents )
+              {
+                tabManager.eventBus.trigger( 'tabWillChange', {
+                  oldTab: oldTab,
+                  newTab: tab.data(),
+                  manager: tabManager
+                } );
+              }
+
               var animationClass = (oldIndex<newIndex) ? options.animationHideNext : options.animationHidePrev;
               if( !suppressEvents && animationClass )
               {

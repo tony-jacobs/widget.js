@@ -1,4 +1,9 @@
-0.7.2 (unreleased)
+0.7.3 (unreleased)
+--
+* tabChange event on tabGroup widget, tabWillChange events on the tab manager
+
+
+0.7.2 (2016.03.10)
 --
 * Internationalization now supports both language and locale (using the format 'en-us')
 * EXPERIMENTAL - tabs now support animation (use options animationHideNext, animationHidePrev, animationShowNext, animationShowPrev to specify the CSS animation class)
