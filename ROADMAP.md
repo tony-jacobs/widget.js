@@ -8,13 +8,9 @@ Easy
   - Should be pluggable.  For example, phone numbers is not general.
 
 
-* New template type for URL arguments (perhaps ?{argKey|defaultValue} ) taking advantage of URL processing
-
 * Remove legacy tab event handlers in favor of recently added tabManager eventBus and widget event arguments
 
 * Remove size formatting code (or make it part of the template)
-
-* Clean up global email validation, perhaps making it part of a generalized validation subsystem
 
 * Remove 'content' layout widget (it's not special)
 
