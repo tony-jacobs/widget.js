@@ -15,6 +15,7 @@ src.util = [
 
 src.core = _.flatten( [
   src.util,
+  'js/global.ui.js',
   'js/widget.tracking.js',
   'js/widget.history.js',
   'js/widget.layout.js',
