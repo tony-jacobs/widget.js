@@ -6,9 +6,10 @@ src.util = [
   'js/widget.parser.js',
   'js/widget.util.js',
   'js/widget.format.js',
-  'js/parser/stack.js',
+  'js/parser/argument.js',
   'js/parser/inlineFunction.js',
-  'js/parser/localize.js'
+  'js/parser/localize.js',
+  'js/parser/stack.js'
 ];
 
 src.core = _.flatten( [

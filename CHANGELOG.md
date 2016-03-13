@@ -1,6 +1,7 @@
 0.7.3 (unreleased)
 --
 * tabChange event on tabGroup widget, tabWillChange events on the tab manager
+* URL argument template using format ?{key}
 
 
 0.7.2 (2016.03.10)
