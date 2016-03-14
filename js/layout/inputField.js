@@ -6,6 +6,18 @@
     styleClass: 'inputFieldHolder'
   } );
 
+  function validate( value, context, oldValue )
+  {
+    var validator = widget.get( context, "options.validator" );
+    if( $.type(validator) === 'string' )
+      validator = widget.validate[ validator ];
+
+    if( $.isFunction( validator ) )
+    {
+      var isValid = validator( value, context, oldValue );
+      context.view.toggleClass( 'invalid', !isValid );
+    }
+  }
 
   function createInputField( def )
   {
@@ -52,7 +64,10 @@
       else
       {
         if( oldVal != newVal )
+        {
+          validate( newVal, def, oldVal );
           panel.trigger( 'fieldChange', { oldVal: oldVal, newVal: newVal } );
+        }
       }
     });
 
