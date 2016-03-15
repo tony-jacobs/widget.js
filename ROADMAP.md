@@ -19,7 +19,7 @@ Medium
 --
 * Remove dependencies from widget-util (jquery, knockout, etc)
 
-* Form validation, including group-level validation.  (Current implementation is EXPERIMENTAL)
+* Make form validation mature  (try more cases, add more validators)
 
 * Clean up the animation processing.  The tab group stuff is fine, but doesn't generalize to other element types
 

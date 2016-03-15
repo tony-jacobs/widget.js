@@ -23,7 +23,7 @@
   {
     var view = def.parent;
     var data = def.layout;
-    var options = def.options;
+    var options = def.options || {};
 
     var typeKey = data.dataSource ? data.dataSource.type : undefined;
 
@@ -65,11 +65,22 @@
       {
         if( oldVal != newVal )
         {
-          validate( newVal, def, oldVal );
+          $form = options.formKey ?  panel.closest( 'form.'+options.formKey ) : panel.closest( 'form' );
+          ( $form.length ? $form : field ).trigger( 'validate' );
+
           panel.trigger( 'fieldChange', { oldVal: oldVal, newVal: newVal } );
         }
       }
     });
+
+    if( options.validator )
+    {
+      field.addClass( 'validate' );
+      field.on( 'validate', function onValidate() {
+        validate( field.val(), def );
+        return false;
+      } );
+    }
 
     if( data.label )
     {

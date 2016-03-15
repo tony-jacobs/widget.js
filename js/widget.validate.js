@@ -4,32 +4,9 @@
   var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   var factory = {
-    exactMatch: function createExactMatch( opts )
-    {
-      if( $.type(opts)==='string' )
-        opts = { selector:opts, other:true };
-
-      return function exactMatchValidator( data, context ) {
-        $that = $( opts.selector );
-
-        var isMatch = ($that.val() === data);
-
-        if( opts.other )
-        {
-          $that.parent().toggleClass( 'invalid', !isMatch );
-          return true;
-        }
-        else
-          return isMatch;
-      };
-    },
-
-    ruleExactMatch: function createRuleExactMatch( opts ) {
-      var ruleValidator = widget.validate.create( opts.rule, opts.ruleOpts );
-      var peerValidator = widget.validate.create( 'exactMatch', opts.peer );
-
-      return function( value, context, oldValue ) {
-        return !!(peerValidator( value, context, oldValue ) & ruleValidator( value, context, oldValue ));
+    equals: function createEqualsValidator( opts ) {
+      return function( value, context ) {
+        return value == widget.util.expandPath( opts, context.stack[1] );
       };
     }
   };
@@ -46,7 +23,7 @@
   };
 
   Validate.prototype.nonEmpty = function nonEmpty(value) {
-    return (value && value.trim().length > 0 );
+    return ( value && value.trim().length > 0 );
   };
 
   Validate.prototype.create = function validatorFactory( key, opts ) {

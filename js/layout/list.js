@@ -50,14 +50,26 @@
     var listData = def.layout;
     var listOptions = def.options;
 
-    var panel = $('<div/>' ).appendTo( parent );
+    var formKey = widget.get( def, 'options.form', false );
+    var panel = formKey ? $('<form/>' ) : $('<div/>' );
+
+    if( formKey )
+    {
+      if( $.type( formKey ) === 'string' )
+        panel.addClass( formKey );
+
+      panel.on( 'validate', function() {
+        var $validatables = panel.find( '.validate' );
+        $validatables.trigger( 'validate', def );
+      });
+    }
+
+    var holder = panel.appendTo( parent );
     var footer = $('<div/>').addClass( listOptions.footerStyleClass || 'footer' ).appendTo( parent ).toggle( false );
     $.each( ['max-width', 'margin-right'], function( i, key ) {
       if( listOptions[ key ] )
         panel.css( key, listOptions[key] );
     });
-
-    var holder = panel;
 
     var data = listData.content || [];
     var dataStack = def.stack || [data];

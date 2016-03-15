@@ -4,7 +4,7 @@
 * URL argument template using format ?{key}
 * Deprecated global validateEmail() in favor of widget.validate.email()
 * Move (global) jquery plugins (sortlist, destroyed event) from widget-util to widget-core
-* EXPERIMENTAL - input field validationClosure
+* EXPERIMENTAL - form  and input field validation
 
 
 0.7.2 (2016.03.10)
