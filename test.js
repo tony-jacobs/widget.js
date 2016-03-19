@@ -571,6 +571,56 @@ widget.util.set( 'renderers', 'childRenderer', {
             }
           ]
         }
+      },
+      {
+        name:'style', label:'Style', type:'Tab', layout: {
+          type:"list",
+          content:[
+            {
+              type:'label',
+              name:'styleMe',
+              options:{
+              },
+              style: {
+                color: '={return "blue"}',
+                'background-color': 'yellow',
+                display: 'inline-block',
+                padding: '20px'
+              }
+            },
+            {
+              type:'label',
+              name:'arrayStyles',
+              options:{
+              },
+              style: [
+                {
+                  color: '?{color|orange}',
+                  'background-color': 'yellow',
+                },
+                {
+                  display: 'inline-block',
+                  padding: '20px'
+                }
+              ]
+            },
+            {
+              type:'label',
+              name:'nested styles',
+              options:{
+              },
+              style: {
+                name: 'myStyle',
+                style:{
+                  color: 'blue',
+                  'background-color': 'pink',
+                  display: 'inline-block',
+                  padding: '20px'
+                }
+              }
+            }
+          ]
+        }
       }
     ]
 

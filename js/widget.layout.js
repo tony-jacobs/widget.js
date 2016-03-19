@@ -247,12 +247,38 @@ widget.layout = (function(){
       bindIf( 'cleanup', w.view, w.options.events, w );
     }
 
+    lifecycle( 'unstyled', w );
+    if( w.view && w.layout.style )
+      applyStyle( w, w.layout.style );
+
     lifecycle( 'ready', w );
 
     if( w.view )
       w.view.trigger( 'widget-update', w );
 
     return w.view;
+  }
+
+  function applyStyle( def, style )
+  {
+    if( $.isArray( style ) )  // iterate if array of styles
+    {
+      for( var i in style )
+        applyStyle( def, style[i] );
+    }
+    else if( style.style )  // recurse if complex structure (a GUI builder would do this)
+    {
+      applyStyle( def, style.style );
+    }
+    else  // just do it
+    {
+      var evaluatedStyle = {};
+      for( var key in style )
+      {
+        evaluatedStyle[ key ] = widget.util.expandPath( style[key], def.data );
+      }
+      def.view.css( evaluatedStyle );
+    }
   }
 
   function callEvent( events, key, context, event )
