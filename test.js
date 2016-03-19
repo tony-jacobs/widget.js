@@ -1018,7 +1018,6 @@ function startDataManager( onReady, onUpdate ) {
     $.each( value.content, function( key, value ) {
       value.id = keyFactory( value );
       value.action = ( value.url ) ? widget.ui.createUrlViewAction( value ) : widget.ui.createRendererPopupAction( value, 'popupRenderer' );
-      Search.appendRecord( value.id, value );
     });
   });
 

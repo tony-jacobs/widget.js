@@ -83,6 +83,8 @@
 
   function createContentCell( col )
   {
+    col.options = col.options || {};
+
     var rowItem;
     if( $.type( col.data ) == 'object' )
     {
@@ -105,6 +107,7 @@
         rowItem.name = '';
     }
 
+    rowItem.options = rowItem.options||{};
     var styleClass = 'column ' + (rowItem.options.styleClass||'');
     rowItem.options = $.extend( {}, rowItem.options, col.options );  // clone options for mutation
     rowItem.options.styleClass = styleClass + ' ' + (col.options.styleClass||'');
