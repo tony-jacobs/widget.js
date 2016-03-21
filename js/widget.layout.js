@@ -275,7 +275,7 @@ widget.layout = (function(){
       var evaluatedStyle = {};
       for( var key in style )
       {
-        evaluatedStyle[ key ] = widget.util.expandPath( style[key], def.data );
+        evaluatedStyle[ key ] = widget.util.expandPath( ""+style[key], def.data );
       }
       def.view.css( evaluatedStyle );
     }
