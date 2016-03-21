@@ -8,8 +8,6 @@ Easy
   - Should be pluggable.  For example, phone numbers is not general.
 
 
-* Remove legacy tab event handlers in favor of recently added tabManager eventBus and widget event arguments
-
 * Remove size formatting code (or make it part of the template)
 
 * Remove 'content' layout widget (it's not special)

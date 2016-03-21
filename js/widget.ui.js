@@ -173,10 +173,8 @@ widget.ui = {
         return tab ? tab.data( 'name' ) : null;
       },
       _fireSelection: function( tab, suppressEvents ) {
-        tab.children().trigger( 'tabselected' );
-
-        if( $.isFunction( tabManager.onTabChanged ) )
-          tabManager.onTabChanged( tab.data( 'name'), tab, tabManager );
+        if( tabManager.onTabChanged )
+          log.error( "onTabChanged() is no longer supported in favor of tabManager.eventBus.on('tabChanged')" );
 
         if( !suppressEvents )
           tabManager.eventBus.trigger( 'tabChanged', tab );
@@ -332,7 +330,6 @@ widget.ui = {
         {
           tab.addClass( options.selectedClass );
           window.setTimeout( function deferredSelectionEvent() {
-            tab.children().trigger( 'tabselected' );
             tabManager.eventBus.trigger( 'defaultTabSelected', tab );
           }, 0 );
         }

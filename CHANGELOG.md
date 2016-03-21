@@ -1,6 +1,7 @@
 0.8.0 (unreleased)
 --
 * EXPERIMENTAL - styles
+* Remove legacy tab UI events
 
 
 0.7.3 (2016.03.19)
