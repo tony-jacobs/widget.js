@@ -30,8 +30,6 @@ Medium
 
 Complex
 --
-* Style processing
-
 * Visible / hidden events, particularly for tabs
 
 * Allow deferred widget renderers (promise from dataReady, placeholder layout while waiting for dataReady to resolve)
