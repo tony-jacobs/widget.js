@@ -23,7 +23,6 @@ src.core = _.flatten( [
   'js/layout/button.js',
   'js/layout/checkBox.js',
   'js/layout/comboBox.js',
-  'js/layout/content.js',
   'js/layout/error.js',
   'js/layout/icon.js',
   'js/layout/iframe.js',
