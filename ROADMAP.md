@@ -3,11 +3,17 @@ Roadmap for widget.js
 
 Easy
 --
+* Unparent list footers if not populated, which is a very common case
+
 * Remove size formatting code (or make it part of the template)
 
 * New template type for formatters (perhaps #{value|type,args})
   - Include: time, money, and phone numbers.
   - Should be pluggable.  For example, phone numbers is not general.
+
+* Globals to be hidden in a closure:  Tracking, showIframePopup, showContentPopup
+
+* Remove 'addAnchorSupport' -- too complex and too buggy
 
 
 Medium

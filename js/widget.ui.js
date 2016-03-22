@@ -473,3 +473,40 @@ function showContentPopup( parent, content ) {
     return prefix;
   };
 })();
+
+
+// Simplified from https://github.com/dlom/favicon.js (MIT License)
+(function faviconMixinClosure( doc ) {
+
+  var head = doc.getElementsByTagName("head")[0];
+
+  var removeExistingFavicons = function() {
+    var links = head.getElementsByTagName("link");
+
+    for (var i = 0; i < links.length; i++)
+    {
+      if (/\bicon\b/i.test(links[i].getAttribute("rel")))
+      {
+        head.removeChild(links[i]);
+      }
+    }
+  };
+
+  widget.ui.setFavicon = function setFavicon( iconURL, docTitle ) {
+    if( docTitle )
+    {
+      doc.title = docTitle;
+    }
+
+    if( iconURL !== "" )
+    {
+      var newLink = doc.createElement("link");
+      newLink.type = "image/x-icon";
+      newLink.rel = "icon";
+      newLink.href = iconURL;
+      removeExistingFavicons();
+      head.appendChild(newLink);
+    }
+  };
+
+})(document);

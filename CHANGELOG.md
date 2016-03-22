@@ -3,6 +3,7 @@
 * EXPERIMENTAL - styles
 * Remove legacy tab UI events
 * Remove 'content' layout widget, since it's not better than a label
+* Add favicon using widget.ui.setFavicon()
 
 
 0.7.3 (2016.03.19)
