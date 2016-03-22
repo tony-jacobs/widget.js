@@ -1,39 +1,45 @@
 (function registerComboBoxLayout(){
-  
-  widget.layout.register( 'combobox', createComboBoxView, {
-    description: "Simulate a combo box for HTML5 with an auto-complete box"
-  },
+
+  if( $ && $.ui )
   {
-    styleClass: 'widget-combobox'
-  });
+    widget.layout.register( 'combobox', createComboBoxView, {
+      description: "Simulate a combo box for HTML5 with an auto-complete box"
+    },
+    {
+      styleClass: 'widget-combobox'
+    });
+  }
 
   // derived from: http://jqueryui.com/autocomplete/#combobox
   (function( $ ) {
-    
+
+    if( !$.ui )
+      return;
+
     $.widget( "ui.autocomplete", $.ui.autocomplete, {
 
       _resizeMenu: function() {
         this._super();
         this.menu.element.css( {'width': this.options.inputField().outerWidth( true ) } );
       }
-      
+
     });
-    
+
     $.widget( "widgetjs.combobox", {
       _create: function() {
         this.wrapper = $( "<span>" )
           .addClass( "widget-combobox" )
           .insertAfter( this.element );
- 
+
         this.element.hide();
         this._createAutocomplete();
         this._createShowAllButton();
       },
- 
+
       _createAutocomplete: function() {
         var selected = this.element.children( ":selected" ),
           value = selected.val() ? selected.text() : "";
- 
+
         this.input = $( "<input>" )
           .appendTo( this.wrapper )
           .val( value )
@@ -58,42 +64,42 @@
           self._value = self.input.val();
           if( oldValue != self._value )
           {
-            self.element.trigger( 'comboboxChange', { 
+            self.element.trigger( 'comboboxChange', {
               source: 'editor',
               combobox: this,
               value: self._value
             } );
           }
         });
- 
+
         this._on( this.input, {
           autocompleteselect: function( event, ui ) {
             ui.item.option.selected = true;
             this._trigger( "select", event, {
               item: ui.item.option
             });
-            
+
             var oldValue = self._value;
             self._value = ui.item.option.value;
             if( oldValue != self._value )
             {
-              this.element.trigger( 'comboboxChange', { 
-                item: ui.item.option, 
+              this.element.trigger( 'comboboxChange', {
+                item: ui.item.option,
                 source: 'menu',
                 combobox: this,
                 value: ui.item.option.value
               } );
             }
           },
- 
+
           autocompletechange: "_onUpdate"
         });
       },
-      
+
       inputField: function() {
         return this.input;
       },
- 
+
       _createShowAllButton: function() {
         var input = this.input,
           wasOpen = false;
@@ -119,7 +125,7 @@
           toggleButton.toggleClass( 'optionsVisible', false );
         } );
       },
- 
+
       _source: function( request, response ) {
         var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
         response( this.element.children( "option" ).map(function() {
@@ -132,12 +138,12 @@
             };
         }) );
       },
- 
+
       _onUpdate: function( event, ui ) {
         if( this.options.enforceOptions )
           this._removeIfInvalid(event, ui );
       },
- 
+
       _removeIfInvalid: function( event, ui ) {
         if( !ui.item ) {
           // Search for a match (case-insensitive)
@@ -150,7 +156,7 @@
               return false;
             }
           });
-   
+
           if( !valid ) {
             this.input.val( "" )
                       .attr( "title", value + " didn't match any item" )
@@ -163,12 +169,12 @@
           }
         }
       },
- 
+
       _destroy: function() {
         this.wrapper.remove();
         this.element.show();
       },
-      
+
       menuWidget: function() {
         return this.input.autocomplete('widget' );
       }
@@ -177,13 +183,13 @@
 
 
   var panelId = 0;
-  
+
   function createComboBoxView( def )
   {
     def.options = def.options || {};
     var holder = $('<div/>').addClass( def.options.holderClass || def.options.styleClass+"Holder" );
     var items = def.layout.items;
-    
+
     if( !def.layout.items )
     {
       var listDataSource = widget.get( def.options, 'listDataSource', null );
@@ -195,15 +201,15 @@
 
     if( items )
     {
-      var selector = $( '<select/>', { 
-        id: 'widget-combobox-'+(panelId++) 
+      var selector = $( '<select/>', {
+        id: 'widget-combobox-'+(panelId++)
       } ).appendTo( holder );
 
       var typeKey = def.data.dataSource ? def.data.dataSource.type : undefined;
       var dataPath = def.data.dataSource ? def.data.dataSource.path : "selector";
-    
+
       var sourceData = typeKey ? widget.util.get( typeKey, dataPath ) : widget.get( def.stack[1], dataPath );
-        
+
       // Bail if the data source is empty and we're in autohide.
       if( !sourceData && def.options.autoHide )
         return null;
@@ -221,14 +227,14 @@
         $.each( items, function( i, item ){
           if( $.type( item ) === "string" )
             item = { key:item, name:item, displayName:item };
-  
+
           var displayName = item.displayName || (item.key + ": " + item.name);
           var opt = $( '<option/>', { value: item.key, html: displayName } ).appendTo( selector );
-  
+
           if( sourceData && (item.key == sourceData) )
             opt.prop( 'selected', true );
         } );
-        
+
         selector.combobox( {
           enforceOptions: def.options.enforceListOptions || false,
           placeholder: def.layout.placeholder
@@ -249,7 +255,7 @@
           if( oldValue != context.value )
             holder.trigger( 'change' );
         });
-        
+
         selector.addClass('unselectable');
       };
     }
