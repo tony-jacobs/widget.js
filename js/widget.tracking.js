@@ -1,40 +1,42 @@
-var Tracking = (function() {
+(function trackincClosure(){
+  var Tracking = (function() {
 
-  var defaults = false;
-  var self;
+    var defaults = false;
+    var self;
 
-  var Tracking = function() {
-    self = this;
-    
-    this.init();
-    this.events = [];
-  };
+    var Tracking = function() {
+      self = this;
 
-  Tracking.prototype = {
-    init: function() {
-      tracker = this;
-    },
+      this.init();
+      this.events = [];
+    };
 
-    setDefaultKeyValue: function setDefaultKeyValue( key, value ) {
-      if( ! defaults )
-        defaults = {};
+    Tracking.prototype = {
+      init: function() {
+        tracker = this;
+      },
 
-      if( value === undefined || value === null )
-        delete defaults[key];
-      else
-        defaults[key] = value;
-    },
+      setDefaultKeyValue: function setDefaultKeyValue( key, value ) {
+        if( ! defaults )
+          defaults = {};
 
-    track: function track( data ) {
-      //console.log( "Track", data );
-      self.events.push( data );
-      return data;
-    }
-  };
+        if( value === undefined || value === null )
+          delete defaults[key];
+        else
+          defaults[key] = value;
+      },
 
-  return Tracking;
+      track: function track( data ) {
+        //console.log( "Track", data );
+        self.events.push( data );
+        return data;
+      }
+    };
+
+    return Tracking;
+  })();
+
+  widget.tracker = new Tracking();
+  widget.track = widget.tracker.track;
+  
 })();
-
-widget.tracker = new Tracking();
-widget.track = widget.tracker.track;
-

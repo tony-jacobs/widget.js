@@ -5,6 +5,7 @@
 * Remove 'content' layout widget, since it's not better than a label
 * Add favicon using widget.ui.setFavicon()
 * Keep list footers out of the DOM if not in use
+* Removed unused functions and cleaned up globals
 
 
 0.7.3 (2016.03.19)

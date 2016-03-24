@@ -9,10 +9,6 @@ Easy
   - Include: time, money, and phone numbers.
   - Should be pluggable.  For example, phone numbers is not general.
 
-* Globals to be hidden in a closure:  Tracking, showIframePopup, showContentPopup
-
-* Remove 'addAnchorSupport' -- too complex and too buggy
-
 
 Medium
 --
