@@ -34,11 +34,21 @@
    */
   function updateFooter( def, holder, footer )
   {
+    if( footer.children().length )
+    {
+      if( !footer.parent().length )
+        holder.insertAfter( footer );
+    }
+    else
+    {
+      footer.detach();
+    }
+
     var footerMode = widget.get( def, 'options.footerMode', 'emptyContent' );
     if( footerMode == 'emptyContent' )
     {
       if( footer.children().length )
-        footer.toggle( (holder.children().length === 0) );
+       footer.toggle( (holder.children().length === 0) );
     }
     else
       footer.toggle( true );
