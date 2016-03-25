@@ -1066,13 +1066,6 @@ function startDataManager( onReady, onUpdate ) {
     }
   };
 
-  $.each( data, function( key, value ) {
-    $.each( value.content, function( key, value ) {
-      value.id = keyFactory( value );
-      value.action = ( value.url ) ? widget.ui.createUrlViewAction( value ) : widget.ui.createRendererPopupAction( value, 'popupRenderer' );
-    });
-  });
-
   data.charts = generateSampleData();
   data.koList = ko.observableArray([
     { title: "Observable 1", lastModified: Date.now() },

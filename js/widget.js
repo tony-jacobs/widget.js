@@ -41,40 +41,6 @@
       } );
   }
 
-  function formatSize( bytes, decimalFix, si )
-  {
-    var thresh;
-    var units;
-    if( si === undefined )
-    {
-      thresh = 1024;
-      units = ['k','M','G','T','P','E','Z','Y'];
-    }
-    else
-    {
-      thresh = (si ? 1000 : 1024);
-      units = si ? ['kB','MB','GB','TB','PB','EB','ZB','YB'] : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
-    }
-
-    if(bytes < thresh) return bytes + ' B';
-    var u = -1;
-    do {
-      bytes /= thresh;
-      ++u;
-    } while(bytes >= thresh);
-    return bytes.toFixed( decimalFix||1 )+' '+units[u];
-  }
-
-  function printCompressionStats( startTime, message, s1, s2 )
-  {
-    var ms = (Date.now()-startTime);
-    if( ms > 10 )
-    {
-      var pct = ( 100 * s1/s2 ).toFixed( 2 );
-      console.log( message + " " + formatSize( s1*2, 2 ) + " --> " + formatSize( s2*2, 2 ) + " (" + pct + "%) in " + ms + " ms" );
-    }
-  }
-
   var self = {
     eventBus: $('<div/>'),
     get: get,
@@ -84,72 +50,6 @@
       self.eventBus.trigger( key+'.start', event||{} );
       self.eventBus.trigger( key, event||{} );
       self.eventBus.trigger( key+'.complete', event||{} );
-    },
-
-    getStorage: function getStorage( preferLocal )
-    {
-      var flavor = preferLocal ? 'local' : 'sync';
-      var chromeStorage =  (window.chrome && chrome.storage && chrome.storage[flavor]);
-      var decodeStorage = function decodeStorage( encoded, isCompressed, dataName ) {
-        var obj = null;
-        if( encoded )
-        {
-          if( isCompressed )
-          {
-            var now = Date.now();
-            var oldLen = encoded.length;
-            encoded = LZString.decompressFromUTF16( encoded );
-            var ms = (Date.now()-now);
-            if( ms > 10 )
-            {
-              var pct = Math.floor(10000*encoded.length/oldLen)/100;
-              printCompressionStats( now, dataName + " Decompress", oldLen, encoded.length );
-            }
-          }
-          obj = JSON.parse( encoded );
-        }
-        return obj;
-      };
-      var encodeStorage = function encodeStorage( obj, willCompress, dataName ) {
-        var encoded = "";
-        if( obj )
-        {
-          encoded = JSON.stringify( obj );
-          if( willCompress )
-          {
-            var now = Date.now();
-            var oldLen = encoded.length;
-            encoded = LZString.compressToUTF16( encoded );
-            printCompressionStats( now, dataName + " Compress", oldLen, encoded.length );
-          }
-        }
-        return encoded;
-      };
-
-      if( chromeStorage )
-        return {
-          get: function( key, callback, useCompression ) {
-            chrome.storage[flavor].get( key, function( obj ) {
-              callback( decodeStorage( obj[ key ], useCompression, key ) );
-            } );
-          },
-          set: function( key, value, useCompression ) {
-            chrome.storage[flavor].set( { key: encodeStorage( value, useCompression, key ) } );
-          }
-        };
-      else
-        return {
-          get: function( key, callback, useCompression ) {
-            // Yield the thread to prevent synchronous processing
-            setTimeout( function() {
-              var data = window.localStorage[ key ];
-              callback( decodeStorage( data, useCompression, key ) );
-            }, 0 );
-          },
-          set: function( key, value, useCompression ) {
-            window.localStorage.setItem( key, encodeStorage( value, useCompression, key ) );
-          }
-        };
     },
 
     getAncestorData: function getAncestorData( cxt, key, defaultValue )

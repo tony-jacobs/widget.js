@@ -5,7 +5,6 @@ src.util = [
   'js/widget.js',
   'js/widget.parser.js',
   'js/widget.util.js',
-  'js/widget.format.js',
   'js/widget.validate.js',
   'js/parser/argument.js',
   'js/parser/inlineFunction.js',

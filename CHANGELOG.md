@@ -6,6 +6,8 @@
 * Add favicon using widget.ui.setFavicon()
 * Keep list footers out of the DOM if not in use
 * Removed unused functions and cleaned up globals
+* Removed HTML5 storage abstraction (just use it directly)
+* Removed Formatter subsystem - was not general or pluggable (see roadmap)
 
 
 0.7.3 (2016.03.19)

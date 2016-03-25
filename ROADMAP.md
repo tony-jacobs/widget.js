@@ -3,10 +3,8 @@ Roadmap for widget.js
 
 Easy
 --
-* Remove size (bytes,GB,MB) formatting code (or make it part of the template)
-
 * New template type for formatters (perhaps #{value|type,args})
-  - Include: time, money, and phone numbers.
+  - Include: percent, time, money, and phone numbers.
   - Should be pluggable.  For example, phone numbers is not general.
 
 
