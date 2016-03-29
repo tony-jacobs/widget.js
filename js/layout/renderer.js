@@ -60,8 +60,16 @@
     }
     else
     {
+      var errorMessage;
+      try {
+        errorMessage = JSON.stringify(def.data||{});
+      } catch( e ) {
+        console.warn( "Renderer error", e, def );
+        errorMessage = "ERROR: See console ("+e+")";
+      }
+
       panel.append( $('<div/>', {text: key } ).addClass('title') );
-      panel.append( $('<div/>', {text: JSON.stringify(def.data||{}) } ).addClass('data') );
+      panel.append( $('<div/>', {text: errorMessage } ).addClass('data') );
     }
 
 
