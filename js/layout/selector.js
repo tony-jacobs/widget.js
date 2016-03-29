@@ -1,5 +1,5 @@
 (function registerSelectorLayout(){
-  
+
   widget.layout.register( 'selector', createSelectorView, {
     description: "TODO!"
   },
@@ -12,7 +12,7 @@
     var view = def.parent;
     var data = def.layout;
     var options = def.options;
-    
+
     if( !data.items )
     {
       var listDataSource = widget.get( options, 'listDataSource', null );
@@ -29,9 +29,9 @@
       var sourceData;
       var typeKey = data.dataSource ? data.dataSource.type : undefined;
       var dataPath = data.dataSource ? data.dataSource.path : "selector";
-    
+
       sourceData = typeKey ? widget.util.get( typeKey, dataPath ) : widget.get( def.stack[1], dataPath );
-        
+
       if( !sourceData && options.autoHide )
         return null;
 
@@ -45,13 +45,13 @@
         selector.appendTo( view );
 
       var uiMenu = selector.selectmenu({
-        icons: { button: "fa fa-caret-down" } 
+        icons: { button: "fa fa-caret-down" }
       }).selectmenu('widget');
-      
+
       uiMenu.addClass( 'widget-select' );
       var uiMenuDropdown = selector.selectmenu( "menuWidget" );
       uiMenuDropdown.addClass( options.menuClass || options.styleClass+"Menu" );
-      
+
       selector.addClass('unselectable');
       uiMenu.addClass( 'unselectable' );
 
@@ -65,7 +65,7 @@
         }
         uiMenu.trigger( 'selectmenuchange' );
       });
-      
+
       uiMenu.update = function updateMenu( event, context ) {
         var sourceData = typeKey ? widget.util.get( typeKey, dataPath ) : widget.get( def.stack[1], dataPath );
 
@@ -73,21 +73,21 @@
         $.each( data.items, function( i, item ){
           if( $.type( item ) === "string" )
             item = { key:item, name:item, displayName:widget.util.expandPath('_{'+item+'}') };
-  
+
           var displayName = item.displayName || (item.key + ": " + item.name);
           var opt = $( '<option/>', { value: item.key, html: displayName } ).appendTo( selector );
-  
+
           if( sourceData && (item.key == sourceData) )
             opt.prop( 'selected', true );
         } );
-        
+
         selector.selectmenu( "refresh" );
-        
-        // jquery-ui automatically adds a width to the select menu - we insist 
+
+        // jquery-ui automatically adds a width to the select menu - we insist
         // that the CSS do that instead
         uiMenu.css('width','');
       };
-      
+
       return uiMenu;
     }
     else
