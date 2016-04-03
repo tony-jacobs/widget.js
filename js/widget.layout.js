@@ -31,7 +31,7 @@ widget.layout = (function(){
         return $.isArray( obj() ) ? obj :  asArray( obj() );
 
       case 'object':
-        var result = ko.observableArray();
+        var result = (window.ko ? ko.observableArray() : []);
         result.onKeyAdded = function( key ) {
           result.push( {
             key: key,
