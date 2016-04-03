@@ -42,7 +42,14 @@
     if( renderer && renderer.layout )
     {
       var dataStack = widget.util.getData( 'stack', [] );
+
+      var dataPopCount = 1;
       dataStack.unshift( def.data );
+      if( def.layout.data )
+      {
+        dataStack.unshift( def.layout.data );
+        dataPopCount++;
+      }
 
       var rendererOptions = $.extend( {}, renderer.options||{}, {
         rendererKey: key||'static'
@@ -56,7 +63,8 @@
       var rendererView = dispatch( panel, rendererData, rendererOptions, undefined, dataStack );
 
       optionsStack.pop();
-      dataStack.pop();
+      for( var i=0; i<dataPopCount; i++ )
+        dataStack.pop();
     }
     else
     {
