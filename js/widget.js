@@ -65,6 +65,41 @@
         return self.getAncestorData( $(cxt).parent(), key, defaultValue );
     },
 
+    getStorage: function getStorage( preferLocal )
+    {
+      var flavor = preferLocal ? 'local' : 'sync';
+
+      var decodeStorage = function decodeStorage( encoded, dataName ) {
+        var obj = null;
+        if( encoded )
+        {
+          obj = JSON.parse( encoded );
+         }
+        return obj;
+      };
+      var encodeStorage = function encodeStorage( obj, dataName ) {
+        var encoded = "";
+        if( obj )
+        {
+          encoded = JSON.stringify( obj );
+        }
+        return encoded;
+      };
+
+      return {
+        get: function( key, callback ) {
+          // Yield the thread to prevent synchronous processing
+          setTimeout( function() {
+            var data = window.localStorage[ key ];
+            callback( decodeStorage( data, key ) );
+           }, 0 );
+        },
+        set: function( key, value ) {
+          window.localStorage.setItem( key, encodeStorage( value, key ) );
+        }
+      };
+    },
+
     makeAutorefresh: function makeAutorefresh( view, update, refreshInterval, initialize  )
     {
       var refreshTimeout = null;
