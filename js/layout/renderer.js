@@ -43,12 +43,12 @@
     {
       var dataStack = widget.util.getData( 'stack', [] );
 
-      var dataPopCount = 1;
+      var dataShiftCount = 1;
       dataStack.unshift( def.data );
       if( def.layout.data )
       {
         dataStack.unshift( def.layout.data );
-        dataPopCount++;
+        dataShiftCount++;
       }
 
       var rendererOptions = $.extend( {}, renderer.options||{}, {
@@ -63,8 +63,8 @@
       var rendererView = dispatch( panel, rendererData, rendererOptions, undefined, dataStack );
 
       optionsStack.pop();
-      for( var i=0; i<dataPopCount; i++ )
-        dataStack.pop();
+      for( var i=0; i<dataShiftCount; i++ )
+        dataStack.shift();
     }
     else
     {
