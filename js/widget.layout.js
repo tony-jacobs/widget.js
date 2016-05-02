@@ -281,7 +281,7 @@ widget.layout = (function(){
     }
   }
 
-  function callEvent( events, key, context, event )
+  function callEvent( events, key, context, event, arg )
   {
     if( events && events[key] )
     {
@@ -295,7 +295,7 @@ widget.layout = (function(){
 
       if( $.isFunction( events[key]) )
       {
-        return events[key]( context, event );
+        return events[key]( context, event, arg );
       }
     }
   }
@@ -303,7 +303,7 @@ widget.layout = (function(){
   function bindIf( key, view, events, context )
   {
     if( events && events[key] )
-      view.on( key, function( event ) { callEvent( events, key, context, event ); } );
+      view.on( key, function( event, arg ) { callEvent( events, key, context, event, arg ); } );
   }
 
   function lifecycle( eventKey, w, data )

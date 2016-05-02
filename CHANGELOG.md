@@ -1,4 +1,9 @@
-0.8.0 (unreleased)
+0.8.1 (unreleased)
+--
+* Add potential argument to 'trigger' event call-through (events now passed context, event, arg where arg is the second parameter to $.trigger)
+
+
+0.8.0 (2016.04.06)
 --
 * EXPERIMENTAL - styles
 * Remove legacy tab UI events
