@@ -134,6 +134,13 @@
       data = listData.content();
     }
 
+    panel.on( 'itemAdded', function( event, newItem ) {
+      layoutItem( newItem );
+      updateFooter( def, holder, footer );
+      sort( def, holder );
+      return false;
+    });
+
     if( listOptions.holderClass )
       holder = $('<div/>' ).addClass( listOptions.holderClass ).appendTo( panel );
 
