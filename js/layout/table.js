@@ -160,13 +160,22 @@
 
   function createTableView( def )
   {
-    var headerLayout = createHeaderLayout( def.layout.columns, def.options, def );
-    var contentLayout = createContentLayout( def.layout.columns, def.layout.dataSource, def.layout.contentOptions, def );
-
     var holder = $('<div/>').addClass( def.options.styleClass );
-
     var contextStack = [ def.stack[1]||def.data ];
-    def.headerView = widget.layout( holder, headerLayout, undefined, contextStack );
+
+    var headerLayout;
+
+    if( def.options.columnHeaders || def.options.columnHeaders === undefined )
+    {
+      headerLayout = createHeaderLayout( def.layout.columns, def.options, def );
+      def.headerView = widget.layout( holder, headerLayout, undefined, contextStack );
+    }
+    else
+    {
+      headerLayout = null;
+    }
+
+    var contentLayout = createContentLayout( def.layout.columns, def.layout.dataSource, def.layout.contentOptions, def );
 
     def.table = {
       header: headerLayout,
