@@ -75,7 +75,8 @@
         var a = ""+widget.util.expandPath( col.data, dataA );
         var b = ""+widget.util.expandPath( col.data, dataB );
 
-        return widget.get( col, 'options.sortDirection', 'asc' ) =='desc' ? b.localeCompare( a ) : a.localeCompare( b );
+        //return widget.get( col, 'options.sortDirection', 'asc' ) =='desc' ? b.localeCompare( a ) : a.localeCompare( b );
+        return widget.get( col, 'options.sortDirection', 'asc' ) =='desc' ? widget.util.alphanumericCompare( b, a ) : widget.util.alphanumericCompare( a, b );
       }
       return 0;
     };
