@@ -142,6 +142,13 @@
         contentOptions.sortBy = sortFunction;
     }
 
+    if( def.options.defaultSortIndex !== undefined )
+    {
+      var col = columns[0];
+      def._sortColumn = col;
+      col.options.sortDirection = col.options.sortDirection || 'asc';
+    }
+
     renderer.options.events = options.events;
     delete contentOptions.events;
 
