@@ -1,4 +1,5 @@
 (function registerListLayout(){
+  var DATA_POINTER_KEY = "_ref";
 
   var dispatch = widget.layout.register( 'list', createListView, {
     description: "Creates a list of widgets from a content array or from a data source"
@@ -14,7 +15,7 @@
     };
 
     var itemView = widget.layout( holder, item, options, stack );
-    $(itemView).data( stack[0] );
+    $(itemView).data( DATA_POINTER_KEY, stack[0] );
 
     return itemView;
   }
@@ -36,7 +37,7 @@
     if( def.options.sortBy )
     {
       $(holder).children().sortElements( function(a, b){
-        return def.options.sortBy( $(a).data(), $(b).data() );
+        return def.options.sortBy( $(a).data(DATA_POINTER_KEY), $(b).data(DATA_POINTER_KEY) );
       });
     }
   }
