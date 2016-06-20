@@ -103,6 +103,20 @@ widget.layout = (function(){
     return $.when.apply( this, promises );
   }
 
+  function updateTooltip( def )
+  {
+    if( def.options.tooltip )
+    {
+      def.options._tooltip = widget.util.expandPath( def.options.tooltip, def.data );
+
+      var tooltipAttr = def.options.tooltipAttribute || 'title';
+      if( def.options._tooltip )
+        def.view.attr( tooltipAttr, def.options._tooltip );
+      else
+        def.view.removeAttr( tooltipAttr );
+    }
+  }
+
   function dispatch( parent, layout, options, defaultHandler, stack )
   {
     // If we have a preload list, then create and return a promise that honors
@@ -190,11 +204,7 @@ widget.layout = (function(){
         w.view.addClass( w.options._styleClass );
       }
 
-      if( w.options.tooltip )
-      {
-        w.options._tooltip = widget.util.expandPath( w.options.tooltip, w.data );
-        w.view.attr( 'tooltip', w.options._tooltip );
-      }
+      updateTooltip( w );
 
       w.view.on( 'widget-update', function onUpdate( event, context ) {
         if( $.isFunction( w.view.update ) )
@@ -212,6 +222,7 @@ widget.layout = (function(){
             w.view.addClass( w.options._styleClass );
           }
         }
+        updateTooltip( w );
       } );
 
       w.view.on( 'remove', function onRemoved() {
