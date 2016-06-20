@@ -67,19 +67,40 @@
 
   function createColumnSortFunction( def )
   {
-    return function columnSort( dataA, dataB ) {
+    var defaultSortColumn;
+    if( def.options.defaultSortIndex !== undefined )
+    {
+      defaultSortColumn = def.data.columns[ def.options.defaultSortIndex ];
+    }
+
+    function doCompare( col, dataA, dataB )
+    {
+      var a = ""+widget.util.expandPath( col.data, dataA );
+      var b = ""+widget.util.expandPath( col.data, dataB );
+
+      return widget.util.alphanumericCompare( a, b );
+    }
+
+    var sortFunc = function columnSort( dataA, dataB ) {
+      var result = 0;
+      var sortDirection = 1;
 
       if( def._sortColumn )
       {
         var col = def._sortColumn;
-        var a = ""+widget.util.expandPath( col.data, dataA );
-        var b = ""+widget.util.expandPath( col.data, dataB );
+        sortDirection = ( widget.get( col, 'options.sortDirection', 'asc' ) == 'desc' ) ? -1 : 1;
 
-        //return widget.get( col, 'options.sortDirection', 'asc' ) =='desc' ? b.localeCompare( a ) : a.localeCompare( b );
-        return widget.get( col, 'options.sortDirection', 'asc' ) =='desc' ? widget.util.alphanumericCompare( b, a ) : widget.util.alphanumericCompare( a, b );
+        result = doCompare( col, dataA, dataB );
       }
-      return 0;
+
+      if( result === 0 && defaultSortColumn )
+      {
+        result = doCompare( defaultSortColumn, dataA, dataB );
+      }
+
+      return sortDirection * result;
     };
+    return sortFunc;
   }
 
   function createContentCell( col )
