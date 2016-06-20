@@ -21,6 +21,18 @@
 
   function sort( def, holder )
   {
+    if( def.__sortTimeout === undefined )
+    {
+      def.__sortTimeout = window.setTimeout( function(){
+        delete def.__sortTimeout;
+
+        doSort( def, holder );
+      }, 10 );
+    }
+  }
+
+  function doSort( def, holder )
+  {
     if( def.options.sortBy )
     {
       $(holder).children().sortElements( function(a, b){
