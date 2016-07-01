@@ -37,7 +37,7 @@
       id: fieldKey,
       name: fieldKey,
       type: data.fieldType || 'text',
-      placeholder: widget.util.expandPath( data.placeholder, def.data )
+      placeholder: $('<div/>').html( widget.util.expandPath( data.placeholder, def.stack[1] ) ).text()
     }).addClass( 'inputField' );
 
     if( options.readonly )
@@ -90,11 +90,13 @@
 
     if( data.dataSource )
     {
-      panel.update = function updateCheckbox( event, context ) {
+      panel.update = function updateInputField( event, context ) {
         var newVal = (typeKey ? widget.util.get( typeKey, data.dataSource.path ) : widget.get( def.stack[1], data.dataSource.path ));
         var oldVal = field.val();
         if( oldVal != newVal )
           field.val( newVal );
+
+        field.attr( 'placeholder', $('<div/>').html( widget.util.expandPath( data.placeholder, def.stack[1] ) ).text() );
       };
     }
 
