@@ -36,9 +36,12 @@
   {
     if( def.options.sortBy )
     {
+      var oldElement = document.activeElement;
       $(holder).children().sortElements( function(a, b){
         return def.options.sortBy( $(a).data(DATA_POINTER_KEY), $(b).data(DATA_POINTER_KEY) );
       });
+      // firefox bug -- should not lose focus as a result of sorting.
+      oldElement.focus();
     }
   }
 
