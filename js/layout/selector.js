@@ -35,10 +35,12 @@
       if( !sourceData && options.autoHide )
         return null;
 
+
       if( data.label )
       {
         var holder = $('<div/>').addClass( options.holderClass || options.styleClass+"Holder" );
-        var label = $('<span/>', { html:data.label } ).addClass( options.labelClass || options.styleClass+"Label" ).appendTo( holder );
+        var label = $('<span/>').addClass( options.labelClass || options.styleClass+"Label" ).appendTo( holder );
+        label.html( widget.util.expandPath( data.label, def.stack[1] ) );
         view.append( holder.append( label ).append( selector ) );
       }
       else
@@ -80,6 +82,9 @@
           if( sourceData && (item.key == sourceData) )
             opt.prop( 'selected', true );
         } );
+
+        if( label )
+          label.html( widget.util.expandPath( data.label, def.stack[1] ) );
 
         selector.selectmenu( "refresh" );
 

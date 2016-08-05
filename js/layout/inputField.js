@@ -82,9 +82,12 @@
       } );
     }
 
+    var labelElement;
     if( data.label )
     {
-      panel.append( $('<label/>', { html: data.label } ) );
+      labelElement = $('<label/>');
+      panel.append( labelElement );
+      labelElement.html( widget.util.expandPath( data.label, def.stack[1] ) );
     }
     panel.append( field );
 
@@ -97,6 +100,8 @@
           field.val( newVal );
 
         field.attr( 'placeholder', $('<div/>').html( widget.util.expandPath( data.placeholder, def.stack[1] ) ).text() );
+        if( labelElement )
+          labelElement.html( widget.util.expandPath( data.label, def.stack[1] ) );
       };
     }
 
