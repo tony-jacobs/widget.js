@@ -112,7 +112,7 @@ widget.layout = (function(){
       var tooltipAttr = def.options.tooltipAttribute || 'title';
       if( def.options._tooltip )
       {
-        def.view.attr( tooltipAttr, $('<span/>').html( def.options._tooltip ).text() )
+        def.view.attr( tooltipAttr, $('<span/>').html( def.options._tooltip ).text() );
       }
       else
         def.view.removeAttr( tooltipAttr );
