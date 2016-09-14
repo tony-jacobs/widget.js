@@ -10,13 +10,18 @@
     var renderer = widget.get( def.layout, key );
     if( !renderer )
     {
-      key = widget.get( def.layout, 'dynamicRenderer', 'Unknown Type' );
+      key = widget.get( def.layout, 'dynamicRenderer' );
       if( 'object'==$.type(key) )
       {
         var dynamicKey = widget.util.expandPath( widget.get( def.layout, 'dynamicRendererKey', 'default' ), def.data );
-        key = key[ dynamicKey ];
+        key = key[ dynamicKey ] || key[ "default" ] || dynamicKey;
       }
+
+      if( !key )
+        key = "UnknownRenderer";
+
       key = widget.util.expandPath( key, def.data );
+
       renderer = widget.util.get( 'renderers', key );
     }
 
